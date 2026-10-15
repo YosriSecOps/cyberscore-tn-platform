@@ -258,15 +258,25 @@ export async function POST(req: NextRequest) {
       const lookup = await dns.lookup(cleanDomain);
       ipAddress = lookup.address;
       dnsSuccess = true;
-      // Tunisian national infrastructure IP range check (ATI AS2609: 193.95.*)
-      isSovereignHost = ipAddress.startsWith("193.95.") || ipAddress.startsWith("41.22");
+      // Accurate Tunisian sovereign infrastructure check (ATI AS2609: 193.95.0.0/18, 41.224.0.0/13, 197.10.0.0/16)
+      const isSovereignIp = (ip: string) => {
+        if (ip.startsWith("193.95.")) return true;
+        const p = ip.split(".").map(Number);
+        return p.length === 4 && ((p[0] === 41 && p[1] >= 224 && p[1] <= 231) || (p[0] === 197 && p[1] === 10));
+      };
+      isSovereignHost = isSovereignIp(ipAddress);
     } catch {
       // Try with www prefix
       try {
         const lookupWww = await dns.lookup(`www.${cleanDomain}`);
         ipAddress = lookupWww.address;
         dnsSuccess = true;
-        isSovereignHost = ipAddress.startsWith("193.95.") || ipAddress.startsWith("41.22");
+        const isSovereignIp = (ip: string) => {
+          if (ip.startsWith("193.95.")) return true;
+          const p = ip.split(".").map(Number);
+          return p.length === 4 && ((p[0] === 41 && p[1] >= 224 && p[1] <= 231) || (p[0] === 197 && p[1] === 10));
+        };
+        isSovereignHost = isSovereignIp(ipAddress);
       } catch {
         dnsSuccess = false;
       }

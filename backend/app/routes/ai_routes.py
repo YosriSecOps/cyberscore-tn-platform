@@ -1,6 +1,7 @@
 """
 CyberScore TN — AI Assistant Routes (Amina)
-Provides chat endpoint with Ollama (primary), Gemini (fallback), and mock (demo) modes.
+Provides chat endpoint with Ollama (sovereign local LLM Qwen2.5-Coder:7b) and mock expert demo mode.
+Note: Cloud AI (Gemini) is disabled by design to strictly adhere to Tunisian digital sovereignty (Décret-loi n° 2023-17).
 """
 
 import json
@@ -345,7 +346,8 @@ async def ai_status():
             "model": model_name,
         },
         "gemini": {
-            "available": bool(settings.GEMINI_API_KEY)
+            "available": False,
+            "status": "Désactivé (Politique de Souveraineté Territoriale ANCS)"
         },
         "fallback": "mock"
     }

@@ -289,12 +289,12 @@ Le système chinois de labellisation cybersécurité utilise un système d'étoi
 
 Les sites gouvernementaux tunisiens sont organisés en 4 secteurs principaux :
 
-| Secteur | Exemples | Nombre approx. |
-|---------|----------|----------------|
-| Ministères | finances.gov.tn, interieur.gov.tn | 30+ |
-| Institutions Publiques | ancs.tn, cni.tn, ati.tn | 20+ |
-| Collectivités Locales | Gouvernorats, municipalités | 50+ |
-| Entreprises Publiques | tunisietelecom.tn, steg.com.tn | 15+ |
+| Secteur | Exemples | Nombre de sites |
+|---------|----------|-----------------|
+| Ministères | finances.gov.tn, interieur.gov.tn | 44 |
+| Institutions Publiques | ancs.tn, cni.tn, ati.tn | 24 |
+| Collectivités Locales | Gouvernorats, municipalités | 28 |
+| Entreprises Publiques | tunisietelecom.tn, steg.com.tn | 24 |
 
 <!-- Updated: 2026-08-06 — Phase 0, Planning -->
 
@@ -616,7 +616,7 @@ backend/app/
 - Workflow d'approbation : les demandes génèrent un dossier en attente (`PENDING_APPROVAL`) soumis à la validation manuelle d'un administrateur ANCS dans le panneau `/admin`.
 - Profils démo "1-Click" intégrés pour la soutenance (`Admin ANCS`, `Auditeur Finances`, `Observateur Santé`).
 
-**Résultat**: 44 pages générées et compilées (routes trilingues AR/FR/EN & templates SSR/SSG), build Next.js 16 vérifié avec Turbopack sans aucune erreur TypeScript.
+**Résultat**: 19 routes App Router générées et compilées (16 routes d'interface sous `/[locale]` et 3 endpoints d'API serveur), build Next.js 16 vérifié avec Turbopack sans aucune erreur TypeScript (0 erreur).
 
 **Difficultés rencontrées**:
 - La gestion du RTL avec les animations CSS a nécessité des `@keyframes` séparées (`slideInLtr` / `slideInRtl`)
@@ -791,7 +791,7 @@ class AuditState(BaseModel):
 #### 5.5.3 Le Pipeline des 4 Agents Spécialisés
 
 1. **Agent 1 : Reconnaissance Réseau (`recon_agent.py`)**
-   - Cartographie réseau asynchrone non destructive (`tools/port_scanner.py`) via des sockets TCP purs sur les 25 ports standards et d'administration.
+   - Cartographie réseau asynchrone non destructive (`tools/port_scanner.py`) via des sockets TCP sur le top-1000 (150 threads), dont 34 services critiques classés par risque.
    - Extraction des bannières brutes de services (SSH, Web, RDP, bases de données) et inspection HTTP avancée (`tools/web_inspector.py`) avec validation des certificats SSL/TLS, analyse des en-têtes de sécurité et détection d'empreintes applicatives.
 
 2. **Agent 2 : Corrélation Contextuelle CVE (`cve_agent.py`)**
@@ -829,7 +829,7 @@ Conformément aux exigences légales de l'ANCS et au code pénal tunisien en mat
 Ces informations sont scellées dans le journal d'audit (`/history`) et gravées sur le rapport officiel pour garantir l'imputabilité juridique de l'opération.
 
 ##### 2. Cartographie Réseau Active & Empreinte Système (Agent 1)
-L'Agent 1 déploie un balayage réseau asynchrone non-destructif ciblant les **27 ports standards et d'administration** définis dans `COMMON_PORTS` (config.py) — SSH:22, Telnet:23, DNS:53, HTTP:80, HTTPS:443, MySQL:3306, RDP:3389, PostgreSQL:5432, etc. — ainsi que les 34 ports de la `SERVICE_MAP` étendue (port_scanner.py) avec réessais exponentiels pour les ports critiques :
+L'Agent 1 déploie un balayage réseau asynchrone non-destructif ciblant les **sockets TCP sur le top-1000 (150 threads), dont 34 services critiques classés par risque** — SSH:22, Telnet:23, DNS:53, HTTP:80, HTTPS:443, MySQL:3306, RDP:3389, PostgreSQL:5432, etc. — ainsi que les services étendus de la `SERVICE_MAP` (port_scanner.py) avec réessais exponentiels pour les ports critiques :
 - **Capture des Bannières Réelles (*Banner Grabbing*)** : Récupération des chaînes d'identification brutes des démons réseau (ex: `OpenSSH_8.2p1 Ubuntu-4ubuntu0.5`, `Apache/2.4.41`).
 - **Fingerprinting de l'OS par Heuristique TTL** : Analyse du champ **TTL IP** (*Time To Live* : ≤ 64 pour Linux/Unix, ≤ 128 pour Windows Server) et des en-têtes HTTP pour identifier la famille et la version du système d'exploitation avec un indice de confiance supérieur à 90%.
 - Ces résultats alimentent la page officielle du rapport PDF vectoriel (`ActiveReconPdfPage.tsx`).
@@ -971,7 +971,7 @@ Afin de structurer le monitoring national, CyberScore TN classe l'ensemble du pa
 | **4** | **Entreprises Publiques** | الشركات والمنشآت العمومية | Sociétés nationales et offices publics d'État (`steg.com.tn`, `sonede.com.tn`, `poste.tn`, `tunisair.com.tn`, etc.). |
 
 **Processus de Classification Automatique en 3 Étapes** :
-1. **Référentiel National Pré-enregistré (`PostgreSQL / Seed`)** : Chaque URL scannée est automatiquement mise en correspondance avec le catalogue des 115+ organismes officiels tunisiens (liaison clé étrangère `Website.organization_id → Organization.sector_id`).
+1. **Référentiel National Pré-enregistré (`PostgreSQL / Seed`)** : Chaque URL scannée est automatiquement mise en correspondance avec le catalogue des 120 sites officiels tunisiens répartis sur 42 organisations mères (liaison clé étrangère `Website.organization_id → Organization.sector_id`).
 2. **Heuristique de Domaine & Détection Intelligente** : Pour les nouveaux sites audités, des règles d'inférence lexicale catégorisent automatiquement l'organisme :
    - Préfixes `commune-*` ou `municipalite-*` → *Collectivités Locales* (`sector_id: 3`).
    - Domaines institutionnels `.gov.tn` → *Ministères* (`sector_id: 1`) ou *Institutions Publiques* (`sector_id: 2`).
@@ -1104,7 +1104,7 @@ Client typé avec interfaces TypeScript pour tous les endpoints :
 ![Figure 7.2 — Interface d'audit passif et restitution de la fiche technique](assets/scanner.png)
 *Figure 7.2 : Interface de scan passif et restitution de la fiche technique d'évaluation (Score global, diagramme radar et journal des vulnérabilités).*
 
-**Résultat**: 44/44 pages compilées sans erreur (build Next.js 16 vérifié avec Turbopack).
+**Résultat**: 19 routes applicatives compilées sans erreur (16 routes d'interface sous `/[locale]` et 3 routes d'API, 0 erreur TypeScript).
 
 ### 7.7 Page Surveillance des Menaces — `/threats` (SOC Threat Intelligence Feed)
 #### منظومة استخبارات التهديدات السيبرانية وغرفة العمليات
@@ -1649,10 +1649,10 @@ Notre architecture répond à cette problématique par **trois lignes de défens
      - Le portail officiel CyberScore TN est hébergé sous la zone souveraine nationale `.tn` administrée sous le contrôle strict de l'Agence Tunisienne d'Internet (ATI) et de l'ANCS. Aucun acteur non habilité ne peut enregistrer un domaine étatique réservé.
      - Le portail officiel arbore un certificat TLS émis par l'autorité nationale de certification **TunTrust (ANCE)** sous le backbone gouvernemental **AS2609**. Le faux site pirate arborera un domaine commercial banalisé (`.xyz`, `.biz`) avec un certificat générique gratuit (Let's Encrypt), immédiatement identifiable par l'usager averti.
    * *Hypothèse 3 : Que se passe-t-il si l'attaquant tente de soumettre son faux domaine à l'audit de CyberScore TN pour obtenir une attestation verte ?*
-     - Les 6 moteurs de scan passif analysent le domaine cible : absence de correspondance avec l’**indicateur d’hébergement souverain** (préfixes IP ATI — bloc principal `41.224.0.0/11`, `197.10.0.0/16`), certificats non institutionnels, vulnérabilités ouvertes.
-     - Le domaine est automatiquement classé **Grade F (Score 0/100)** avec l'étiquette rouge vif : `🚨 DOMAINE SUSPECT / NON RECONNU PAR L'ÉTAT`.
+     - Les 6 moteurs de scan passif analysent le domaine cible : absence de correspondance avec l’**indicateur d’hébergement souverain** (préfixes IP ATI — blocs officiels ATI AS2609 `41.224.0.0/13`, `193.95.0.0/18` et `197.10.0.0/16`), certificats non institutionnels, vulnérabilités ouvertes.
+      - Un indicateur d'hébergement souverain signale explicitement la non-appartenance au réseau national sans modifier artificiellement la note technique des protocoles testés.
 
-> **🔬 Note technique (jury ANCS)** : La vérification d'hébergement souverain repose sur une **heuristique de préfixes IPv4** (blocs ATI vérifiés manuellement sur RIPE NCC pour AS2609). Il ne s'agit pas d'une requête BGP/Whois en temps réel. La feuille de route §11.4 prévoit l'intégration d'une API RIPEstat pour une vérification ASN infalsifiable.
+> **🔬 Note technique (jury ANCS)** : La vérification d'hébergement souverain repose sur un **indicateur d'hébergement souverain (préfixes IP)** (blocs ATI vérifiés sur les bases WHOIS du RIPE NCC pour AS2609 : `41.224.0.0/13` et `193.95.0.0/18`). Il ne s'agit pas d'une recherche ASN dynamique en direct. La feuille de route §11.4 prévoit l'intégration d'une API RIPEstat pour une vérification ASN infalsifiable.
 
 3. **Ligne de Défense 3 : Contrôle Dynamique d'Origine (HTTP Referer & Hostname Binding)** :
    * Dans le composant de distribution du widget (`BadgesClient.tsx`), le script d'intégration interroge dynamiquement l'environnement d'exécution client :
@@ -1999,7 +1999,7 @@ graph TD
     end
 
     subgraph "Niveau 3 : Validation E2E & Rendu UI"
-        T8[Test Build Next.js 16 : 44 pages SSR/SSG trilingues]
+        T8[Test Build Next.js 16 : 19 routes SSR/API trilingues (0 erreur)]
         T9[Test Générateur PDF : Rendu vectoriel 7 pages A4]
         T10[Test Résilience Offline : Fallback localStorage]
     end
@@ -2081,7 +2081,7 @@ Des audits de validation ont été conduits sur un panel de portails d'État tun
 | **Modules de Scan Python** | Tests Unitaires & Fixtures | `pytest`, `pytest-asyncio` | **92%** | ✅ 0 échec |
 | **Score Engine & Pondération** | Tests de Non-Régression | `pytest` | **100%** | ✅ Formule conforme |
 | **Routes API & RBAC** | Tests d'Intégration HTTP | `httpx`, `TestClient` | **88%** | ✅ Authentification validée |
-| **Frontend Next.js** | Validation TypeScript & Build | `tsc --noEmit`, `next build` | **100%** | ✅ 44/44 pages (0 erreur) |
+| **Frontend Next.js** | Validation TypeScript & Build | `tsc --noEmit`, `next build` | **100%** | ✅ 19 routes (0 erreur) |
 | **Générateur PDF Vectoriel** | Rendu Visuel & Intégrité A4 | `@react-pdf/renderer` | **100%** | ✅ 7 pages certifiées |
 
 <!-- Updated: 2026-09-27 — Chapter 10 Tests & Quality Validation Complete -->
@@ -2093,7 +2093,7 @@ Des audits de validation ont été conduits sur un panel de portails d'État tun
 Afin d'élever la plateforme aux exigences d'un audit de cybersécurité institutionnel et d'éliminer toute hallucination ou approximation, le moteur autonome multi-agent (`probe_agent`) et son intégration au sein de l'interface Next.js ont fait l'objet d'une campagne de validation approfondie :
 
 #### 1. Architecture Découplée & Orchestration des 4 Agents
-* **Agent 1 (Reconnaissance Réseau & Services) :** Sondage asynchrone non bloquant par sockets TCP sur 25 ports standards et d'administration, résolution DNS directe et extraction des bannières brutes (`SSH-2.0-OpenSSH`, `Apache/2.4.7`).
+* **Agent 1 (Reconnaissance Réseau & Services) :** Sondage asynchrone non bloquant par sockets TCP sur le top-1000 (150 threads, dont 34 services critiques classés par risque), résolution DNS directe et extraction des bannières brutes (`SSH-2.0-OpenSSH`, `Apache/2.4.7`).
 * **Agent 2 (Analyse des Vulnérabilités & Configuration) :** Corrélation contextuelle via le LLM souverain local **Qwen2.5-Coder:7b** (Ollama sur port 25000) et détection déterministe des en-têtes manquants (HSTS, CSP, X-Frame-Options).
 * **Agent 3 (Validation Dynamique PoC) :** Épreuve non destructive de la surface d'attaque pour valider l'exploitabilité réelle (absence de fuite SQL, absence de réflexion XSS non filtrée).
 * **Agent 4 (Remédiation & Scellement Cryptographique) :** Élaboration d'une feuille de route d'actions correctives immédiates avec commandes Bash/Nginx prêtes à l'emploi et calcul de l'empreinte d'intégrité **SHA-256** scellant le rapport d'audit.

@@ -357,7 +357,7 @@ Toutes nos VMs sont 100% Headless, sans interface graphique inutile, supervisée
 | Composant du Scan Actif | Mécanisme Technique Précis | Restitution & Preuve d'Audit |
 | :--- | :--- | :--- |
 | **Cadre Légal & Mandat** | **Décret 2023-17** : Saisie obligatoire du Code Mandat ANCS + Signature numérique de l'auditeur. | Traçabilité immuable dans l'historique et en-tête légal du rapport PDF. |
-| **Reconnaissance Réseau (Agent 1)** | Balayage non destructif des 25 ports critiques + Fingerprinting OS via TTL (64/128) et bannières réelles. | Page Dédiée PDF : *Cartographie Réseau & Empreinte Système*. |
+| **Reconnaissance Réseau (Agent 1)** | Sockets TCP sur le top-1000 (150 threads), 34 services critiques + Fingerprinting OS via TTL (64/128) et bannières réelles. | Page Dédiée PDF : *Cartographie Réseau & Empreinte Système*. |
 | **Dette Technique & EOL (Agent 2)** | Détection des versions en fin de vie (*End-Of-Life*, ex: PHP 7.4, Apache obsolète) qualifiées de *Permanent 0-Day*. | Page Dédiée PDF : *Obsolescence Logicielle & CVEs (Score CVSS)*. |
 | **Validation PoC (Agent 3)** | Sondes applicatives neutres (réflexion XSS bénigne, anomalies SQLi, fuzzing `.git` / `.env`). | **Règle Zéro Faux Positif** : Rejet automatique des failles non prouvées. |
 | **Remédiation & Sceau (Agent 4)** | Génération de directives Bash prêtes à l'emploi + Calcul de l'empreinte **SHA-256** infalsifiable. | QR Code de vérification souveraine et sceau cryptographique officiel. |

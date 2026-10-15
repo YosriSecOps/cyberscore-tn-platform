@@ -78,15 +78,19 @@ class PoCAgent:
                 iso27001_control="A.8.28",
             ))
 
-        # 3. Incorporate Potential Findings with Confirmed Context
+        # 3. Incorporate Deterministic Structural Findings Only (Zero False Positive Rule)
         for pot in state.potential_vulnerabilities:
             # Check if this finding is already covered
             if not any(v.title == pot.title for v in validated):
-                # Architectural findings like open ports or missing headers are already verified by definition
-                if "PORT" in pot.id or "HEADER" in pot.id:
+                # Deterministic findings from network reconnaissance (open ports, missing headers, software EOL)
+                # are factual measurements from Agent 1:
+                if any(k in pot.id for k in ["PORT", "HEADER", "OBSOLETE", "EOL"]):
                     pot.poc_verified = True
-                validated.append(pot)
+                    validated.append(pot)
+                else:
+                    # Speculative AI hypotheses without dynamic PoC proof are excluded from validated findings
+                    logger.info(f"  -> Discarded unproven AI hypothesis: {pot.title} ({pot.id}) [Zero False Positive Rule]")
 
         state.validated_vulnerabilities = validated
-        logger.info(f"  -> Validated {len(validated)} findings ({sum(1 for v in validated if v.poc_verified)} with active PoC)")
+        logger.info(f"  -> Validated {len(validated)} findings ({sum(1 for v in validated if v.poc_verified)} with active PoC/factual proof)")
         return state

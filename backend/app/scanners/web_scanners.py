@@ -227,53 +227,53 @@ class CSPScanner(BaseScanner):
                         ))
                         score -= 0.5
 
-                    # Check for default-src
-                    if "default-src" not in csp:
-                        findings.append(Finding(
-                            title={
-                                "ar": "CSP بدون default-src",
-                                "fr": "CSP sans default-src",
-                                "en": "CSP Missing default-src",
-                            },
-                            severity="medium",
-                            category="csp",
-                            description={
-                                "ar": "CSP لا يحتوي على توجيه default-src الاحتياطي",
-                                "fr": "CSP sans directive de repli 'default-src'",
-                                "en": "CSP missing 'default-src' fallback directive",
-                            },
-                            remediation={
-                                "ar": "أضف توجيه default-src إلى CSP",
-                                "fr": "Ajouter la directive 'default-src' au CSP",
-                                "en": "Add 'default-src' directive to CSP",
-                            },
-                            evidence="[ABSENT] default-src in CSP",
-                        ))
-                        score -= 1.0
+                # Check for default-src
+                if "default-src" not in csp:
+                    findings.append(Finding(
+                        title={
+                            "ar": "CSP بدون default-src",
+                            "fr": "CSP sans default-src",
+                            "en": "CSP Missing default-src",
+                        },
+                        severity="medium",
+                        category="csp",
+                        description={
+                            "ar": "CSP لا يحتوي على توجيه default-src الاحتياطي",
+                            "fr": "CSP sans directive de repli 'default-src'",
+                            "en": "CSP missing 'default-src' fallback directive",
+                        },
+                        remediation={
+                            "ar": "أضف توجيه default-src إلى CSP",
+                            "fr": "Ajouter la directive 'default-src' au CSP",
+                            "en": "Add 'default-src' directive to CSP",
+                        },
+                        evidence="[ABSENT] default-src in CSP",
+                    ))
+                    score -= 1.0
 
-                    # Check for script-src
-                    if "script-src" not in csp and "default-src" not in csp:
-                        findings.append(Finding(
-                            title={
-                                "ar": "CSP بدون script-src",
-                                "fr": "CSP sans script-src",
-                                "en": "CSP Missing script-src",
-                            },
-                            severity="medium",
-                            category="csp",
-                            description={
-                                "ar": "CSP لا يحتوي على توجيه script-src",
-                                "fr": "CSP sans directive 'script-src'",
-                                "en": "CSP missing 'script-src' directive",
-                            },
-                            remediation={
-                                "ar": "أضف توجيه script-src للتحكم في مصادر JavaScript",
-                                "fr": "Ajouter la directive 'script-src' pour contrôler les sources JavaScript",
-                                "en": "Add 'script-src' directive to control JavaScript sources",
-                            },
-                            evidence="[ABSENT] script-src in CSP",
-                        ))
-                        score -= 1.0
+                # Check for script-src
+                if "script-src" not in csp and "default-src" not in csp:
+                    findings.append(Finding(
+                        title={
+                            "ar": "CSP بدون script-src",
+                            "fr": "CSP sans script-src",
+                            "en": "CSP Missing script-src",
+                        },
+                        severity="medium",
+                        category="csp",
+                        description={
+                            "ar": "CSP لا يحتوي على توجيه script-src",
+                            "fr": "CSP sans directive 'script-src'",
+                            "en": "CSP missing 'script-src' directive",
+                        },
+                        remediation={
+                            "ar": "أضف توجيه script-src للتحكم في مصادر JavaScript",
+                            "fr": "Ajouter la directive 'script-src' pour contrôler les sources JavaScript",
+                            "en": "Add 'script-src' directive to control JavaScript sources",
+                        },
+                        evidence="[ABSENT] script-src in CSP",
+                    ))
+                    score -= 1.0
 
         except Exception as e:
             findings.append(Finding(
