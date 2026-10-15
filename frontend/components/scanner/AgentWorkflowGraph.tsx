@@ -70,18 +70,18 @@ const AGENTS: AgentStepConfig[] = [
     subtasks: {
       fr: [
         "Résolution DNS & découverte de la topologie",
-        "Sondes TCP SYN synchronisées (80, 443, 8080)",
-        "Empreinte de la pile réseau via TTL et fenêtres",
+        "Sondes de connexion TCP socket (80, 443, 8080)",
+        "Empreinte OS via distance TTL et bannières",
       ],
       ar: [
         "استكشاف عناوين IP والطوبولوجيا الشبكية",
-        "فحص المنافذ 80 و 443 و 8080 بأمان",
-        "تحديد بصمة نظام التشغيل عبر حزم TTL",
+        "فحص منافذ الاتصال TCP بأمان (80، 443، 8080)",
+        "تحديد بصمة نظام التشغيل عبر مسافة TTL وبصمات الخدمات",
       ],
       en: [
         "DNS resolution & topology discovery",
-        "Synchronized TCP SYN probes (80, 443, 8080)",
-        "Stack fingerprinting via TTL & window size",
+        "Synchronized TCP socket probes (80, 443, 8080)",
+        "Stack fingerprinting via IP TTL distance & service banners",
       ],
     },
     metric: {

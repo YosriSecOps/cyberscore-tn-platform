@@ -79,7 +79,7 @@ export default function CoverPage({ report, qrCodeUrl }: CoverPageProps) {
 
         <View>
           <Text style={{ fontFamily: "Times-Italic", fontSize: 9.5, lineHeight: 1.35, color: COLORS.muted, textAlign: "center" }}>
-            {report.name ? `${report.name} — ` : ""}Secteur {report.sector}
+            {report.name ? `${report.name} — ` : ""}{report.sector?.startsWith("Cible") ? report.sector : `Secteur ${report.sector}`}
           </Text>
         </View>
       </View>
@@ -138,7 +138,7 @@ export default function CoverPage({ report, qrCodeUrl }: CoverPageProps) {
                 RANG SECTORIEL
               </Text>
               <Text style={{ fontFamily: "Times-Bold", fontSize: 9, color: COLORS.ink }}>
-                {report.sectorRank} / {report.sectorTotal}
+                {report.sectorRank && report.sectorTotal ? `${report.sectorRank} / ${report.sectorTotal}` : "N/A (Cible Externe)"}
               </Text>
             </View>
             <View>
@@ -160,8 +160,8 @@ export default function CoverPage({ report, qrCodeUrl }: CoverPageProps) {
           ...(report.mandatReference ? [{ label: "MANDAT OFFICIEL ANCS", value: `${report.mandatReference} • Habilitation Active Validée` }] : []),
           ...(report.auditorSignature ? [{ label: "OFFICIER SIGNATAIRE (RoE)", value: `${report.auditorSignature} • Règles d'Engagement Signées` }] : []),
           { label: "DATE & HEURE D'AUDIT", value: `${report.scanDate} (Durée : ${report.scanDuration})` },
-          { label: "ADRESSE IP RÉSOUDRE", value: report.ipAddress ? `${report.ipAddress}${report.ipv6Address ? ` • IPv6: ${report.ipv6Address}` : ""}` : "AS2609 (ATI - Agence Tunisienne Internet)" },
-          { label: "AUTORITÉ SSL / TLS", value: "TunTrust / ANCE (Autorité Nationale de Certification Électronique)" },
+          { label: "ADRESSE IP RÉSOUDRE", value: report.ipAddress ? `${report.ipAddress}${report.ipv6Address ? ` • IPv6: ${report.ipv6Address}` : ""}` : (report.site.endsWith(".tn") ? "AS2609 (ATI - Agence Tunisienne Internet)" : "Hôte Réseau Externe") },
+          { label: "AUTORITÉ SSL / TLS", value: report.certificateInfo?.authority || (report.site.endsWith(".tn") ? "TunTrust / ANCE (Autorité Nationale de Certification Électronique)" : "Autorité Internationale / Externe (Non-TunTrust)") },
           { label: "SCEAU CRYPTOGRAPHIQUE", value: report.sha256Hash ? `${report.sha256Hash.slice(0, 36)}... (SHA-256 Certifié)` : "Scellé par l'Autorité Nationale ANCS" },
           { label: "RÉFÉRENTIELS DE CONFORMITÉ", value: "ISO 27002 • NIST CSF v2 • OWASP Top 10 • Décrets ANCS" },
           { label: "CLASSIFICATION TLP", value: "TLP:AMBER+STRICT • Diffusion Réservée aux RSSI & Directeurs" },

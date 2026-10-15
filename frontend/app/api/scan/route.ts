@@ -656,13 +656,11 @@ export async function POST(req: NextRequest) {
     );
 
     const grade =
-      totalScore >= 93 ? "A+" :
-      totalScore >= 88 ? "A" :
-      totalScore >= 82 ? "B+" :
-      totalScore >= 75 ? "B" :
-      totalScore >= 68 ? "C+" :
-      totalScore >= 60 ? "C" :
-      totalScore >= 50 ? "D" : "F";
+      totalScore >= 95 ? "A+" :
+      totalScore >= 90 ? "A" :
+      totalScore >= 80 ? "B" :
+      totalScore >= 70 ? "C" :
+      totalScore >= 60 ? "D" : "F";
 
     const gradeLabelsAr: Record<string, string> = {
       "A+": "ممتاز جداً (أعلى درجات الحصانة السيادية)",

@@ -51,9 +51,9 @@ const Sparkline = ({ trend }: { trend: "up" | "down" | "flat" }) => {
 
 const SECTOR_LABELS: Record<string, { fr: string; ar: string; en: string }> = {
   "ministries": { fr: "Ministères", ar: "الوزارات", en: "Ministries" },
-  "institutions": { fr: "Institutions Publiques", ar: "المؤسسات العمومية", en: "Public Institutions" },
+  "institutions": { fr: "Institutions Publiques", ar: "الهيئات والمؤسسات الوطنية", en: "Public Institutions" },
   "local": { fr: "Collectivités Locales", ar: "الجماعات المحلية", en: "Local Authorities" },
-  "enterprises": { fr: "Entreprises Publiques", ar: "الشركات العمومية", en: "Public Enterprises" }
+  "enterprises": { fr: "Entreprises Publiques", ar: "المنشآت والشركات العمومية", en: "Public Enterprises" }
 };
 
 export default function SitesTable() {
@@ -214,9 +214,9 @@ function SitesTableInner() {
           >
             <option value="all">{isAr ? "جميع القطاعات" : "Tous les secteurs"}</option>
             <option value="ministries">{isAr ? "الوزارات" : "Ministères"}</option>
-            <option value="institutions">{isAr ? "المؤسسات العمومية" : "Institutions Publiques"}</option>
+            <option value="institutions">{isAr ? "الهيئات والمؤسسات الوطنية" : "Institutions Publiques"}</option>
             <option value="local">{isAr ? "الجماعات المحلية" : "Collectivités Locales"}</option>
-            <option value="enterprises">{isAr ? "الشركات العمومية" : "Entreprises Publiques"}</option>
+            <option value="enterprises">{isAr ? "المنشآت والشركات العمومية" : "Entreprises Publiques"}</option>
           </select>
           <button 
             onClick={() => setSortAsc(!sortAsc)}

@@ -41,10 +41,10 @@
     "critical": "حرج"
   },
   "sectors": {
-    "ministries": "الوزارات",
-    "institutions": "المؤسسات العمومية",
-    "local": "الجماعات المحلية",
-    "enterprises": "المؤسسات العمومية"
+    "ministries": "الوزارات والرئاسة",
+    "institutions": "الهيئات والمؤسسات الوطنية",
+    "local": "الجماعات والبلديات المحلية",
+    "enterprises": "المنشآت والشركات العمومية"
   },
   "dashboard": {
     "nationalOverview": "النظرة الوطنية",

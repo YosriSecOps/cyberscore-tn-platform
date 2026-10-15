@@ -240,7 +240,7 @@ export function generateMockReport(siteUrl: string = "finances.gov.tn", override
   const realScanMatch = userScanMatch || REAL_SCANS_REPORT_MAP.get(normalized);
 
   const score = overrideData?.score ?? (realScanMatch?.score ?? 60);
-  const grade = overrideData?.grade ?? (realScanMatch?.grade ?? (score >= 90 ? "A" : score >= 80 ? "B" : score >= 70 ? "C" : score >= 50 ? "D" : "F"));
+  const grade = overrideData?.grade ?? (realScanMatch?.grade ?? (score >= 90 ? "A" : score >= 80 ? "B" : score >= 70 ? "C" : score >= 60 ? "D" : "F"));
 
   // Sector and Name
   const isLocal = normalized.includes("commune") || normalized.includes("gouvernorat");
@@ -389,7 +389,7 @@ export function convertScanResultToScanReport(result: any): ScanReport {
     .toLowerCase();
 
   const score = Math.round(result.total_score ?? 70);
-  const grade = result.grade || (score >= 90 ? "A+" : score >= 80 ? "B" : score >= 65 ? "C" : score >= 50 ? "D" : "F");
+  const grade = result.grade || (score >= 95 ? "A+" : score >= 90 ? "A" : score >= 80 ? "B" : score >= 70 ? "C" : score >= 60 ? "D" : "F");
 
   // Transform findings into Vulnerabilities
   const rawFindings = Array.isArray(result.findings) ? result.findings : [];
@@ -440,6 +440,13 @@ export function convertScanResultToScanReport(result: any): ScanReport {
   const mediumCount = result.medium_count ?? vulnerabilities.filter((v) => v.severity === "medium").length;
   const lowCount = result.low_count ?? vulnerabilities.filter((v) => v.severity === "low").length;
 
+  const isSovereignTn = cleanDomain.endsWith(".tn") || cleanDomain.endsWith(".gov.tn");
+  const sectorName = isSovereignTn
+    ? (cleanDomain.endsWith(".gov.tn") ? "Institutions Gouvernementales" : "Secteur Public Souverain")
+    : "Cible d'Audit Technique Autonome (Hors Périmètre National)";
+  const sectorRank = isSovereignTn ? 4 : 0;
+  const sectorTotal = isSovereignTn ? 30 : 0;
+
   return {
     site: cleanDomain,
     score,
@@ -447,9 +454,9 @@ export function convertScanResultToScanReport(result: any): ScanReport {
     scanType: isAutonomous ? "Audit Autonome Multi-Agents" : "Standard",
     scanDate: new Date().toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" }),
     scanDuration: result.duration_ms ? `${Math.round(result.duration_ms / 1000)}s` : "15s",
-    sector: cleanDomain.endsWith(".gov.tn") ? "Institutions Gouvernementales" : "Infrastructure Numérique",
-    sectorRank: 4,
-    sectorTotal: 30,
+    sector: sectorName,
+    sectorRank,
+    sectorTotal,
 
     isAutonomousAgent: isAutonomous,
     sha256Hash: result.sha256_hash,
@@ -466,11 +473,13 @@ export function convertScanResultToScanReport(result: any): ScanReport {
     webSurface: result.web_surface,
 
     certificateInfo: {
-      authority: "TunTrust (Agence Nationale de Certification Électronique)",
+      authority: isSovereignTn
+        ? "TunTrust / ANCE (Autorité Nationale de Certification Électronique)"
+        : (result.ssl_issuer || "Autorité Internationale / Externe (Non-TunTrust)"),
       keyLength: "RSA 2048 / ECDSA P-256",
       signatureAlgorithm: "SHA256withRSA",
       tlsVersion: "TLS 1.2 / TLS 1.3",
-      sovereignCompliant: true,
+      sovereignCompliant: isSovereignTn,
     },
 
     subdomains: [
