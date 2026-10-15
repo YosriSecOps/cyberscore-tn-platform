@@ -28,6 +28,7 @@ export default function AlertFeed() {
   const titleText = isAr ? "التنبيهات الأخيرة" : locale === "fr" ? "Alertes Récentes" : "Recent Alerts";
 
   const [alerts, setAlerts] = useState<AlertItem[]>(DEFAULT_ALERTS);
+  const [isLive, setIsLive] = useState(false);
 
   useEffect(() => {
     async function fetchRecentAlerts() {
@@ -75,6 +76,7 @@ export default function AlertFeed() {
             });
 
             setAlerts(liveAlerts);
+            setIsLive(true);
           }
         }
       } catch {
@@ -89,6 +91,21 @@ export default function AlertFeed() {
     <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
       <div className="section-header" style={{ borderBottom: "none", paddingBottom: 0, marginBottom: "var(--space-md)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <div className="section-title">{titleText}</div>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          {/* Live / Fallback badge */}
+          <span style={{
+            display: "inline-flex", alignItems: "center", gap: "4px",
+            fontSize: "10px", fontWeight: 600, padding: "2px 8px",
+            borderRadius: "999px",
+            background: isLive ? "rgba(34,197,94,0.12)" : "rgba(245,158,11,0.12)",
+            color: isLive ? "#22c55e" : "#f59e0b",
+            border: `1px solid ${isLive ? "rgba(34,197,94,0.3)" : "rgba(245,158,11,0.3)"}`,
+          }}>
+            <span style={{ width: 6, height: 6, borderRadius: "50%", background: isLive ? "#22c55e" : "#f59e0b", display: "inline-block" }} />
+            {isLive
+              ? (isAr ? "مباشر" : locale === "fr" ? "En direct" : "Live")
+              : (isAr ? "بيانات تجريبية" : locale === "fr" ? "Démo" : "Demo")}
+          </span>
         <Link
           href={`/${locale}/threats`}
           style={{
@@ -117,6 +134,7 @@ export default function AlertFeed() {
         >
           {viewAllText}
         </Link>
+        </div>
       </div>
 
       <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "6px" }}>

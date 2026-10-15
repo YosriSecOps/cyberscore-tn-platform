@@ -160,33 +160,54 @@ export default function StatCards() {
   const isAr = locale === "ar";
   const isFr = locale === "fr";
 
+  // NOTE: trend values are demo indicators shown when the backend API is unavailable.
+  // When PostgreSQL is live, real delta values should be computed server-side and returned
+  // by GET /api/dashboard/stats as `trend_total_sites`, `trend_avg_score`, etc.
+  const demoLabel = isAr ? "(بيانات تجريبية)" : isFr ? "(démo)" : "(demo)";
+
   const METADATA: Record<string, any> = {
     totalSites: {
       icon: Globe,
       color: "#3b82f6",
       bgColor: "rgba(59, 130, 246, 0.1)",
-      trend: isAr ? "+12 هذا الشهر" : isFr ? "+12 ce mois-ci" : "+12 this month",
+      trend: isAr
+        ? `+12 هذا الشهر ${demoLabel}`
+        : isFr
+        ? `+12 ce mois-ci ${demoLabel}`
+        : `+12 this month ${demoLabel}`,
       trendUp: true,
     },
     averageScore: {
       icon: ShieldCheck,
       color: "#22c55e",
       bgColor: "rgba(34, 197, 94, 0.1)",
-      trend: isAr ? "+5.3 نقاط" : isFr ? "+5.3 points" : "+5.3 points",
+      trend: isAr
+        ? `+5.3 نقاط ${demoLabel}`
+        : isFr
+        ? `+5.3 pts ${demoLabel}`
+        : `+5.3 pts ${demoLabel}`,
       trendUp: true,
     },
     criticalAlerts: {
       icon: Bug,
       color: "#ef4444",
       bgColor: "rgba(239, 68, 68, 0.1)",
-      trend: isAr ? "-2 منذ الأمس" : isFr ? "-2 depuis hier" : "-2 since yesterday",
+      trend: isAr
+        ? `-2 منذ الأمس ${demoLabel}`
+        : isFr
+        ? `-2 depuis hier ${demoLabel}`
+        : `-2 since yesterday ${demoLabel}`,
       trendUp: false,
     },
     scansToday: {
       icon: Scan,
       color: "#8b5cf6",
       bgColor: "rgba(139, 92, 246, 0.1)",
-      trend: isAr ? "+8 عمليات فحص" : isFr ? "+8 scans" : "+8 scans",
+      trend: isAr
+        ? `+8 عمليات فحص ${demoLabel}`
+        : isFr
+        ? `+8 scans ${demoLabel}`
+        : `+8 scans ${demoLabel}`,
       trendUp: false,
     },
   };

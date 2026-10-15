@@ -829,9 +829,9 @@ Conformément aux exigences légales de l'ANCS et au code pénal tunisien en mat
 Ces informations sont scellées dans le journal d'audit (`/history`) et gravées sur le rapport officiel pour garantir l'imputabilité juridique de l'opération.
 
 ##### 2. Cartographie Réseau Active & Empreinte Système (Agent 1)
-L'Agent 1 déploie un balayage réseau asynchrone non-destructif ciblant les 25 ports standards et d'administration (SSH:22, Telnet:23, DNS:53, HTTP:80, HTTPS:443, MySQL:3306, RDP:3389, PostgreSQL:5432, etc.) :
+L'Agent 1 déploie un balayage réseau asynchrone non-destructif ciblant les **27 ports standards et d'administration** définis dans `COMMON_PORTS` (config.py) — SSH:22, Telnet:23, DNS:53, HTTP:80, HTTPS:443, MySQL:3306, RDP:3389, PostgreSQL:5432, etc. — ainsi que les 34 ports de la `SERVICE_MAP` étendue (port_scanner.py) avec réessais exponentiels pour les ports critiques :
 - **Capture des Bannières Réelles (*Banner Grabbing*)** : Récupération des chaînes d'identification brutes des démons réseau (ex: `OpenSSH_8.2p1 Ubuntu-4ubuntu0.5`, `Apache/2.4.41`).
-- **Fingerprinting de l'OS par Heuristique Réseau** : Analyse combinée du champ **TTL IP** (*Time To Live* : 64 pour Linux/Unix, 128 pour Windows Server), de la taille de fenêtre TCP (*Window Size*) et des en-têtes HTTP pour identifier la famille et la version du système d'exploitation avec un indice de confiance supérieur à 90%.
+- **Fingerprinting de l'OS par Heuristique TTL** : Analyse du champ **TTL IP** (*Time To Live* : ≤ 64 pour Linux/Unix, ≤ 128 pour Windows Server) et des en-têtes HTTP pour identifier la famille et la version du système d'exploitation avec un indice de confiance supérieur à 90%.
 - Ces résultats alimentent la page officielle du rapport PDF vectoriel (`ActiveReconPdfPage.tsx`).
 
 ##### 3. Dette Technique & Obsolescence Logicielle en Fin de Vie (Agent 2)
@@ -1277,11 +1277,13 @@ Conçu via `@react-pdf/renderer` pour transformer le rapport en une véritable *
 ### 7.12 Cartographie Sectorielle & Gouvernance Territoriale (`/sectors`)
 #### التقسيم القطاعي وتوزيع المؤسسات الحكومية حسب درجات الحماية
 
-Afin de conférer aux décideurs de l'ANCS et des ministères une visibilité macroscopique sur l'état du cyberespace national, la page `/sectors` segmente les organismes publics en 4 grandes familles :
+Afin de conférer aux décideurs de l'ANCS et des ministères une visibilité macroscopique sur l'état du cyberespace national, la page `/sectors` segmente les organismes publics en 4 grandes familles (scores au 15/10/2026) :
 1. **Ministères & Présidence** (44 sites majeurs, score moyen 76/100)
 2. **Institutions & Agences Publiques** (24 organismes, score moyen 63/100)
 3. **Collectivités Locales & Municipalités** (28 municipalités, score moyen 52/100)
 4. **Établissements & Entreprises d'État** (24 entités, score moyen 62/100)
+
+Total périmètre audité : **120 organismes publics** (événement de référence : rapport national du 15/10/2026).
 
 L'interface intègre une heatmap vectorielle régionale et permet d'orienter stratégiquement les budgets de durcissement et les équipes d'intervention de l'ANCS vers les collectivités locales les plus fragiles.
 
@@ -1647,8 +1649,10 @@ Notre architecture répond à cette problématique par **trois lignes de défens
      - Le portail officiel CyberScore TN est hébergé sous la zone souveraine nationale `.tn` administrée sous le contrôle strict de l'Agence Tunisienne d'Internet (ATI) et de l'ANCS. Aucun acteur non habilité ne peut enregistrer un domaine étatique réservé.
      - Le portail officiel arbore un certificat TLS émis par l'autorité nationale de certification **TunTrust (ANCE)** sous le backbone gouvernemental **AS2609**. Le faux site pirate arborera un domaine commercial banalisé (`.xyz`, `.biz`) avec un certificat générique gratuit (Let's Encrypt), immédiatement identifiable par l'usager averti.
    * *Hypothèse 3 : Que se passe-t-il si l'attaquant tente de soumettre son faux domaine à l'audit de CyberScore TN pour obtenir une attestation verte ?*
-     - Les 6 moteurs de scan passif analysent le domaine cible : absence de rattachement au bloc IP souverain de l'État (AS2609), certificats non institutionnels, vulnérabilités ouvertes.
+     - Les 6 moteurs de scan passif analysent le domaine cible : absence de correspondance avec l’**indicateur d’hébergement souverain** (préfixes IP ATI — bloc principal `41.224.0.0/11`, `197.10.0.0/16`), certificats non institutionnels, vulnérabilités ouvertes.
      - Le domaine est automatiquement classé **Grade F (Score 0/100)** avec l'étiquette rouge vif : `🚨 DOMAINE SUSPECT / NON RECONNU PAR L'ÉTAT`.
+
+> **🔬 Note technique (jury ANCS)** : La vérification d'hébergement souverain repose sur une **heuristique de préfixes IPv4** (blocs ATI vérifiés manuellement sur RIPE NCC pour AS2609). Il ne s'agit pas d'une requête BGP/Whois en temps réel. La feuille de route §11.4 prévoit l'intégration d'une API RIPEstat pour une vérification ASN infalsifiable.
 
 3. **Ligne de Défense 3 : Contrôle Dynamique d'Origine (HTTP Referer & Hostname Binding)** :
    * Dans le composant de distribution du widget (`BadgesClient.tsx`), le script d'intégration interroge dynamiquement l'environnement d'exécution client :
@@ -1685,7 +1689,7 @@ Une distinction fondamentale régit la provenance et le traitement des données 
 ├─────────────────────────────────────────────┬────────────────────────────────────────────────────┤
 │         🇹🇳 VOLET NATIONAL (.gov.tn)         │        🌍 VOLET INTERNATIONAL & MONDIAL (MENA/FR)   │
 ├─────────────────────────────────────────────┼────────────────────────────────────────────────────┤
-│ • 115 Domaines gouvernementaux réels        │ • 8 Pays de référence (EAU, SA, FR, JO, MA, EG, DZ, LY)│
+│ • 120 Domaines gouvernementaux réels        │ • 8 Pays de référence (EAU, SA, FR, JO, MA, EG, DZ, LY)│
 │ • Audits techniques passifs en temps réel   │ • Données étalonnées sur les indices publics de l'ONU  │
 │ • Interrogation directe des sockets TLS     │   (ITU Global Cybersecurity Index - GCI)           │
 │ • Résolution DNS réelle (DNSSEC/SPF/DMARC)  │ • Rapports macroscopiques annuels SecurityScorecard│
@@ -1695,7 +1699,7 @@ Une distinction fondamentale régit la provenance et le traitement des données 
 ```
 
 1. **Le Volet National Tunisien (100% Réel & Live)** :
-   * La plateforme s'appuie sur le registre officiel des 115 domaines gouvernementaux (`defense.gov.tn`, `finances.gov.tn`, `justice.gov.tn`, etc.) administrés par l'ATI et les départements ministériels.
+   * La plateforme s'appuie sur le registre officiel des **120 domaines gouvernementaux** (`defense.gov.tn`, `finances.gov.tn`, `justice.gov.tn`, etc.) administrés par l'ATI et les départements ministériels (périmètre au 15/10/2026 : 44 ministères, 24 agences, 28 collectivités, 24 établissements).
    * Les notes sont calculées via le **moteur d'audit passif non-intrusif** de CyberScore TN qui inspecte en conditions réelles les 16 vecteurs techniques de sécurité publique.
 2. **Le Volet International (Baseline & Données d'Étalonnage Officielles)** :
    * **Justification Éthique et Juridique** : L'exécution de scans automatisés non autorisés contre les infrastructures de serveurs d'États souverains étrangers constituerait une infraction au droit international et aux chartes de cyber-éthique.
@@ -2185,6 +2189,6 @@ Pour inscrire **CyberScore TN** dans une démarche d'industrialisation pérenne 
 
 ---
 
-> **Note**: Ce document constitue le rapport final officiel de projet de fin d'année (PFA) pour la plateforme CyberScore TN. Dernière révision certifiée : 27 Septembre 2026.
+> **Note**: Ce document constitue le rapport final officiel de projet de fin d'année (PFA) pour la plateforme CyberScore TN. Dernière révision certifiée : **15 Octobre 2026**.
 
 
