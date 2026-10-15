@@ -37,7 +37,16 @@ export default function AlertFeed() {
         if (res.ok) {
           const data = await res.json();
           if (data && Array.isArray(data.scans) && data.scans.length > 0) {
-            const liveAlerts: AlertItem[] = data.scans.map((s: any) => {
+            // Deduplicate by site so each target appears at most once in recent feed
+            const seen = new Set<string>();
+            const distinctScans = data.scans.filter((s: any) => {
+              const domain = (s.url || "").replace(/^https?:\/\//, "").replace(/^www\./, "").split("/")[0].toLowerCase();
+              if (!domain || seen.has(domain)) return false;
+              seen.add(domain);
+              return true;
+            });
+
+            const liveAlerts: AlertItem[] = distinctScans.map((s: any) => {
               const cleanSite = s.url.replace(/^https?:\/\//, "").replace(/^www\./, "").split("/")[0];
               const isCrit = (s.critical_count ?? 0) > 0;
               const sev: AlertItem["severity"] = isCrit ? "critical" : s.grade === "A" ? "info" : s.grade === "B" ? "low" : "high";

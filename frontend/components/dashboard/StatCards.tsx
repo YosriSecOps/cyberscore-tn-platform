@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { useEffect, useState, useRef } from "react";
 import { Globe, ShieldCheck, Bug, Scan } from "lucide-react";
 import { getDynamicNationalStats } from "@/lib/dynamic-data";
@@ -156,11 +156,39 @@ export default function StatCards() {
     scansToday: (v) => Math.round(v).toString(),
   };
 
+  const locale = useLocale();
+  const isAr = locale === "ar";
+  const isFr = locale === "fr";
+
   const METADATA: Record<string, any> = {
-    totalSites: { icon: Globe, color: "#3b82f6", bgColor: "rgba(59, 130, 246, 0.1)", trend: "12 ce mois-ci", trendUp: true },
-    averageScore: { icon: ShieldCheck, color: "#22c55e", bgColor: "rgba(34, 197, 94, 0.1)", trend: "5.3 points", trendUp: true },
-    criticalAlerts: { icon: Bug, color: "#ef4444", bgColor: "rgba(239, 68, 68, 0.1)", trend: "2 depuis hier", trendUp: false },
-    scansToday: { icon: Scan, color: "#8b5cf6", bgColor: "rgba(139, 92, 246, 0.1)", trend: "8 scans", trendUp: false },
+    totalSites: {
+      icon: Globe,
+      color: "#3b82f6",
+      bgColor: "rgba(59, 130, 246, 0.1)",
+      trend: isAr ? "+12 هذا الشهر" : isFr ? "+12 ce mois-ci" : "+12 this month",
+      trendUp: true,
+    },
+    averageScore: {
+      icon: ShieldCheck,
+      color: "#22c55e",
+      bgColor: "rgba(34, 197, 94, 0.1)",
+      trend: isAr ? "+5.3 نقاط" : isFr ? "+5.3 points" : "+5.3 points",
+      trendUp: true,
+    },
+    criticalAlerts: {
+      icon: Bug,
+      color: "#ef4444",
+      bgColor: "rgba(239, 68, 68, 0.1)",
+      trend: isAr ? "-2 منذ الأمس" : isFr ? "-2 depuis hier" : "-2 since yesterday",
+      trendUp: false,
+    },
+    scansToday: {
+      icon: Scan,
+      color: "#8b5cf6",
+      bgColor: "rgba(139, 92, 246, 0.1)",
+      trend: isAr ? "+8 عمليات فحص" : isFr ? "+8 scans" : "+8 scans",
+      trendUp: false,
+    },
   };
 
   return (

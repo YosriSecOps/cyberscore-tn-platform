@@ -70,24 +70,24 @@ const AGENTS: AgentStepConfig[] = [
     subtasks: {
       fr: [
         "Résolution DNS & découverte de la topologie",
-        "Sondes de connexion TCP socket (80, 443, 8080)",
+        "Sondes de connexion TCP socket (25 ports critiques)",
         "Empreinte OS via distance TTL et bannières",
       ],
       ar: [
         "استكشاف عناوين IP والطوبولوجيا الشبكية",
-        "فحص منافذ الاتصال TCP بأمان (80، 443، 8080)",
+        "فحص منافذ الاتصال TCP للخدمات الحساسة (25 منفذاً)",
         "تحديد بصمة نظام التشغيل عبر مسافة TTL وبصمات الخدمات",
       ],
       en: [
         "DNS resolution & topology discovery",
-        "Synchronized TCP socket probes (80, 443, 8080)",
+        "Synchronized TCP socket probes (25 critical ports)",
         "Stack fingerprinting via IP TTL distance & service banners",
       ],
     },
     metric: {
-      fr: "4 ports analysés • Latence 14ms",
-      ar: "4 منافذ • استجابة 14 ميلي ثانية",
-      en: "4 ports audited • 14ms latency",
+      fr: "25 ports analysés • Latence 14ms",
+      ar: "25 منفذاً تم تدقيقها • استجابة 14 ميلي ثانية",
+      en: "25 ports audited • 14ms latency",
     },
   },
   {

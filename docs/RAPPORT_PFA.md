@@ -111,7 +111,7 @@ Built with an asynchronous FastAPI backend and a Next.js 16 trilingual frontend 
 ## Chapitre 1: Introduction Générale
 ### الفصل الأول: مقدمة عامة
 
-### 1.1 Contexte du Stage
+### 1.1 Contexte du Projet de Fin d'Année (PFA)
 
 La cybersécurité est devenue un enjeu stratégique majeur pour les États et leurs administrations. En Tunisie, le patrimoine web public s'articule autour de l'extension de référence `.gov.tn` (pour les ministères centraux tels que `finances.gov.tn` ou `sante.gov.tn`) et du domaine national de premier niveau `.tn` pour les ministères et organismes régaliens historiques (notamment `defense.tn` pour le Ministère de la Défense Nationale, `mes.tn` pour le Ministère de l'Enseignement Supérieur, `ancs.tn` pour l'Agence Nationale de la Cybersécurité, ainsi que `.com.tn` pour les entreprises publiques stratégiques comme la STEG et la SONEDE). Ces plateformes constituent la vitrine numérique de l'État et servent de portails d'accès aux téléservices pour des millions de citoyens. La sécurisation continue et souveraine de cet écosystème est donc une priorité nationale absolue.
 
@@ -1278,10 +1278,10 @@ Conçu via `@react-pdf/renderer` pour transformer le rapport en une véritable *
 #### التقسيم القطاعي وتوزيع المؤسسات الحكومية حسب درجات الحماية
 
 Afin de conférer aux décideurs de l'ANCS et des ministères une visibilité macroscopique sur l'état du cyberespace national, la page `/sectors` segmente les organismes publics en 4 grandes familles :
-1. **Ministères** (30 sites majeurs, score moyen 78/100)
-2. **Institutions & Agences Publiques** (20 organismes, score moyen 85/100)
-3. **Collectivités Locales & Municipalités** (50 municipalités, score moyen 62/100)
-4. **Établissements & Entreprises d'État** (15 entités, score moyen 73/100)
+1. **Ministères & Présidence** (44 sites majeurs, score moyen 76/100)
+2. **Institutions & Agences Publiques** (24 organismes, score moyen 63/100)
+3. **Collectivités Locales & Municipalités** (28 municipalités, score moyen 52/100)
+4. **Établissements & Entreprises d'État** (24 entités, score moyen 62/100)
 
 L'interface intègre une heatmap vectorielle régionale et permet d'orienter stratégiquement les budgets de durcissement et les équipes d'intervention de l'ANCS vers les collectivités locales les plus fragiles.
 
@@ -1593,12 +1593,12 @@ Afin de concrétiser l'utilité publique du Sceau de Confiance et du QR Code, no
      - Compteur de diapositives dynamique (`Conseil 01 / 04`).
      - Badge d'icône lumineux (*Glowing Badge*) avec code couleur sémantique adapté à chaque typologie de menace.
      - Étiquettes de catégorisation (*Tag & Badge*) : `Règle Fondamentale`, `Alerte Sécurité`, `Protection Renforcée`, `Urgence Cyber Nationale`.
-     - Recommandation d'action directe (*Action Callout*) avec lien cliquable vers la ligne d'urgence nationale (`71 843 200`) et le CERT National (`assistance@anci.tn`).
+     - Recommandation d'action directe (*Action Callout*) avec lien cliquable vers la ligne d'urgence nationale (`71 843 200`) et le CERT National (`assistance@ancs.tn`).
      - Rotation automatique douce cadencée à 5,5 secondes avec suspension immédiate lors du survol de la souris (*Pause on Hover*).
      - Pagination par points (*Dots Indicator*) avec expansion dynamique en capsule éclairée pour la diapositive active.
 
-![Figure 9.3 — Portail Souverain de Vérification Citoyenne et Hygiène Numérique (sante.gov.tn)](assets/verify_portal.png)
-*Figure 9.3 : Portail Souverain de Vérification Citoyenne (/verify/sante.gov.tn) avec entête républicaine, carrousel d'hygiène numérique trilingue et attestation de sécurité cryptographique.*
+![Figure 9.2 — Portail Souverain de Vérification Citoyenne et Hygiène Numérique (sante.gov.tn)](assets/verify_portal.png)
+*Figure 9.2 : Portail Souverain de Vérification Citoyenne (/verify/sante.gov.tn) avec entête républicaine, carrousel d'hygiène numérique trilingue et attestation de sécurité cryptographique.*
 
 ---
 
@@ -1719,8 +1719,8 @@ Le tableau de bord positionne la Tunisie au **7ème rang régional (Score global
 | **En-têtes HTTP** | **62** | **75** | `-13 (Alerte)` | Carence fréquente sur les en-têtes stricts (`HSTS`, `X-Frame-Options`, `Permissions-Policy`). |
 | **Content Security (CSP)** | **55** | **70** | <span style="color:#ef4444;font-weight:bold;">-15 (Critique)</span> | **Faiblesse majeure** : Absence quasi-généralisée de politique `Content-Security-Policy` contre les attaques XSS. |
 
-![Figure 9.2 — Observatoire géostratégique et benchmark sectoriel des institutions](assets/benchmark.png)
-*Figure 9.2 : Observatoire comparatif et benchmark sectoriel confrontant les 4 secteurs d'État et les référentiels internationaux.*
+![Figure 9.3 — Observatoire géostratégique et benchmark sectoriel des institutions](assets/benchmark.png)
+*Figure 9.3 : Observatoire comparatif et benchmark sectoriel confrontant les 4 secteurs d'État et les référentiels internationaux.*
 
 ---
 
@@ -1901,7 +1901,7 @@ Le module d'administration implémente une architecture de **persistance à 3 ni
 
 ---
 
-#### 9.6.5 Paramètres Globaux de Surveillance & Mode Maintenance
+#### 9.6.4 Paramètres Globaux de Surveillance & Mode Maintenance
 
 L'onglet **Paramètres Globaux** permet aux administrateurs de l'ANCS d'ajuster dynamiquement le comportement du moteur d'audit national :
 
