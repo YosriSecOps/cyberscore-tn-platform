@@ -1,0 +1,83 @@
+\chapter{État de l'Art \& Étude Comparative}
+\label{chap:art}
+
+\section{Cadres \& Normes de Référence en Cybersécurité}
+L'évaluation objective de la posture de sécurité d'un système d'information nécessite de s'adosser à des référentiels reconnus à l'échelle internationale. CyberScore TN intègre et corrèle quatre piliers normatifs fondamentaux.
+
+\subsection{OWASP Top 10 (Édition 2021)}
+L'\textit{Open Web Application Security Project} (OWASP) publie périodiquement le consensus mondial sur les dix risques de sécurité applicative les plus critiques \cite{owasp2021}. Le tableau \ref{tab:owasp} détaille la classification 2021 prise en compte par nos moteurs d'analyse.
+
+\begin{table}[!htbp]
+\centering
+\caption{Classification OWASP Top 10:2021 intégrée dans CyberScore TN}
+\label{tab:owasp}
+\begin{singlespace}
+\footnotesize
+\renewcommand{\arraystretch}{1.08}
+\begin{tabularx}{\textwidth}{l p{5cm} X}
+\toprule
+\textbf{Code} & \textbf{Catégorie de Risque} & \textbf{Vecteur d'Audit dans CyberScore TN} \\
+\midrule
+\textbf{A01} & Broken Access Control & Vérification de l'exposition des répertoires (\texttt{.git}, \texttt{.env}) \\
+\textbf{A02} & Cryptographic Failures & Analyse des protocoles TLS 1.0/1.1 obsolètes et suites de chiffrement \\
+\textbf{A03} & Injection & Détection DAST ZAP des injections SQL et Cross-Site Scripting \\
+\textbf{A04} & Insecure Design & Absence de mécanismes d'isolation et politiques permissives \\
+\textbf{A05} & Security Misconfiguration & En-têtes HTTP manquants (HSTS, CSP, X-Frame-Options) \\
+\textbf{A06} & Vulnerable Components & Détection de CMS, serveurs Apache/Nginx et bibliothèques obsolètes \\
+\textbf{A07} & Identification Failures & Absence des attributs \texttt{Secure}, \texttt{HttpOnly} sur les cookies \\
+\textbf{A08} & Software \& Data Integrity & Scripts tiers inclus depuis des CDN sans contrôle d'intégrité SRI \\
+\textbf{A09} & Security Logging Failures & Exposition publique de messages de débogage et pages de logs \\
+\textbf{A10} & Server-Side Request Forgery & Présence de relais ouverts et rebonds non filtrés \\
+\bottomrule
+\end{tabularx}
+\end{singlespace}
+\end{table}
+
+\subsection{NIST Cybersecurity Framework (CSF) v2.0}
+Publié par le \textit{National Institute of Standards and Technology} en 2024, le NIST CSF v2.0 \cite{nistcsfv2} structure la gouvernance de la sécurité autour de six fonctions capitales : \textbf{Govern} (Gouverner), \textbf{Identify} (Identifier), \textbf{Protect} (Protéger), \textbf{Detect} (Détecter), \textbf{Respond} (Répondre) et \textbf{Recover} (Récupérer). CyberScore TN cartographie chaque constat technique vers les catégories du NIST CSF pour offrir une vision managériale de la maturité cyber aux directeurs informatiques.
+
+\subsection{Normes ISO/IEC 27001 \& 27002:2022}
+La norme internationale ISO/IEC 27002:2022 \cite{iso27002} regroupe 93 mesures de sécurité réparties en 4 thèmes : contrôles organisationnels (37), personnes (8), physiques (14) et technologiques (34). Notre plateforme évalue automatiquement le respect des contrôles technologiques de l'Annexe A (notamment le chiffrement A.8.24, la gestion des vulnérabilités A.8.8, et la sécurité des réseaux A.8.20).
+
+\subsection{Système de Notation CVSS v3.1}
+Le \textit{Common Vulnerability Scoring System} (CVSS v3.1) \cite{firstcvss} fournit un score quantitatif de 0.0 à 10.0 pour évaluer la sévérité intrinsèque des vulnérabilités. CyberScore TN associe à chaque faille détectée son vecteur CVSS officiel, permettant de calibrer la pondération du score global.
+
+\section{Analyse Comparative des Solutions Existantes}
+Pour positionner CyberScore TN, nous avons analysé les solutions internationales de notation cybernétique de référence.
+
+\subsection{SecurityScorecard (États-Unis)}
+Pionnier de la notation externe, SecurityScorecard évalue les entreprises selon une note alphabétique (A--F) basée sur 10 catégories de risque. La solution offre une plateforme propriétaire d'IA (TITAN AI). Cependant, son modèle commercial SaaS est extrêmement onéreux pour les finances publiques (coûts récurrents en devises fortes) et héberge les données des infrastructures auditées sur des clouds soumis au \textit{Cloud Act} américain.
+
+\subsection{BitSight (États-Unis)}
+BitSight propose une métrique numérique de 250 à 900 (similaire aux scores de crédit financier). Largement adopté par les compagnies d'assurance anglo-saxonnes, il offre un module de benchmarking macroscopique. Néanmoins, il souffre des mêmes contraintes de souveraineté et de coût d'abonnement que SecurityScorecard.
+
+\subsection{China Cybersecurity Label -- CCL (Chine)}
+Le système national chinois labellise les services et produits selon une échelle intuitive de une à trois étoiles ($\star\star\star$) attestée par un QR code de vérification publique. CyberScore TN s'inspire de cette lisibilité pour concevoir son Sceau officiel de confiance destiné aux citoyens.
+
+\subsection{Synthèse Comparative \& Positionnement de CyberScore TN}
+Le tableau \ref{tab:benchmark_solutions} récapitule les divergences fondamentales entre les offres du marché et la réponse souveraine apportée par CyberScore TN.
+
+\begin{table}[!htbp]
+\centering
+\caption{Comparaison des plateformes d'évaluation cyber avec CyberScore TN}
+\label{tab:benchmark_solutions}
+\begin{singlespace}
+\footnotesize
+\renewcommand{\arraystretch}{1.12}
+\begin{tabularx}{\textwidth}{>{\bfseries}l X X X >{\bfseries}X}
+\toprule
+\textbf{Critère} & \textbf{SecurityScorecard} & \textbf{BitSight} & \textbf{China CCL} & \textbf{CyberScore TN} \\
+\midrule
+Notation & A -- F & 250 -- 900 & $\star\star\star$ & Duale : A--F + $\star\star\star$ \\
+Périmètre Cible & Entreprises Fortune 500 & Grandes entreprises & Produits & 120+ Domaines État (.gov.tn) \\
+Souveraineté IA & Cloud US propriétaire & Cloud externe & Absent & Locale (Qwen2.5-Coder) \\
+Assistant Virtuel & Chatbot textuel & Absent & Absent & Avatar 3D Three.js (Amina) \\
+Audit Non-Intrusif & Oui & Oui & Audit sur dossier & Oui (16 Piliers passifs) \\
+Coût Annuel & $>$ 500 000 DT / an & $>$ 600 000 DT / an & Inaccessible & 0 DT (Open-Source Souverain) \\
+Conformité Locale & Standard US & Standard US & Standard CN & Décret-loi n° 2023-17 / ANCS \\
+\bottomrule
+\end{tabularx}
+\end{singlespace}
+\end{table}
+
+CyberScore TN se positionne ainsi comme une \textbf{solution souveraine, libre de droits et parfaitement calibrée pour les prérequis de l'État tunisien}, générant une économie annuelle estimée à plus de 550 000 dinars tunisiens tout en garantissant la confidentialité intégrale des vulnérabilités nationales.

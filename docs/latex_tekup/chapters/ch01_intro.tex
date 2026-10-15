@@ -1,0 +1,47 @@
+\chapter{Introduction Générale}
+\label{chap:intro}
+
+\section{Contexte Général \& Enjeux Nationaux}
+Les plateformes publiques hébergées sous le domaine national \texttt{.gov.tn} centralisent les démarches administratives et les flux de données des citoyens, des entreprises et des institutions tunisiennes. Leur exposition directe sur Internet en fait des cibles régulières d'attaques par déni de service, d'injections applicatives et de tentatives d'exfiltration de données.
+
+Le \textbf{Décret-loi n° 2023-17 du 11 mars 2023} relatif à la cybersécurité \cite{decret2023} confie à l'\textbf{Agence Nationale de la Cybersécurité (ANCS)} la mission d'imposer des contrôles techniques rigoureux et d'auditer la posture de sécurité des systèmes d'information publics. Ce cadre légal impose aux organismes publics une obligation de surveillance continue et de remédiation rapide de leurs vulnérabilités.
+
+Ce projet de fin d'année (PFA), réalisé à \textbf{TEK-UP University} en collaboration avec l'ANCS, a pour objectif de concevoir et déployer la plateforme \textbf{CyberScore TN} pour automatiser l'évaluation de ces infrastructures d'État.
+
+\section{Problématique \& Limites des Pratiques Actuelles}
+L'évaluation de la sécurité des administrations tunisiennes rencontre quatre limites opérationnelles :
+\begin{itemize}
+    \item \textbf{Audits manuels trop espacés} : Les audits ponctuels annuels ne détectent pas les régressions intermédiaires (certificats TLS expirés, mauvaises configurations de serveurs web après mise en production, ou failles récemment publiées).
+    \item \textbf{Absence de référentiel de notation partagé} : Chaque organisme applique ses propres critères sans métrique commune, ce qui empêche l'ANCS de comparer les secteurs et de prioriser les interventions critiques.
+    \item \textbf{Disparité entre constats techniques et normes} : Les rapports d'audit traditionnels listent des vulnérabilités brutes sans corrélation directe avec les exigences de l'OWASP Top 10 \cite{owasp2021}, du NIST CSF v2.0 \cite{nistcsfv2} ou de l'ISO/IEC 27001 \cite{iso27001}.
+    \item \textbf{Risque de fuite de données vers des services tiers} : Le recours à des plateformes d'analyse propriétaires étrangères (BitSight, SecurityScorecard) ou à des API de modèles de langage hébergées hors du territoire national expose des informations sensibles sur les failles des ministères tunisiens.
+\end{itemize}
+
+\section{Objectifs du Projet CyberScore TN}
+Pour répondre à ces contraintes, nous avons développé \textbf{CyberScore TN}, un système d'audit passif et de pilotage de conformité dédié aux domaines \texttt{.gov.tn}. Le projet répond à six objectifs précis :
+\begin{enumerate}
+    \item \textbf{Auditer passivement 120+ domaines gouvernementaux} à travers 16 facteurs de risque techniques sans impacter la disponibilité des serveurs distants.
+    \item \textbf{Calculer un score unifié sur 100 points} assorti d'une notation duale : un grade de \textbf{A+} à \textbf{F} et un label de confiance de \textbf{1 à 3 étoiles}.
+    \item \textbf{Automatiser la mise en conformité} en associant chaque faille détectée aux identifiants exacts de l'ANCS, du NIST CSF v2.0, de l'ISO 27001 et de l'OWASP.
+    \item \textbf{Intégrer une assistance IA locale et souveraine} : Déployer le modèle open-source \texttt{Qwen2.5-Coder:7b} sous runtime local Ollama \cite{qwen2024} pour générer des scripts de durcissement sans aucune transmission externe de données.
+    \item \textbf{Déployer un tableau de bord national} : Visualisation en temps réel de la santé cyber des ministères avec cartographie SVG des 24 gouvernorats et télémétrie des menaces CTI.
+    \item \textbf{Produire des rapports certifiés} : Génération automatisée de rapports d'audit PDF au format Chancellerie, authentifiés par empreinte cryptographique SHA-256.
+\end{enumerate}
+
+\section{Méthodologie de Développement}
+Le développement a suivi une méthode \textbf{Agile / Scrum} articulée en sprints de deux semaines. Chaque itération a couplé le codage des modules d'inspection, la validation unitaire via PyTest (92\% de couverture de code atteinte) et la mise à jour continue de la documentation technique.
+
+\section{Structure du Rapport}
+Ce document est organisé en onze chapitres :
+\begin{itemize}
+    \item Le \textbf{Chapitre \ref{chap:art}} examine l'état de l'art normatif et compare les plateformes existantes avec CyberScore TN.
+    \item Le \textbf{Chapitre \ref{chap:conception}} formalise les besoins fonctionnels, l'architecture à 4 couches et les diagrammes UML.
+    \item Le \textbf{Chapitre \ref{chap:infra}} détaille les 11 conteneurs Docker, l'API FastAPI et le frontend Next.js 16 trilingue (avec support de l'arabe RTL).
+    \item Le \textbf{Chapitre \ref{chap:scan}} présente les 8 modules de scanning passif et les mesures de vélocité.
+    \item Le \textbf{Chapitre \ref{chap:scoring}} explicite la formule mathématique de scoring et la classification sectorielle des 120 institutions.
+    \item Le \textbf{Chapitre \ref{chap:dashboard}} décrit le Command Center, le rendu SVG des 24 gouvernorats et la Mappemonde CTI.
+    \item Le \textbf{Chapitre \ref{chap:ia}} détaille l'inférence locale de Qwen2.5-Coder:7b, le streaming SSE et l'avatar Three.js Amina.
+    \item Le \textbf{Chapitre \ref{chap:backend_gamification}} documente le contrôle d'accès RBAC (avec écran de sécurité 403), les 12 trophées XP et le Sceau public vectoriel.
+    \item Le \textbf{Chapitre \ref{chap:tests}} expose les résultats des tests de charge, de résilience offline et les audits de domaines réels.
+    \item Enfin, le \textbf{Chapitre \ref{chap:conclusion}} dresse le bilan technique du projet et trace les perspectives d'intégration au SOC national.
+\end{itemize}

@@ -1,0 +1,18 @@
+[
+  {"id": "ID.AM-1", "function": "Identify", "category": "Asset Management", "subcategory": "Physical devices and systems are inventoried", "description": "Inventaire des dispositifs physiques et systèmes"},
+  {"id": "ID.AM-2", "function": "Identify", "category": "Asset Management", "subcategory": "Software platforms and applications are inventoried", "description": "Inventaire des plateformes logicielles"},
+  {"id": "ID.RA-1", "function": "Identify", "category": "Risk Assessment", "subcategory": "Asset vulnerabilities are identified and documented", "description": "Identification des vulnérabilités"},
+  {"id": "ID.GV-1", "function": "Identify", "category": "Governance", "subcategory": "Organizational cybersecurity policy is established", "description": "Politique de cybersécurité"},
+  {"id": "PR.AC-1", "function": "Protect", "category": "Access Control", "subcategory": "Identities and credentials are issued, managed, verified", "description": "Gestion des identités et accès"},
+  {"id": "PR.DS-1", "function": "Protect", "category": "Data Security", "subcategory": "Data-at-rest is protected", "description": "Protection des données au repos"},
+  {"id": "PR.DS-2", "function": "Protect", "category": "Data Security", "subcategory": "Data-in-transit is protected", "description": "Protection des données en transit (SSL/TLS)"},
+  {"id": "PR.IP-1", "function": "Protect", "category": "Information Protection", "subcategory": "Configuration baselines are established and maintained", "description": "Configuration de base de sécurité"},
+  {"id": "PR.IP-12", "function": "Protect", "category": "Information Protection", "subcategory": "A vulnerability management plan is developed and implemented", "description": "Plan de gestion des vulnérabilités"},
+  {"id": "PR.PT-3", "function": "Protect", "category": "Protective Technology", "subcategory": "Communications and control networks are protected", "description": "Protection des communications réseau"},
+  {"id": "DE.AE-1", "function": "Detect", "category": "Anomalies and Events", "subcategory": "A baseline of network operations is established", "description": "Référence des opérations réseau"},
+  {"id": "DE.CM-1", "function": "Detect", "category": "Security Continuous Monitoring", "subcategory": "The network is monitored to detect cybersecurity events", "description": "Surveillance continue du réseau"},
+  {"id": "DE.CM-8", "function": "Detect", "category": "Security Continuous Monitoring", "subcategory": "Vulnerability scans are performed", "description": "Scans de vulnérabilité réguliers"},
+  {"id": "RS.RP-1", "function": "Respond", "category": "Response Planning", "subcategory": "Response plan is executed during or after an incident", "description": "Plan de réponse aux incidents"},
+  {"id": "RS.MI-1", "function": "Respond", "category": "Mitigation", "subcategory": "Incidents are contained", "description": "Confinement des incidents"},
+  {"id": "RC.RP-1", "function": "Recover", "category": "Recovery Planning", "subcategory": "Recovery plan is executed during or after an incident", "description": "Plan de reprise après incident"}
+]

@@ -1,0 +1,129 @@
+\chapter[Analyse des Besoins \& Conception]{Analyse des Besoins \& Conception du Système}
+\label{chap:conception}
+
+\section{Analyse des Besoins}
+La conception de CyberScore TN repose sur une étude rigoureuse des exigences fonctionnelles et opérationnelles formulées par les officiers de sécurité de l'ANCS et des ministères.
+
+\subsection{Besoins Fonctionnels}
+Le système couvre seize exigences fonctionnelles prioritaires réparties selon leur niveau de criticité opérationnelle :
+
+\begin{table}[!htbp]
+\centering
+\caption{Matrice des 16 exigences fonctionnelles de CyberScore TN}
+\label{tab:besoins_fonctionnels}
+\footnotesize
+\renewcommand{\arraystretch}{1.08}
+\begin{tabularx}{\textwidth}{l X c p{3.8cm}}
+\toprule
+\textbf{Code} & \textbf{Intitulé du Besoin Fonctionnel} & \textbf{Priorité} & \textbf{Module Réalisateur} \\
+\midrule
+\textbf{BF01} & Audit passif automatique des 120+ domaines gouvernementaux & Haute & Moteur d'Orchestration \\
+\textbf{BF02} & Calcul mathématique du score sur 100 avec notation duale (A--F, $\star\star\star$) & Haute & Score Engine \\
+\textbf{BF03} & Mappage automatisé vers OWASP Top 10, NIST CSF v2 et ISO 27001 & Haute & Framework Mapper \\
+\textbf{BF04} & Visualisation télémétrique au sein du Command Center National & Haute & Next.js Dashboard \\
+\textbf{BF05} & Cartographie vectorielle SVG des 24 gouvernorats tunisiens & Haute & TunisiaMap SVG \\
+\textbf{BF06} & Génération et export d'attestations d'audit PDF vectorielles 7 pages & Haute & React-PDF Engine \\
+\textbf{BF07} & Dialogue souverain avec l'analyste IA 3D Amina (streaming SSE) & Haute & Ollama / Qwen2.5-Coder \\
+\textbf{BF08} & Énumération passive de la surface d'attaque sous-domaines (EASM) & Moyenne & Subfinder / DNS \\
+\textbf{BF09} & Surveillance CTI des cybermenaces mondiales (War Room Canvas 60 FPS) & Moyenne & Threat Intel Engine \\
+\textbf{BF10} & Identification des technologies serveurs et des CMS obsolètes & Moyenne & Tech Detector \\
+\textbf{BF11} & Détection des faiblesses Supply Chain et des scripts CDN sans SRI & Moyenne & Supply Chain Scanner \\
+\textbf{BF12} & Modélisation prédictive de la dérive de score à +30 jours & Moyenne & Prediction Analytics \\
+\textbf{BF13} & Émulation professionnelle des RSSI par attribution d'XP et 12 badges & Basse & Gamification Hub \\
+\textbf{BF14} & Génération du Sceau Public de Confiance avec QR code anti-fraude & Basse & Trust Seal Generator \\
+\textbf{BF15} & Observatoire comparatif et benchmarking géostratégique (MENA \& Monde) & Basse & Benchmark Engine \\
+\textbf{BF16} & Contrôle d'accès strict RBAC avec interception 403 et Audit Trail & Haute & Security Middleware \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Besoins Non-Fonctionnels}
+Les spécifications non-fonctionnelles garantissent l'excellence technique et la viabilité étatique de la plateforme :
+
+\begin{table}[!htbp]
+\centering
+\caption{Matrice des exigences non-fonctionnelles}
+\label{tab:besoins_non_fonctionnels}
+\small
+\renewcommand{\arraystretch}{1.1}
+\begin{tabularx}{\textwidth}{l p{4cm} X}
+\toprule
+\textbf{Code} & \textbf{Exigence} & \textbf{Spécification Technique Validée} \\
+\midrule
+\textbf{BNF01} & Souveraineté Numérique Totale & 100\% des données et de l'inférence IA hébergées en local ; 0 octet transmis vers des clouds tiers. \\
+\textbf{BNF02} & Vélocité d'Exécution Asynchrone & Scan Quick en $\sim$2.8 s, Standard en $\sim$7.4 s et Deep en $\sim$28.6 s via parallélisation \texttt{asyncio.gather}. \\
+\textbf{BNF03} & Ergonomie Trilingue \& RTL & Prise en charge native de l'arabe avec inversion symétrique CSS Logical Properties sans latence. \\
+\textbf{BNF04} & Portabilité \& Conteneurisation & Déploiement reproductible orchestré sous Docker Compose articulant 11 microservices isolés. \\
+\textbf{BNF05} & Résilience \& Tolérance aux Pannes & Basculement transparent vers un moteur expert déterministe certifié en cas de coupure du GPU LLM. \\
+\textbf{BNF06} & Accessibilité Multi-Résolutions & Interface réactive fluide adaptée aux murs d'écrans SOC 4K comme aux terminaux portables d'astreinte. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Architecture Globale à 4 Couches}
+Pour répondre à ces exigences avec une modularité maximale, nous avons structuré CyberScore TN selon une \textbf{Architecture Logicielle à 4 Couches Distinctes} :
+
+\begin{figure}[!htbp]
+\centering
+\begin{tcolorbox}[colback=gray!5,colframe=tekupPurple,arc=1mm,title=\textbf{Architecture Modulaire à 4 Couches de CyberScore TN}]
+\centering
+\textbf{\large 1. COUCHE PRÉSENTATION (FRONTEND)}\\[1mm]
+Next.js 16 (App Router) $\cdot$ React 19 $\cdot$ Three.js 3D Avatar (Amina) $\cdot$ RTL Arabe $\cdot$ Canvas 60 FPS\\
+$\downarrow$ \textit{\small Protocole REST (JSON) + Flux Streaming SSE (Server-Sent Events) + WebSockets}\\[2mm]
+\textbf{\large 2. COUCHE SERVICE \& MOTEURS D'AUDIT (BACKEND)}\\[1mm]
+FastAPI (Python 3.12) $\cdot$ AsyncIO $\cdot$ Pydantic v2 $\cdot$ 8 Modules de Scan $\cdot$ Moteur de Notation sur 100 $\cdot$ RBAC\\
+$\downarrow$ \textit{\small Appels Asynchrones \& Interrogation Sockets / Modèles de Langage}\\[2mm]
+\textbf{\large 3. COUCHE INTELLIGENCE ARTIFICIELLE SOUVERAINE (IA LOCALE)}\\[1mm]
+Runtime Ollama Local $\cdot$ Modèle Qwen2.5-Coder:7b $\cdot$ Générateur Expert de Remédiation Déterministe\\
+$\downarrow$ \textit{\small ORM SQLAlchemy 2.0 (asyncpg) $\cdot$ Cache In-Memory}\\[2mm]
+\textbf{\large 4. COUCHE DONNÉES \& PERSISTANCE}\\[1mm]
+PostgreSQL 16 (19 Tables Relationnelles \& JSONB) $\cdot$ Redis 7 (Cache de Scan \& Files Celery)
+\end{tcolorbox}
+\caption{Vue architecturale à 4 couches de la plateforme CyberScore TN}
+\label{fig:archi_4_couches}
+\end{figure}
+
+\section{Modélisation UML du Système}
+
+\subsection{Diagramme des Cas d'Utilisation (Use Case)}
+Le système distingue trois profils d'utilisateurs rattachés à l'État :
+\begin{itemize}
+    \item \textbf{L'Administrateur Central ANCS (Super-Admin)} : Supervise l'ensemble des 120 institutions, valide ou révoque les comptes officiers, configure les seuils d'alerte nationaux et active le mode maintenance.
+    \item \textbf{L'Auditeur / Officier RSSI Ministériel} : Dispose d'une habilitation restreinte à son périmètre ministériel, lance des audits de sécurité, dialogue avec l'IA Amina et exporte les attestations PDF officielles.
+    \item \textbf{L'Observateur Public} : Accède au Command Center et au Benchmark international en lecture seule, sans privilège de scan ni accès aux configurations internes.
+\end{itemize}
+
+\begin{figure}[!htbp]
+\centering
+\begin{tcolorbox}[colback=white,colframe=tekupPurple,arc=1mm,left=4pt,right=4pt,top=4pt,bottom=4pt,title=\textbf{Matrice des Droits d'Accès par Rôle (RBAC)}]
+\begin{singlespace}
+\footnotesize
+\begin{tabularx}{\linewidth}{X >{\centering\arraybackslash}p{2.6cm} >{\centering\arraybackslash}p{2.4cm} >{\centering\arraybackslash}p{2.6cm}}
+\toprule
+\textbf{Cas d'Utilisation Métier} & \textbf{Admin ANCS} & \textbf{Auditeur RSSI} & \textbf{Observateur} \\
+\midrule
+Command Center \& Cartographie & \checkmark & \checkmark & \checkmark \\
+Benchmark International & \checkmark & \checkmark & \checkmark \\
+Lancement Scan (/scan) & \checkmark & \checkmark & $\times$ \textit{(Bloqué)} \\
+Assistant IA Amina & \checkmark & \checkmark & $\times$ \\
+Export Rapport PDF Officiel & \checkmark & \checkmark & $\times$ \\
+Gestion des Utilisateurs & \checkmark & $\times$ \textit{(HTTP 403)} & $\times$ \textit{(HTTP 403)} \\
+Mode Maintenance National & \checkmark & $\times$ & $\times$ \\
+\bottomrule
+\end{tabularx}
+\end{singlespace}
+\end{tcolorbox}
+\caption{Matrice d'attribution des cas d'utilisation par rôle}
+\label{fig:rbac_matrix}
+\end{figure}
+
+\subsection{Diagramme de Séquence -- Cycle de Vie d'un Audit Asynchrone}
+Le déroulement d'un audit de sécurité illustre la puissance de la parallélisation asynchrone :
+\begin{enumerate}
+    \item L'auditeur transmet l'URL cible (ex: \texttt{finances.gov.tn}) et sélectionne le mode d'audit via l'interface Next.js.
+    \item L'API FastAPI réceptionne la requête et mandate l'Orchestrateur asynchrone (\texttt{orchestrator.py}).
+    \item Grâce à la coroutine \texttt{asyncio.gather}, les modules d'inspection s'exécutent simultanément : poignée de main TLS (\texttt{sslyze}), inspection des en-têtes (\texttt{httpx}), résolution DNSSEC/DMARC (\texttt{dnspython}) et analyse des cookies.
+    \item Les constats bruts normalisés sous forme d'objets \texttt{Finding} sont transmis au Score Engine.
+    \item Le Score Engine calcule la note sur 100, attribue le grade (ex: B+) et le label d'étoiles, puis sauvegarde la transaction en base PostgreSQL 16.
+    \item L'interface affiche instantanément les gauges et le radar chart, et offre l'option de consulter l'IA Amina pour la remédiation.
+\end{enumerate}

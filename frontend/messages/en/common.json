@@ -1,0 +1,103 @@
+{
+  "app": {
+    "title": "CyberScore TN",
+    "subtitle": "Cybersecurity Assessment Platform",
+    "description": "AI-Powered Cybersecurity Scoring Platform for Tunisian Government Websites"
+  },
+  "nav": {
+    "commandCenter": "Command Center",
+    "scanner": "Scanner",
+    "results": "Results",
+    "compare": "Compare",
+    "sectors": "Sectors",
+    "threats": "Threats",
+    "predictions": "Predictions",
+    "badges": "Badges",
+    "reports": "Reports",
+    "benchmark": "International Benchmark",
+    "history": "History",
+    "admin": "Administration",
+    "assistant": "AI Assistant",
+    "settings": "Settings"
+  },
+  "actions": {
+    "scan": "Scan",
+    "newScan": "New Scan",
+    "export": "Export",
+    "compare": "Compare",
+    "details": "Details",
+    "close": "Close",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "search": "Search"
+  },
+  "grades": {
+    "excellent": "Excellent",
+    "strong": "Strong",
+    "good": "Good",
+    "fair": "Fair",
+    "poor": "Poor",
+    "critical": "Critical"
+  },
+  "sectors": {
+    "ministries": "Ministries",
+    "institutions": "Public Institutions",
+    "local": "Local Authorities",
+    "enterprises": "Public Enterprises"
+  },
+  "dashboard": {
+    "nationalOverview": "National Overview",
+    "sectorHealth": "Sector Health",
+    "riskMatrix": "Risk Matrix",
+    "alertFeed": "Recent Alerts",
+    "leaderboard": "Leaderboard",
+    "leaderboardDesc": "Sites ranked by security score",
+    "totalSites": "Total Monitored Sites",
+    "averageScore": "Average Score",
+    "criticalAlerts": "Critical Alerts",
+    "scansToday": "Scans Today",
+    "score": "Score",
+    "grade": "Grade",
+    "stars": "Stars"
+  },
+  "scanner": {
+    "title": "Security Scanner",
+    "description": "Enter a government website URL to start the cybersecurity assessment",
+    "enterUrl": "Enter website URL",
+    "scanType": "Scan Type",
+    "scanType_quick": "Quick",
+    "scanType_standard": "Standard",
+    "scanType_deep": "Deep",
+    "scanType_autonomous": "Autonomous Multi-Agent Audit (AI)",
+    "scanners": "scanners",
+    "startScan": "Start Scan",
+    "scanning": "Scanning...",
+    "scanAnother": "Scan Another Site",
+    "tryAgain": "Try Again",
+    "categoryBreakdown": "Category Breakdown",
+    "findings": "Findings",
+    "severity": "Severity",
+    "finding": "Finding",
+    "category": "Category",
+    "phase1": "Phase 1: Quick Scans",
+    "phase2": "Phase 2: Network Scans",
+    "phase3": "Phase 3: Deep Scans"
+  },
+  "avatar": {
+    "name": "Amina",
+    "greeting": "Hello! I'm Amina, your cybersecurity assistant",
+    "askMe": "Ask me anything...",
+    "thinking": "Thinking...",
+    "analyzing": "Analyzing..."
+  },
+  "theme": {
+    "dark": "Dark Mode",
+    "light": "Light Mode"
+  },
+  "language": {
+    "ar": "العربية",
+    "fr": "Français",
+    "en": "English"
+  }
+}

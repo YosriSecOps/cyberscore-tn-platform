@@ -1,0 +1,38 @@
+PROPRIETARY AND CONFIDENTIAL LICENSE (ALL RIGHTS RESERVED)
+
+Copyright (c) 2026 Yosri Hamdouni (YosriSecOps).
+All Rights Reserved.
+
+This software and associated documentation files (the "Software") are the proprietary
+and confidential property of Yosri Hamdouni and the CyberScore TN Project, developed
+in partnership with the National Cybersecurity Agency of Tunisia (ANCS) and TEK-UP.
+
+TERMS AND CONDITIONS:
+
+1. PROHIBITION OF UNAUTHORIZED USE, COPYING, AND DISTRIBUTION:
+   No permission is granted to any person or entity to use, copy, modify, merge,
+   publish, distribute, sublicense, sell, reverse engineer, decompile, or create
+   derivative works of the Software or any portion thereof, without the prior
+   express written consent of the copyright holder.
+
+2. ACADEMIC AND INSTITUTIONAL EVALUATION EXCEPTION:
+   Authorized members of the academic jury (TEK-UP) and official supervisors
+   from the Agence Nationale de la Cybersécurité (ANCS) are granted a limited,
+   non-exclusive, non-transferable license to view, execute, and evaluate the Software
+   solely for the purposes of academic grading, thesis evaluation, and official
+   internship validation.
+
+3. CONFIDENTIALITY AND SENSITIVE ASSETS:
+   The Software contains proprietary algorithms, state cybersecurity telemetry models,
+   and infrastructure security architecture patterns related to sovereign digital assets.
+   Any unauthorized disclosure, public dissemination, or leak of this codebase is strictly
+   prohibited and may constitute a violation of applicable national intellectual property
+   laws and cybersecurity regulations (notably Tunisian Decree-Law No. 2023-17).
+
+4. NO WARRANTY:
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+   INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+   PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHOR OR COPYRIGHT HOLDER BE LIABLE
+   FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+   OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+   DEALINGS IN THE SOFTWARE.

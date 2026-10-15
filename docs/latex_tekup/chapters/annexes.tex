@@ -1,0 +1,88 @@
+\chapter[Spécification des APIs]{Spécification des Interfaces de Programmation (API REST \& WebSocket)}
+\label{anx:api}
+
+L'ensemble des services de CyberScore TN est exposé à travers une API REST asynchrone conçue avec FastAPI (Python 3.12), complétée par des canaux bidirectionnels WebSocket pour la télémétrie en direct.
+
+\section{Endpoints de Scanning \& Télémétrie Asynchrone}
+
+\begin{table}[!htbp]
+\centering
+\caption{Spécification des routes d'audit et de streaming}
+\label{tab:api_scans}
+\begin{singlespace}
+\footnotesize
+\renewcommand{\arraystretch}{1.1}
+\begin{tabularx}{\textwidth}{p{3.2cm} l p{3.2cm} X}
+\toprule
+\textbf{Méthode \& Route} & \textbf{Accès} & \textbf{Entrée (Payload)} & \textbf{Description \& Rôle Opérationnel} \\
+\midrule
+\texttt{POST /api/scans/run} & Auditeur / Admin & \texttt{\{"url", "scan\_type"\}} & Déclenche un audit asynchrone non-bloquant et initialise l'enregistrement en base. \\
+\texttt{GET /api/scans/recent} & Public / Tout rôle & Paramètre \texttt{limit=10} & Récupère les dix derniers audits complétés pour alimenter le Leaderboard. \\
+\texttt{GET /api/scans/\{id\}} & Tout rôle authentifié & Identifiant UUID & Restitue l'intégralité des résultats d'un scan (scores, findings et preuves). \\
+\texttt{GET /api/scans/history/\{url\}} & Tout rôle & Nom de domaine & Retourne l'historique temporel des audits pour le tracé des courbes d'évolution. \\
+\texttt{WS /api/scans/ws/\{id\}} & Client initiateur & ID de session scan & Canal WebSocket bidirectionnel diffusant en direct l'avancement pourcentage et module actif. \\
+\bottomrule
+\end{tabularx}
+\end{singlespace}
+\end{table}
+
+\section{Endpoints Décisionnels \& Supervision Étatique}
+
+\begin{table}[!htbp]
+\centering
+\caption{Spécification des routes de gouvernance et de renseignement}
+\label{tab:api_gov}
+\begin{singlespace}
+\footnotesize
+\renewcommand{\arraystretch}{1.1}
+\begin{tabularx}{\textwidth}{p{3.5cm} l p{2.8cm} X}
+\toprule
+\textbf{Méthode \& Route} & \textbf{Accès} & \textbf{Format Réponse} & \textbf{Usage Métier} \\
+\midrule
+\texttt{GET /api/dashboard/stats} & Public & JSON & Télémétrie en temps réel du Command Center (sites surveillés, score national, alertes). \\
+\texttt{GET /api/sectors} & Public & JSON Array & Référentiel des 4 secteurs d'État avec moyennes pondérées agrégées dynamiquement. \\
+\texttt{GET /api/organizations} & Public & JSON Array & Catalogue officiel des 120 institutions publiques et ministères tunisiens. \\
+\texttt{GET /api/threats/stats} & Auditeur / Admin & JSON Array & Télémétrie de cybermenaces CTI et vulnérabilités critiques pour la War Room Canvas. \\
+\texttt{GET /api/predictions/overview} & Auditeur / Admin & JSON & Projections analytiques à +30 jours basées sur les tendances d'audits. \\
+\texttt{POST /api/ai/chat} & Auditeur / Admin & SSE (Flux Streaming) & Échange en streaming mot-par-mot avec l'analyste IA Amina sous Qwen2.5-Coder:7b. \\
+\bottomrule
+\end{tabularx}
+\end{singlespace}
+\end{table}
+
+\chapter[Schéma Relationnel PostgreSQL]{Dictionnaire du Schéma Relationnel PostgreSQL 16 (19 Modèles)}
+\label{anx:db}
+
+La persistance des données s'appuie sur le SGBD relationnel PostgreSQL 16 via SQLAlchemy 2.0 en mode asynchrone (\texttt{asyncpg}). Les dix-neuf tables sont structurées pour concilier rigueur relationnelle et flexibilité documentaire grâce aux colonnes JSONB.
+
+\section{Référentiel des Tables Clés}
+
+\begin{table}[!htbp]
+\centering
+\caption{Dictionnaire des données relationnelles de CyberScore TN}
+\label{tab:db_schema}
+\begin{singlespace}
+\footnotesize
+\renewcommand{\arraystretch}{1.08}
+\begin{tabularx}{\textwidth}{l p{3.4cm} X}
+\toprule
+\textbf{Nom de la Table} & \textbf{Modèle SQLAlchemy} & \textbf{Attributs Clés \& Rôle Système} \\
+\midrule
+\texttt{users} & \texttt{User} & \texttt{id}, \texttt{email}, \texttt{hashed\_password}, \texttt{role} (admin/auditor/viewer), \texttt{status} (pending/approved), \texttt{organization\_id}. \\
+\texttt{sectors} & \texttt{Sector} & \texttt{id}, \texttt{name\_fr}, \texttt{name\_ar}, \texttt{description}, \texttt{icon}. \\
+\texttt{organizations} & \texttt{Organization} & \texttt{id}, \texttt{name\_fr}, \texttt{name\_ar}, \texttt{sector\_id}, \texttt{governorate}, \texttt{contact\_email}. \\
+\texttt{websites} & \texttt{Website} & \texttt{id}, \texttt{url}, \texttt{organization\_id}, \texttt{current\_score}, \texttt{current\_grade}, \texttt{last\_scanned\_at}. \\
+\texttt{scans} & \texttt{Scan} & \texttt{id}, \texttt{website\_id}, \texttt{scan\_type} (quick/standard/deep), \texttt{total\_score}, \texttt{grade}, \texttt{duration\_seconds}, \texttt{raw\_metrics} (JSONB). \\
+\texttt{scan\_results} & \texttt{ScanResult} & \texttt{id}, \texttt{scan\_id}, \texttt{category}, \texttt{severity}, \texttt{title}, \texttt{description}, \texttt{remediation}, \texttt{cvss\_score}, \texttt{owasp\_id}, \texttt{nist\_id}, \texttt{evidence} (JSONB). \\
+\texttt{category\_scores} & \texttt{CategoryScore} & \texttt{id}, \texttt{scan\_id}, \texttt{category\_key}, \texttt{score} (sur 100), \texttt{weight}, \texttt{weighted\_score}. \\
+\texttt{subdomains} & \texttt{Subdomain} & \texttt{id}, \texttt{website\_id}, \texttt{subdomain}, \texttt{ip\_address}, \texttt{open\_ports}, \texttt{is\_active}. \\
+\texttt{threat\_intels} & \texttt{ThreatIntel} & \texttt{id}, \texttt{website\_id}, \texttt{source} (AbuseIPDB/VirusTotal), \texttt{reputation\_score}, \texttt{blacklisted}, \texttt{details} (JSONB). \\
+\texttt{technologies} & \texttt{Technology} & \texttt{id}, \texttt{website\_id}, \texttt{name} (Nginx/WordPress/PHP), \texttt{version}, \texttt{category}, \texttt{cve\_count}. \\
+\texttt{badges} & \texttt{BadgeDefinition} & \texttt{id}, \texttt{code}, \texttt{title\_fr}, \texttt{title\_ar}, \texttt{xp\_reward}, \texttt{category}, \texttt{icon\_path}. \\
+\texttt{earned\_badges} & \texttt{EarnedBadge} & \texttt{id}, \texttt{user\_id}, \texttt{organization\_id}, \texttt{badge\_id}, \texttt{awarded\_at}. \\
+\texttt{ai\_chat\_histories} & \texttt{AIChatHistory} & \texttt{id}, \texttt{user\_id}, \texttt{website\_id}, \texttt{role} (user/assistant), \texttt{content}, \texttt{created\_at}. \\
+\texttt{audit\_logs} & \texttt{AuditLog} & \texttt{id}, \texttt{user\_id}, \texttt{action}, \texttt{ip\_address}, \texttt{details} (JSONB), \texttt{timestamp}. \\
+\bottomrule
+\end{tabularx}
+\end{singlespace}
+\end{table}

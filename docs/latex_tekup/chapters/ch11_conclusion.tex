@@ -1,0 +1,31 @@
+\chapter[Conclusion \& Perspectives]{Conclusion Générale \& Perspectives}
+\label{chap:conclusion}
+
+\section{Bilan des Réalisations Techniques}
+Ce projet de fin d'année (PFA) mené à \textbf{TEK-UP University} a abouti à la réalisation de la plateforme \textbf{CyberScore TN}. Le système fournit à l'ANCS et aux ministères tunisiens un outil automatisé pour cartographier, évaluer et corriger la posture de sécurité des domaines publics \texttt{.gov.tn}.
+
+Le travail réalisé a livré cinq composants opérationnels majeurs :
+\begin{enumerate}
+    \item \textbf{Un orchestrateur de scan asynchrone} qui inspecte 16 facteurs de risque sur plus de 120 institutions en 7.4 secondes en mode Standard, sans impact sur les serveurs audités.
+    \item \textbf{Un moteur de notation normalisé} qui applique une pondération sur 100 points, attribue une note duale (A+ à F et 1 à 3 étoiles) et mappe automatiquement chaque faille vers l'OWASP Top 10, le NIST CSF v2.0 et l'ISO/IEC 27001.
+    \item \textbf{Un assistant IA local et souverain} basé sur le modèle open-source \texttt{Qwen2.5-Coder:7b} sous Ollama, communiquant par streaming SSE avec l'avatar 3D Amina sans transmission de données hors du serveur d'hébergement.
+    \item \textbf{Un tableau de bord décisionnel} qui regroupe la cartographie vectorielle des 24 gouvernorats, une War Room CTI animée en Canvas à 60 FPS et un générateur d'attestations PDF certifiées par empreinte SHA-256.
+    \item \textbf{Un module de gouvernance d'accès (RBAC)} qui cloisonne les privilèges des administrateurs, auditeurs ministériels et observateurs, complété par un système d'émulation par points d'expérience (XP) et badges.
+\end{enumerate}
+
+\section{Bilan Personnel \& Compétences Développées}
+Ce projet m'a permis de consolider un double profil d'ingénieur logiciel et de spécialiste en sécurité applicative :
+\begin{itemize}
+    \item \textbf{Architecture logicielle asynchrone} : Conception d'APIs performantes avec FastAPI (Python 3.12), gestion des coroutines AsyncIO, conteneurisation de 11 services sous Docker Compose et persistance optimisée sur PostgreSQL 16.
+    \item \textbf{Développement web et accessibilité} : Maîtrise de Next.js 16 (App Router), React 19, rendu 3D avec Three.js, animations Canvas à 60 FPS et prise en charge complète de la direction RTL pour la langue arabe.
+    \item \textbf{Sécurité des protocoles et conformité} : Analyse des suites cryptographiques TLS 1.3, validation des enregistrements DNSSEC et DMARC, et mise en application du Décret-loi n° 2023-17.
+    \item \textbf{Déploiement d'IA locale (LLMOps)} : Configuration de modèles quantifiés sur machine locale, gestion des flux de streaming HTTP et conception de prompts de remédiation technique.
+\end{itemize}
+
+\section{Perspectives d'Évolution}
+Trois axes de développement sont envisagés en coordination avec l'ANCS :
+\begin{itemize}
+    \item \textbf{Modélisation prédictive par réseau récurrent (LSTM)} : Entraîner un réseau de neurones sur les historiques d'audits pour anticiper les dégradations de sécurité à 90 jours.
+    \item \textbf{Raccordement au SOC national} : Intégrer CyberScore TN comme sonde d'inspection continue reliée aux outils de supervision du CERT-TN.
+    \item \textbf{Export vers les plateformes SIEM} : Développer des connecteurs d'événements (Syslog/CEF) vers Wazuh et Elastic SIEM pour alerter les équipes d'astreinte dès qu'une anomalie critique est détectée.
+\end{itemize}

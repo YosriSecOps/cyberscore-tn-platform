@@ -1,0 +1,84 @@
+\chapter[Infrastructure \& Socle Technique]{Réalisation : Infrastructure \& Socle Technologique}
+\label{chap:infra}
+
+\section{Environnement de Conteneurisation Docker}
+Afin de garantir une reproductibilité parfaite et une isolation stricte des dépendances de scanning, l'ensemble de la plateforme CyberScore TN est orchestré via Docker Compose.
+
+\subsection{Cartographie des 11 Microservices Conteneurisés}
+L'infrastructure comprend onze conteneurs spécialisés fonctionnant sur un réseau virtuel privé isolé :
+\begin{enumerate}
+    \item \textbf{\texttt{backend}} : API REST FastAPI exécutée sous Python 3.12 avec serveur asynchrone Uvicorn (port \texttt{8000}).
+    \item \textbf{\texttt{frontend}} : Application Next.js 16 sous Node.js 22 assurant le rendu hybride SSR/SSG (port \texttt{3000}).
+    \item \textbf{\texttt{postgres}} : Serveur de base de données relationnelle PostgreSQL 16 hébergeant 19 tables et types JSONB (port \texttt{5432}).
+    \item \textbf{\texttt{redis}} : Système de stockage clé-valeur in-memory Redis 7 faisant office de cache de scan et de courtier de messages (port \texttt{6379}).
+    \item \textbf{\texttt{celery-worker}} : Processus travailleur Celery prenant en charge les tâches longues et scans asynchrones différés.
+    \item \textbf{\texttt{celery-beat}} : Ordonnanceur planifiant les scans automatiques quotidiens des 120 institutions.
+    \item \textbf{\texttt{ollama}} : Runtime d'inférence LLM local exécutant le modèle souverain \texttt{Qwen2.5-Coder:7b} (port \texttt{25000} / \texttt{11434}).
+    \item \textbf{\texttt{zap}} : Conteneur OWASP ZAP DAST pour les audits d'injections applicatives (port \texttt{8080}).
+    \item \textbf{\texttt{nmap}} : Scanner réseau conteneurisé évaluant l'exposition des 100 ports critiques.
+    \item \textbf{\texttt{subfinder}} : Moteur d'énumération passive de sous-domaines (EASM).
+    \item \textbf{\texttt{flower}} : Tableau de bord de supervision et de télémétrie des files de tâches Celery (port \texttt{5555}).
+\end{enumerate}
+
+\section{Backend Asynchrone FastAPI \& Python 3.12}
+Le choix de FastAPI \cite{fastapi} s'impose pour des raisons de performance d'I/O réseau et de standardisation :
+\begin{itemize}
+    \item \textbf{Programmation Asynchrone Native (\texttt{async/await})} : Les scans réseau réalisant des centaines de requêtes simultanées vers des serveurs distants, l'architecture asynchrone de Python permet de traiter ces requêtes sans bloquer le thread principal.
+    \item \textbf{Validation Stricte des Données avec Pydantic v2} : Chaque charge utile entrante et sortante est rigoureusement validée et typée, éliminant les vulnérabilités de parsing.
+    \item \textbf{Documentation OpenAPI Automatisée} : Génération interactive des spécifications de l'API via Swagger UI (\texttt{/docs}) facilitant l'intégration des partenaires institutionnels.
+\end{itemize}
+
+\subsection{Arborescence Modulaire du Backend FastAPI}
+Le code source backend est organisé selon une séparation stricte des responsabilités :
+
+\begin{lstlisting}[language=bash, caption={Structure modulaire du backend FastAPI}]
+backend/app/
+|-- main.py              # Point d'entree FastAPI, lifespan, middleware CORS
+|-- config.py            # Configuration globale (Pydantic BaseSettings)
+|-- database.py          # Moteur SQLAlchemy async (asyncpg) et sessions
+|-- models/              # 18 modeles relationnels SQLAlchemy (users, scans, etc.)
+|-- routes/              # 6 routeurs REST (auth, scan, dashboard, data, ai, threats)
+|-- scanners/            # 8 modules d'audit passif, orchestrator, score_engine
+|-- tasks/               # Taches longues d'arriere-plan Celery et Redis
+\-- crud.py, schemas.py  # Services de persistance CRUD et schemas Pydantic v2
+\end{lstlisting}
+
+\subsection{Modèle de Données PostgreSQL 16 (SQLAlchemy 2.0)}
+La persistance repose sur le pilote asynchrone \texttt{asyncpg}. Les dix-huit modèles relationnels clés sont articulés autour des entités suivantes :
+\begin{itemize}
+    \item \textbf{\texttt{Organization} \& \texttt{Sector}} : Référentiel des 24 ministères et des 4 grands secteurs publics tunisiens.
+    \item \textbf{\texttt{Website}} : Domaine public surveillé (\texttt{url}, organisation de rattachement, score courant).
+    \item \textbf{\texttt{Scan}} : Session d'audit unitaire horodatée avec métriques de durée, mode de scan (Quick, Standard, Deep) et note globale.
+    \item \textbf{\texttt{ScanResult}} : Vulnérabilité unitaire détectée comprenant la sévérité CVSS, le descriptif, la preuve technique et les mappings OWASP/NIST/ISO.
+    \item \textbf{\texttt{CategoryScore}} : Notes pondérées par pilier technique alimentant le diagramme radar.
+    \item \textbf{\texttt{User}} : Comptes étatiques avec rôles RBAC (\texttt{admin}, \texttt{auditor}, \texttt{viewer}) et statut d'approbation d'État.
+    \item \textbf{\texttt{BadgeDefinition} \& \texttt{EarnedBadge}} : Tables de gamification traçant l'XP et l'obtention des 12 trophées.
+\end{itemize}
+
+\section{Frontend Next.js 16 \& Internationalisation Trilingue}
+L'interface utilisateur s'appuie sur Next.js 16 \cite{nextjs} (App Router) et React 19 pour offrir une réactivité de niveau station de travail de SOC.
+
+\subsection{Prise en Charge Native de la Direction RTL Arabe}
+L'anglais et le français sont couramment utilisés dans les environnements techniques, mais l'arabe est la langue officielle de l'administration tunisienne. La plateforme a été pensée dès sa conception pour un support bidirectionnel strict :
+\begin{itemize}
+    \item Injection dynamique de l'attribut \texttt{dir="rtl"} ou \texttt{dir="ltr"} selon la locale active sans rechargement de page.
+    \item Utilisation exclusive de \textbf{propriétés CSS logiques} (\texttt{margin-inline-start}, \texttt{padding-inline-end}, \texttt{inset-inline-start}) garantissant une inversion symétrique naturelle des marges et des icônes.
+    \item Intégration de la police typographique arabe \textbf{Noto Sans Arabic} avec stratégie \texttt{font-display: swap} éliminant tout clignotement à l'affichage.
+\end{itemize}
+
+\subsection{Architecture des 12 Pages de l'Application}
+L'application déploie 12 routes applicatives compilées en 36 pages statiques et dynamiques (12 pages $\times$ 3 langues) :
+\begin{itemize}
+    \item \texttt{/} : Centre de Commande National (Command Center).
+    \item \texttt{/scan} : Moteur d'audit interactif avec progress ring animé.
+    \item \texttt{/sectors} : Classement et santé cyber des 4 secteurs d'État.
+    \item \texttt{/threats} : Mappemonde CTI War Room animée Canvas 60 FPS.
+    \item \texttt{/predictions} : Analyse prédictive des risques à +30 jours.
+    \item \texttt{/assistant} : Console d'IA conversationnelle avec l'avatar 3D Amina.
+    \item \texttt{/badges} : Hub de gamification, trophées XP et générateur de Sceau public.
+    \item \texttt{/benchmark} : Observatoire géostratégique comparatif MENA \& International.
+    \item \texttt{/history} : Journal chronologique des audits réalisés.
+    \item \texttt{/reports} : Hub national d'édition et visionneuse de rapports PDF Chancellerie.
+    \item \texttt{/admin} : Console d'administration RBAC et gestion des habilitations.
+    \item \texttt{/login} \& \texttt{/register} : Portail d'accès sécurisé et d'enrôlement ministériel.
+\end{itemize}

@@ -1,0 +1,73 @@
+.dashboard {
+  --td-bg: var(--surface-1);
+  --td-row: var(--surface-0);
+  --td-row-alt: var(--surface-0);
+  --td-border: var(--border-color);
+  --td-border-light: var(--border-color);
+  --td-text: var(--text-primary);
+  --td-text-muted: var(--text-secondary);
+}
+
+:global([data-theme="dark"]) .dashboard {
+  --td-bg: rgba(15, 23, 42, 0.7);
+  --td-row: transparent;
+  --td-row-alt: rgba(56, 189, 248, 0.03);
+  --td-border: rgba(56, 189, 248, 0.1);
+  --td-border-light: rgba(255, 255, 255, 0.06);
+  --td-text: #e2e8f0;
+  --td-text-muted: #94a3b8;
+}
+
+.section {
+  background: var(--td-bg);
+  border: 1px solid var(--td-border);
+  border-radius: var(--radius-lg, 12px);
+  padding: 20px;
+  margin-top: 16px;
+}
+
+.sectionTitle {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--td-text-muted);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.textPrimary {
+  color: var(--td-text);
+}
+
+.textSecondary {
+  color: var(--td-text-muted);
+}
+
+.tableHeader {
+  border-bottom: 1px solid var(--td-border-light);
+}
+
+.tableRow {
+  border-bottom: 1px solid var(--td-border-light);
+  background: var(--td-row);
+}
+
+.tableRowFirst {
+  background: var(--td-row-alt);
+}
+
+.progressBarBg {
+  background: var(--td-border-light);
+}
+
+.cveCard {
+  background: var(--td-bg);
+  border-radius: var(--radius-lg, 12px);
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}

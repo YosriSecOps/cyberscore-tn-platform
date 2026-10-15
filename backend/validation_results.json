@@ -1,0 +1,203 @@
+[
+  {
+    "url": "https://www.google.com",
+    "total_score": 82.26,
+    "grade": "B",
+    "stars": 2,
+    "breakdown": [
+      {
+        "category": "ssl",
+        "score": 11,
+        "max_score": 12,
+        "weight": 0.12,
+        "normalized": 91.66666666666666,
+        "weighted": 10.999999999999998,
+        "findings_count": 3
+      },
+      {
+        "category": "headers",
+        "score": 6,
+        "max_score": 10,
+        "weight": 0.1,
+        "normalized": 60,
+        "weighted": 6,
+        "findings_count": 6
+      },
+      {
+        "category": "dns",
+        "score": 5,
+        "max_score": 5,
+        "weight": 0.05,
+        "normalized": 100,
+        "weighted": 5,
+        "findings_count": 5
+      },
+      {
+        "category": "email",
+        "score": 3.5,
+        "max_score": 4,
+        "weight": 0.04,
+        "normalized": 87.5,
+        "weighted": 3.5,
+        "findings_count": 3
+      }
+    ],
+    "critical": 0,
+    "high": 1,
+    "medium": 2,
+    "low": 3,
+    "total_findings": 6,
+    "ssl_raw": {
+      "protocol": "TLSv1.3",
+      "cipher": "TLS_AES_256_GCM_SHA384",
+      "authorized": true,
+      "issuer": "WR2",
+      "subject": "www.google.com",
+      "valid_to": "Nov  2 08:39:48 2026 GMT",
+      "daysLeft": 47
+    },
+    "headers_raw": {
+      "strict-transport-security": null,
+      "x-frame-options": "SAMEORIGIN",
+      "x-content-type-options": null,
+      "referrer-policy": null,
+      "permissions-policy": null,
+      "x-xss-protection": "0",
+      "server": "gws"
+    }
+  },
+  {
+    "url": "https://www.finances.gov.tn",
+    "total_score": 88.71,
+    "grade": "B",
+    "stars": 2,
+    "breakdown": [
+      {
+        "category": "ssl",
+        "score": 12,
+        "max_score": 12,
+        "weight": 0.12,
+        "normalized": 100,
+        "weighted": 12,
+        "findings_count": 3
+      },
+      {
+        "category": "headers",
+        "score": 7,
+        "max_score": 10,
+        "weight": 0.1,
+        "normalized": 70,
+        "weighted": 7,
+        "findings_count": 7
+      },
+      {
+        "category": "dns",
+        "score": 5,
+        "max_score": 5,
+        "weight": 0.05,
+        "normalized": 100,
+        "weighted": 5,
+        "findings_count": 5
+      },
+      {
+        "category": "email",
+        "score": 3.5,
+        "max_score": 4,
+        "weight": 0.04,
+        "normalized": 87.5,
+        "weighted": 3.5,
+        "findings_count": 3
+      }
+    ],
+    "critical": 0,
+    "high": 1,
+    "medium": 0,
+    "low": 3,
+    "total_findings": 4,
+    "ssl_raw": {
+      "protocol": "TLSv1.3",
+      "cipher": "TLS_AES_256_GCM_SHA384",
+      "authorized": true,
+      "issuer": "TunTrust Services CA",
+      "subject": "www.finances.gov.tn",
+      "valid_to": "Jan 12 15:27:45 2027 GMT",
+      "daysLeft": 119
+    },
+    "headers_raw": {
+      "strict-transport-security": null,
+      "x-frame-options": "SAMEORIGIN",
+      "x-content-type-options": "nosniff",
+      "referrer-policy": "strict-origin-when-cross-origin",
+      "permissions-policy": null,
+      "x-xss-protection": "1; mode=block",
+      "server": "Apache/2.4.62 (Rocky Linux) OpenSSL/3.2.2"
+    }
+  },
+  {
+    "url": "https://www.education.gov.tn",
+    "total_score": 72.58,
+    "grade": "C",
+    "stars": 2,
+    "breakdown": [
+      {
+        "category": "ssl",
+        "score": 8,
+        "max_score": 12,
+        "weight": 0.12,
+        "normalized": 66.66666666666666,
+        "weighted": 7.999999999999998,
+        "findings_count": 4
+      },
+      {
+        "category": "headers",
+        "score": 7,
+        "max_score": 10,
+        "weight": 0.1,
+        "normalized": 70,
+        "weighted": 7,
+        "findings_count": 6
+      },
+      {
+        "category": "dns",
+        "score": 5,
+        "max_score": 5,
+        "weight": 0.05,
+        "normalized": 100,
+        "weighted": 5,
+        "findings_count": 5
+      },
+      {
+        "category": "email",
+        "score": 2.5,
+        "max_score": 4,
+        "weight": 0.04,
+        "normalized": 62.5,
+        "weighted": 2.5,
+        "findings_count": 2
+      }
+    ],
+    "critical": 1,
+    "high": 2,
+    "medium": 0,
+    "low": 2,
+    "total_findings": 5,
+    "ssl_raw": {
+      "protocol": "TLSv1.2",
+      "cipher": "ECDHE-RSA-AES256-GCM-SHA384",
+      "authorized": false,
+      "issuer": "Sectigo Public Server Authentication CA DV R36",
+      "subject": "*.education.gov.tn",
+      "valid_to": "Jan  7 23:59:59 2027 GMT",
+      "daysLeft": 114
+    },
+    "headers_raw": {
+      "strict-transport-security": null,
+      "x-frame-options": "SAMEORIGIN",
+      "x-content-type-options": "nosniff",
+      "referrer-policy": null,
+      "permissions-policy": null,
+      "x-xss-protection": "1; mode=block",
+      "server": "Apache"
+    }
+  }
+]

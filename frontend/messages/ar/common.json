@@ -1,0 +1,103 @@
+{
+  "app": {
+    "title": "CyberScore TN",
+    "subtitle": "منصة تقييم الأمن السيبراني",
+    "description": "منصة تقييم الأمن السيبراني للمواقع الحكومية التونسية"
+  },
+  "nav": {
+    "commandCenter": "مركز القيادة",
+    "scanner": "الماسح الأمني",
+    "results": "النتائج",
+    "compare": "المقارنة",
+    "sectors": "القطاعات",
+    "threats": "التهديدات",
+    "predictions": "التنبؤات",
+    "badges": "الأوسمة",
+    "reports": "التقارير",
+    "benchmark": "المقارنة الدولية",
+    "history": "السجل",
+    "admin": "الإدارة",
+    "assistant": "المساعدة الذكية",
+    "settings": "الإعدادات"
+  },
+  "actions": {
+    "scan": "فحص",
+    "newScan": "فحص جديد",
+    "export": "تصدير",
+    "compare": "مقارنة",
+    "details": "التفاصيل",
+    "close": "إغلاق",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "search": "بحث"
+  },
+  "grades": {
+    "excellent": "ممتاز",
+    "strong": "قوي",
+    "good": "جيد",
+    "fair": "مقبول",
+    "poor": "ضعيف",
+    "critical": "حرج"
+  },
+  "sectors": {
+    "ministries": "الوزارات",
+    "institutions": "المؤسسات العمومية",
+    "local": "الجماعات المحلية",
+    "enterprises": "المؤسسات العمومية"
+  },
+  "dashboard": {
+    "nationalOverview": "النظرة الوطنية",
+    "sectorHealth": "صحة القطاعات",
+    "riskMatrix": "مصفوفة المخاطر",
+    "alertFeed": "تنبيهات حديثة",
+    "leaderboard": "الترتيب",
+    "leaderboardDesc": "ترتيب المواقع حسب نتيجة الأمان",
+    "totalSites": "إجمالي المواقع المراقبة",
+    "averageScore": "المعدل العام",
+    "criticalAlerts": "تنبيهات حرجة",
+    "scansToday": "عمليات الفحص اليوم",
+    "score": "النتيجة",
+    "grade": "التقييم",
+    "stars": "النجوم"
+  },
+  "scanner": {
+    "title": "الماسح الأمني",
+    "description": "أدخل رابط الموقع الحكومي لبدء تقييم الأمن السيبراني",
+    "enterUrl": "أدخل رابط الموقع",
+    "scanType": "نوع الفحص",
+    "scanType_quick": "سريع",
+    "scanType_standard": "عادي",
+    "scanType_deep": "معمق",
+    "scanType_autonomous": "تدقيق ذاتي متعدد الوكلاء (ذكاء اصطناعي)",
+    "scanners": "ماسح",
+    "startScan": "بدء الفحص",
+    "scanning": "جاري الفحص...",
+    "scanAnother": "فحص موقع آخر",
+    "tryAgain": "إعادة المحاولة",
+    "categoryBreakdown": "تحليل الفئات",
+    "findings": "النتائج المكتشفة",
+    "severity": "الخطورة",
+    "finding": "الاكتشاف",
+    "category": "الفئة",
+    "phase1": "المرحلة 1: فحوصات سريعة",
+    "phase2": "المرحلة 2: فحوصات الشبكة",
+    "phase3": "المرحلة 3: فحوصات معمقة"
+  },
+  "avatar": {
+    "name": "أمينة",
+    "greeting": "مرحبا! أنا أمينة، مساعدتك في الأمن السيبراني",
+    "askMe": "اسألني عن أي شيء...",
+    "thinking": "جاري التفكير...",
+    "analyzing": "جاري التحليل..."
+  },
+  "theme": {
+    "dark": "الوضع الداكن",
+    "light": "الوضع الفاتح"
+  },
+  "language": {
+    "ar": "العربية",
+    "fr": "Français",
+    "en": "English"
+  }
+}

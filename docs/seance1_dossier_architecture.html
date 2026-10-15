@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberScore TN — Architecture Technique & Dossier Séance 1 | TEK-UP SSIRF</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #07090e;
+            --panel: #0d121d;
+            --panel-border: #1e293b;
+            --panel-hover: #131b2b;
+            --cyan: #00e5ff;
+            --cyan-glow: rgba(0, 229, 255, 0.12);
+            --green: #00e676;
+            --green-glow: rgba(0, 230, 118, 0.12);
+            --amber: #ffab00;
+            --crimson: #ff1744;
+            --indigo: #818cf8;
+            --text-title: #ffffff;
+            --text-body: #e2e8f0;
+            --text-muted: #94a3b8;
+            --text-dim: #64748b;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --font-head: 'Space Grotesk', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-body);
+            font-family: var(--font-main);
+            font-size: 15px;
+            line-height: 1.7;
+            padding: 40px 20px;
+            background-image: 
+                radial-gradient(ellipse at 50% 0%, rgba(0, 229, 255, 0.05) 0%, transparent 60%),
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 100% 100%, 36px 36px, 36px 36px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* HEADER BANNER */
+        .doc-header {
+            background: var(--panel);
+            border: 1px solid var(--panel-border);
+            border-top: 4px solid var(--cyan);
+            border-radius: 14px;
+            padding: 34px 38px;
+            margin-bottom: 28px;
+            box-shadow: 0 16px 32px -10px rgba(0, 0, 0, 0.6);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--panel-border);
+            padding-bottom: 16px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .badge-academic {
+            background: rgba(0, 229, 255, 0.08);
+            border: 1px solid rgba(0, 229, 255, 0.3);
+            color: var(--cyan);
+            font-family: var(--font-mono);
+            font-size: 12px;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-session {
+            background: rgba(0, 230, 118, 0.08);
+            border: 1px solid rgba(0, 230, 118, 0.3);
+            color: var(--green);
+            font-family: var(--font-mono);
+            font-size: 12px;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 6px;
+        }
+
+        .doc-header h1 {
+            font-family: var(--font-head);
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--text-title);
+            line-height: 1.25;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .doc-header .lead {
+            color: var(--text-muted);
+            font-size: 16px;
+            font-weight: 400;
+            max-width: 920px;
+        }
+
+        /* 3-PILLARS SUMMARY STRIP */
+        .summary-strip {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .summary-card {
+            background: var(--panel);
+            border: 1px solid var(--panel-border);
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        .summary-icon {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--panel-border);
+            width: 46px;
+            height: 46px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .summary-title {
+            font-size: 14.5px;
+            font-weight: 700;
+            color: var(--text-title);
+            margin-bottom: 4px;
+        }
+
+        .summary-sub {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.45;
+        }
+
+        /* SECTION BOX */
+        .section-box {
+            background: var(--panel);
+            border: 1px solid var(--panel-border);
+            border-radius: 12px;
+            padding: 32px 36px;
+            margin-bottom: 28px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid var(--panel-border);
+            padding-bottom: 14px;
+            margin-bottom: 22px;
+        }
+
+        .sec-num {
+            background: var(--cyan);
+            color: #000;
+            font-family: var(--font-mono);
+            font-weight: 800;
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .sec-title {
+            font-family: var(--font-head);
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-title);
+            letter-spacing: -0.3px;
+        }
+
+        /* PHOTO SHOWCASE WRAPPER */
+        .architecture-image-container {
+            background: #04060a;
+            border: 1px solid rgba(0, 229, 255, 0.3);
+            border-radius: 12px;
+            padding: 18px;
+            margin: 20px 0;
+            box-shadow: 0 0 35px rgba(0, 229, 255, 0.08), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+            text-align: center;
+        }
+
+        .architecture-image {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: block;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8);
+            transition: transform 0.2s ease;
+        }
+
+        .image-caption {
+            margin-top: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12.5px;
+            color: var(--text-muted);
+            padding: 0 6px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .image-caption strong {
+            color: var(--cyan);
+            font-family: var(--font-mono);
+        }
+
+        /* 5-STEP GLOBAL FLOW BADGES */
+        .global-flow-bar {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin: 24px 0 10px;
+        }
+
+        .flow-step-box {
+            background: #090e17;
+            border: 1px solid var(--panel-border);
+            border-top: 3px solid var(--cyan);
+            border-radius: 8px;
+            padding: 14px 12px;
+            text-align: left;
+        }
+
+        .flow-step-num {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--cyan);
+            margin-bottom: 4px;
+        }
+
+        .flow-step-text {
+            font-size: 12.5px;
+            color: var(--text-body);
+            line-height: 1.4;
+            font-weight: 500;
+        }
+
+        /* DETAILED ARCHITECTURE MODULES GRID */
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+            margin: 20px 0;
+        }
+
+        .module-box {
+            background: #090e17;
+            border: 1px solid var(--panel-border);
+            border-radius: 10px;
+            padding: 22px;
+            border-left: 4px solid;
+        }
+
+        .module-box.m-fe { border-left-color: var(--cyan); }
+        .module-box.m-be { border-left-color: var(--indigo); }
+        .module-box.m-ai { border-left-color: var(--green); }
+        .module-box.m-tg { border-left-color: var(--amber); }
+
+        .module-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .module-title {
+            font-size: 15.5px;
+            font-weight: 700;
+            color: var(--text-title);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .module-tag {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .tag-fe { background: rgba(0, 229, 255, 0.1); color: var(--cyan); }
+        .tag-be { background: rgba(129, 140, 248, 0.1); color: var(--indigo); }
+        .tag-ai { background: rgba(0, 230, 118, 0.1); color: var(--green); }
+        .tag-tg { background: rgba(255, 171, 0, 0.1); color: var(--amber); }
+
+        .module-list {
+            list-style: none;
+            font-size: 13.5px;
+            color: var(--text-muted);
+        }
+
+        .module-list li {
+            padding-left: 16px;
+            position: relative;
+            margin-bottom: 6px;
+            line-height: 1.5;
+        }
+
+        .module-list li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--cyan);
+            font-weight: bold;
+        }
+
+        /* STATE GRAPH CARDS */
+        .state-graph-wrapper {
+            background: #090e17;
+            border: 1px solid var(--panel-border);
+            border-radius: 10px;
+            padding: 24px;
+            margin: 20px 0;
+        }
+
+        .auditstate-schema {
+            background: #04060a;
+            border: 1px solid rgba(129, 140, 248, 0.3);
+            border-radius: 8px;
+            padding: 14px 18px;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: #a5b4fc;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .agent-cards-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .agent-card {
+            background: #0d1422;
+            border: 1px solid var(--panel-border);
+            border-radius: 8px;
+            padding: 16px;
+            border-top: 3px solid;
+        }
+
+        .agent-card.a1 { border-top-color: var(--cyan); }
+        .agent-card.a2 { border-top-color: var(--indigo); }
+        .agent-card.a3 { border-top-color: var(--amber); }
+        .agent-card.a4 { border-top-color: var(--crimson); }
+
+        .agent-step-label {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .agent-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-title);
+            margin-bottom: 8px;
+        }
+
+        .agent-sub {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* DOCKER RHEL INFRA GRID */
+        .docker-infra-bar {
+            background: #060910;
+            border: 1px dashed rgba(0, 229, 255, 0.3);
+            border-radius: 10px;
+            padding: 18px 22px;
+            margin: 20px 0;
+        }
+
+        .docker-infra-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--cyan);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .container-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .c-chip {
+            background: #0d131f;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #cbd5e1;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .c-chip strong {
+            color: #fff;
+        }
+
+        /* HOW QUESTIONS ACCORDION / BOXES */
+        .how-box {
+            background: #090e17;
+            border: 1px solid var(--panel-border);
+            border-radius: 10px;
+            padding: 22px 24px;
+            margin-bottom: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .how-box:hover {
+            border-color: rgba(0, 229, 255, 0.4);
+            background: #0d1422;
+        }
+
+        .how-q {
+            font-family: var(--font-head);
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--cyan);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .how-short {
+            background: rgba(0, 229, 255, 0.05);
+            border-left: 3px solid var(--cyan);
+            padding: 10px 14px;
+            font-size: 13.5px;
+            color: #fff;
+            margin-bottom: 12px;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .how-detail {
+            font-size: 13.5px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .code-snippet {
+            background: #04060a;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+            padding: 12px 16px;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: #38bdf8;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+
+        /* CLEAN TABLES */
+        .table-responsive {
+            margin-top: 15px;
+            overflow-x: auto;
+            border: 1px solid var(--panel-border);
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13.5px;
+            text-align: left;
+        }
+
+        th {
+            background: #090e17;
+            color: var(--text-title);
+            font-weight: 600;
+            padding: 12px 18px;
+            border-bottom: 1px solid var(--panel-border);
+            font-size: 13px;
+        }
+
+        td {
+            padding: 13px 18px;
+            border-bottom: 1px solid rgba(30, 41, 59, 0.6);
+            color: var(--text-body);
+        }
+
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: rgba(255, 255, 255, 0.015); }
+
+        .tag-status {
+            font-family: var(--font-mono);
+            font-size: 11.5px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .status-rhel { background: rgba(255, 23, 68, 0.1); color: #ff5252; border: 1px solid rgba(255, 23, 68, 0.3); }
+        .status-ok { background: rgba(0, 230, 118, 0.1); color: var(--green); border: 1px solid rgba(0, 230, 118, 0.3); }
+        .status-info { background: rgba(0, 229, 255, 0.1); color: var(--cyan); border: 1px solid rgba(0, 229, 255, 0.3); }
+
+        /* ROADMAP CARDS */
+        .roadmap-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 15px;
+        }
+
+        .roadmap-card {
+            background: #090e17;
+            border: 1px solid var(--panel-border);
+            border-radius: 8px;
+            padding: 20px;
+            position: relative;
+        }
+
+        .roadmap-card.active {
+            border-color: var(--cyan);
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.08);
+        }
+
+        .road-badge {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .road-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-title);
+            margin-bottom: 8px;
+        }
+
+        .road-body {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* FOOTER */
+        .doc-footer {
+            border-top: 1px solid var(--panel-border);
+            padding: 22px 0 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12.5px;
+            color: var(--text-dim);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .doc-footer strong { color: var(--text-muted); }
+
+        @media (max-width: 900px) {
+            .summary-strip, .module-grid, .agent-cards-row, .global-flow-bar, .roadmap-grid {
+                grid-template-columns: 1fr;
+            }
+            .section-box, .doc-header { padding: 22px; }
+            .doc-header h1 { font-size: 1.65rem; }
+        }
+
+        @media print {
+            body { background: #fff; color: #000; padding: 0; }
+            .doc-header, .section-box, .summary-card, .module-box, .agent-card, .how-box, .roadmap-card, table th {
+                background: #fff !important;
+                border-color: #ddd !important;
+                box-shadow: none !important;
+                color: #000 !important;
+            }
+            .doc-header h1, .sec-title, .module-title, .agent-name, .how-q, .road-title { color: #000 !important; }
+            .doc-header .lead, .how-detail, .road-body, td { color: #333 !important; }
+            .architecture-image-container { border: 1px solid #ddd; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- EN-TÊTE OFFICIEL -->
+    <header class="doc-header">
+        <div class="header-top">
+            <div class="badge-academic">TEK-UP UNIVERSITY &bull; CLASSE CII-5-J-SSIRF-D</div>
+            <div class="badge-session">JALON 1 : DOSSIER D'ARCHITECTURE TECHNIQUE DÉTAILLÉE</div>
+        </div>
+        <h1>CyberScore TN — Architecture Technique & Orchestration Multi-Agents</h1>
+        <p class="lead">De l'audit web au rapport de sécurité souverain : conception d'une plateforme unifiée conteneurisée sur hôte durci Red Hat Enterprise Linux (RHEL 9.5), pilotée par un graphe d'agents IA et un modèle LLM local (Ollama).</p>
+    </header>
+
+    <!-- 3 PILIERS CLÉS (RÉSUMÉ EN 15 SECONDES) -->
+    <div class="summary-strip">
+        <div class="summary-card">
+            <div class="summary-icon">🛡️</div>
+            <div>
+                <div class="summary-title">Socle RHEL 9.5 Hardened</div>
+                <div class="summary-sub">Hôte minimal d'entreprise sous VMware 17 Pro avec SELinux actif en mode Enforcing et Firewalld strict.</div>
+            </div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-icon">📦</div>
+            <div>
+                <div class="summary-title">Sandboxing Conteneurisé</div>
+                <div class="summary-sub">8 conteneurs Docker cloisonnés (Nmap, Nuclei, Headless Browser) sans impact ni conflit sur l'OS hôte.</div>
+            </div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-icon">🧠</div>
+            <div>
+                <div class="summary-title">IA Locale Souveraine</div>
+                <div class="summary-sub">Modèle Qwen local sous Ollama avec Function Calling (temp 0.1) garantissant zéro fuite de données d'audit.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 1 : LE SCHÉMA D'ARCHITECTURE OFFICIEL (PHOTO INTÉGRÉE) -->
+    <section class="section-box">
+        <div class="section-header">
+            <span class="sec-num">01</span>
+            <h2 class="sec-title">Schéma d'Architecture Technique Global</h2>
+        </div>
+        <p style="color: var(--text-muted); font-size: 14.5px;">
+            Ci-dessous le synoptique architectural complet du système, illustrant les interactions entre le navigateur de l'auditeur, le backend FastAPI, l'IA locale, le graphe d'agents et les sandboxes d'outils conteneurisées :
+        </p>
+
+        <!-- IMAGE PRINCIPALE INTÉGRÉE -->
+        <div class="architecture-image-container">
+            <img src="assets/architecture_cyberscore_agents.jpg" alt="CyberScore TN - Schéma d'Architecture Technique Officiel" class="architecture-image">
+            <div class="image-caption">
+                <span><strong>SYNOPTIQUE OFFICIEL :</strong> CyberScore TN &bull; Architecture Multi-Agents & Infrastructure Docker RHEL 9.5</span>
+                <span>Référence Projet : <strong>CII-5-SSIRF-2026</strong></span>
+            </div>
+        </div>
+
+        <!-- LES 5 ÉTAPES DU FLUX GLOBAL (EXTRAIT DE L'IMAGE) -->
+        <h3 style="font-size: 15px; font-weight: 700; color: var(--text-title); margin: 24px 0 10px;">
+            🔄 Déroulement séquentiel du Flux Global (1 à 5) :
+        </h3>
+        <div class="global-flow-bar">
+            <div class="flow-step-box">
+                <div class="flow-step-num">ÉTAPE 1</div>
+                <div class="flow-step-text">L'utilisateur lance un audit via l'API REST (POST JWT).</div>
+            </div>
+            <div class="flow-step-box">
+                <div class="flow-step-num">ÉTAPE 2</div>
+                <div class="flow-step-text">Le backend génère un scan_id et ouvre le canal WebSocket.</div>
+            </div>
+            <div class="flow-step-box">
+                <div class="flow-step-num">ÉTAPE 3</div>
+                <div class="flow-step-text">Le graphe d'agents s'exécute avec l'aide de l'IA locale (Ollama).</div>
+            </div>
+            <div class="flow-step-box">
+                <div class="flow-step-num">ÉTAPE 4</div>
+                <div class="flow-step-text">Les outils conteneurisés scannent la cible et remontent les résultats.</div>
+            </div>
+            <div class="flow-step-box">
+                <div class="flow-step-num">ÉTAPE 5</div>
+                <div class="flow-step-text">Le frontend affiche la timeline en temps réel et le rapport final.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2 : DÉCOMPOSITION TECHNIQUE DES MODULES -->
+    <section class="section-box">
+        <div class="section-header">
+            <span class="sec-num">02</span>
+            <h2 class="sec-title">Décomposition Détaillée des Composants du Schéma</h2>
+        </div>
+
+        <div class="module-grid">
+            <!-- FRONTEND -->
+            <div class="module-box m-fe">
+                <div class="module-head">
+                    <span class="module-title">🖥️ Frontend — Next.js 16.3</span>
+                    <span class="module-tag tag-fe">Turbopack & App Router</span>
+                </div>
+                <ul class="module-list">
+                    <li><strong>Interface utilisateur :</strong> Dashboard réactif trilingue (FR, AR RTL, EN) développé en TypeScript et Tailwind CSS.</li>
+                    <li><strong>Modes d'audit :</strong> Quick (~3s), Standard (~8s), Deep (~30s) et <strong>Audit Autonome Multi-Agents (IA)</strong>.</li>
+                    <li><strong>Affichage temps réel :</strong> Timeline interactive des 4 agents animée en direct et streaming télémétrique.</li>
+                    <li><strong>Restitution certifiée :</strong> Matrice des faiblesses, grille des ports réels, roadmap copier-coller et sceau SHA-256.</li>
+                </ul>
+            </div>
+
+            <!-- BACKEND -->
+            <div class="module-box m-be">
+                <div class="module-head">
+                    <span class="module-title">⚙️ Backend & API Routes</span>
+                    <span class="module-tag tag-be">Orchestrateur Principal</span>
+                </div>
+                <ul class="module-list">
+                    <li><strong>API REST & Handlers :</strong> FastAPI (/api/v1) et Next.js route handler (/api/scan) pour le pilotage d'audit.</li>
+                    <li><strong>Sous-processus Sonde :</strong> Déclenchement de <code>probe_agent.run</code> avec flux JSON stdout et gestion UTF-8.</li>
+                    <li><strong>Gestion d'état :</strong> Maintenance de l'objet d'état partagé Pydantic <code>AuditState</code>.</li>
+                    <li><strong>Sécurité :</strong> Authentification JWT, contrôle d'accès strict (RBAC) et validation stricte des domaines cibles.</li>
+                    <li><strong>Persistance :</strong> Accès à PostgreSQL et archivage structuré des audits horodatés et scellés.</li>
+                </ul>
+            </div>
+
+            <!-- IA LOCALE -->
+            <div class="module-box m-ai">
+                <div class="module-head">
+                    <span class="module-title">🧠 AIaaS Découplée — Ollama (Qwen)</span>
+                    <span class="module-tag tag-ai">Port 25000 GPU</span>
+                </div>
+                <ul class="module-list">
+                    <li><strong>Modèle déployé :</strong> <code>qwen2.5-coder:7b</code> (GGUF Q4_K_M) accéléré par GPU sur l'hôte Windows.</li>
+                    <li><strong>Architecture Découplée :</strong> REST API HTTP dédiée sur port 25000 (accessible en local ou via réseau Host-Only).</li>
+                    <li><strong>Mode Function Calling :</strong> Prompts contraints avec sortie JSON Schema stricte sans texte parasite.</li>
+                    <li><strong>Résilience & Fallback :</strong> Basculement automatique sur moteur de règles déterministe en cas de déconnexion.</li>
+                </ul>
+            </div>
+
+            <!-- CIBLE & OUTILS -->
+            <div class="module-box m-tg">
+                <div class="module-head">
+                    <span class="module-title">🎯 Sonde Autonome & Cible</span>
+                    <span class="module-tag tag-tg">Probe Agent (<50Mo)</span>
+                </div>
+                <ul class="module-list">
+                    <li><strong>Cibles autorisées :</strong> Domaines étatiques (.gov.tn, .tn, .com.tn) et sandbox de test autorisées.</li>
+                    <li><strong>Port Scanner :</strong> Sondage asynchrone par sockets TCP purs et capture de bannières brutes.</li>
+                    <li><strong>Web Inspector :</strong> Audit passif SSL/TLS, analyse des en-têtes HTTP de sécurité et détection de stack.</li>
+                    <li><strong>PoC Verifier :</strong> Validation dynamique non destructive avec élimination totale des faux positifs.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- LE GRAPHE D'AGENTS IA (STATE GRAPH) -->
+        <div class="state-graph-wrapper">
+            <h3 style="font-size: 15px; font-weight: 700; color: var(--text-title); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                🧭 Le Graphe d'Agents IA (State Graph) & Objet d'État Partagé
+            </h3>
+            <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 14px;">
+                Les 4 agents coopèrent séquentiellement en lisant et en enrichissant un objet d'état unique <code>AuditState</code> sérialisé :
+            </p>
+            
+            <div class="auditstate-schema">
+                <strong>AuditState = {</strong><br>
+                &nbsp;&nbsp;target: str,&nbsp;&nbsp;target_ip: str,&nbsp;&nbsp;open_ports: list[PortFinding],&nbsp;&nbsp;web_tech: list[str],<br>
+                &nbsp;&nbsp;missing_headers: list[str],&nbsp;&nbsp;findings: list[VulnerabilityFinding],&nbsp;&nbsp;remediation_roadmap: list[RemediationStep],<br>
+                &nbsp;&nbsp;overall_score: int,&nbsp;&nbsp;grade: str,&nbsp;&nbsp;seal_sha256: str,&nbsp;&nbsp;status: str<br>
+                <strong>}</strong>
+            </div>
+
+            <div class="agent-cards-row">
+                <div class="agent-card a1">
+                    <div class="agent-step-label" style="color: var(--cyan);">AGENT 1</div>
+                    <div class="agent-name">Reconnaissance Réseau</div>
+                    <div class="agent-sub">Cartographie asynchrone par sockets purs, bannières brutes et inspection passive web/TLS.</div>
+                </div>
+                <div class="agent-card a2">
+                    <div class="agent-step-label" style="color: var(--indigo);">AGENT 2</div>
+                    <div class="agent-name">Corrélation CVE (IA)</div>
+                    <div class="agent-sub">Analyse contextuelle via Ollama Qwen 7B (port 25000) et calcul CVSS avec fallback heuristique.</div>
+                </div>
+                <div class="agent-card a3">
+                    <div class="agent-step-label" style="color: var(--amber);">AGENT 3</div>
+                    <div class="agent-name">Validation PoC</div>
+                    <div class="agent-sub">Validation dynamique non destructive, élimination rigoureuse des faux positifs (zéro fausse SQLi).</div>
+                </div>
+                <div class="agent-card a4">
+                    <div class="agent-step-label" style="color: var(--crimson);">AGENT 4</div>
+                    <div class="agent-name">Remédiation & SHA-256</div>
+                    <div class="agent-sub">Feuille de route priorisée avec commandes d'application et scellement d'intégrité cryptographique SHA-256.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- INFRASTRUCTURE DOCKER COMPLETE -->
+        <div class="docker-infra-bar">
+            <div class="docker-infra-title">
+                🐳 Cartographie des 8 Micro-Services Conteneurisés sous RHEL 9.5 :
+            </div>
+            <div class="container-chips">
+                <div class="c-chip"><span>🖥️</span> <strong>frontend</strong> (next.js)</div>
+                <div class="c-chip"><span>⚙️</span> <strong>backend</strong> (fastapi)</div>
+                <div class="c-chip"><span>🧠</span> <strong>ollama</strong> (qwen-coder)</div>
+                <div class="c-chip"><span>🔍</span> <strong>nmap</strong> (scan réseau)</div>
+                <div class="c-chip"><span>🎯</span> <strong>nuclei</strong> (règles cve)</div>
+                <div class="c-chip"><span>🌍</span> <strong>headless-browser</strong> (poc)</div>
+                <div class="c-chip"><span>🗄️</span> <strong>postgres</strong> (base données)</div>
+                <div class="c-chip"><span>🛡️</span> <strong>nginx</strong> (reverse proxy)</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3 : GUIDE TECHNIQUE DES QUESTIONS "HOW?" DU PROFESSEUR -->
+    <section class="section-box">
+        <div class="section-header">
+            <span class="sec-num">03</span>
+            <h2 class="sec-title">Guide des Réponses aux Questions Techniques (« HOW? »)</h2>
+        </div>
+        <p style="color: var(--text-muted); font-size: 14.5px; margin-bottom: 20px;">
+            Arguments techniques et protocolaires précis pour répondre à toutes les questions d'implémentation du jury lors de la soutenance :
+        </p>
+
+        <!-- HOW 1 -->
+        <div class="how-box">
+            <div class="how-q">Q1. HOW : Comment le Frontend et le Backend communiquent-ils en temps réel ?</div>
+            <div class="how-short">
+                <strong>Réponse courte :</strong> Par un modèle hybride : requêtes REST sécurisées par JWT pour le contrôle, et WebSockets bi-directionnels pour le streaming télémétrique des logs sans surcharge de polling.
+            </div>
+            <div class="how-detail">
+                L'auditeur clique sur « Lancer Audit » : Next.js envoie un <code>POST /api/v1/audit/start</code> avec JWT. Le backend valide la requête, génère un UUID <code>scan_id</code> et répond immédiatement <code>202 Accepted</code>. Le frontend ouvre alors instantanément une connexion persistante <code>wss://api.cyberscore.lan/ws/audit/{scan_id}</code>. Le gestionnaire <code>ConnectionManager</code> de FastAPI pousse chaque progression (port trouvé, CVE confirmée) en JSON directement dans la timeline du navigateur.
+            </div>
+        </div>
+
+        <!-- HOW 2 -->
+        <div class="how-box">
+            <div class="how-q">Q2. HOW : Comment le Graphe d'Agents IA s'exécute-t-il concrètement ?</div>
+            <div class="how-short">
+                <strong>Réponse courte :</strong> Il s'agit d'une machine à états finis (StateGraph). Tous les agents partagent l'objet Pydantic <code>AuditState</code> et s'exécutent de façon ordonnancée.
+            </div>
+            <div class="how-detail">
+                L'Agent 1 (Reconnaissance) démarre avec l'état initial. Il invoque Nmap et met à jour <code>open_ports</code> et <code>technologies</code>. L'Agent 2 prend le relais : en lisant les technologies (ex: Apache 2.4.52), il sélectionne uniquement les templates de vulnérabilités correspondants dans Nuclei et peuple <code>potential_cves</code>. L'Agent 3 (Validation PoC) teste chaque CVE via le navigateur headless pour confirmer l'exploitabilité. Enfin, l'Agent 4 synthétise les failles validées et produit le plan de remédiation final.
+            </div>
+        </div>
+
+        <!-- HOW 3 -->
+        <div class="how-box">
+            <div class="how-q">Q3. HOW : Comment l'IA locale (Ollama/Qwen) est-elle contrainte sans fuite cloud ?</div>
+            <div class="how-short">
+                <strong>Réponse courte :</strong> Zéro appel externe. Le backend communique sur le réseau Docker interne avec Ollama via l'API <code>/api/chat</code> en mode Function Calling avec une température stricte de 0.1.
+            </div>
+            <div class="how-detail">
+                FastAPI envoie un prompt système strict imposant une réponse au format JSON Schema conforme à nos modèles Pydantic. La température de <code>0.1</code> élimine les hallucinations et assure un raisonnement déterministe. Aucune donnée d'audit, adresse IP ou vulnérabilité ne quitte le réseau privé du serveur RHEL 9.5.
+            </div>
+        </div>
+
+        <!-- HOW 4 -->
+        <div class="how-box">
+            <div class="how-q">Q4. HOW : Comment le Backend lance-t-il les conteneurs Docker de manière sécurisée ?</div>
+            <div class="how-short">
+                <strong>Réponse courte :</strong> Zéro commande bash sauvage. Le backend utilise le SDK Python Docker officiel (<code>docker.from_env()</code>) pour créer des conteneurs éphémères non-root bridés en ressources.
+            </div>
+            <div class="how-detail">
+                Chaque conteneur d'outil est instancié avec <code>read_only=True</code> (système de fichiers en lecture seule), <code>mem_limit="512m"</code>, <code>nano_cpus=1000000000</code> (1 cœur CPU max), l'utilisateur non-privilégié <code>user="1001:1001"</code>, et la directive <code>auto_remove=True</code> qui garantit la destruction immédiate du conteneur dès la fin du scan.
+            </div>
+            <div class="code-snippet">
+container = client.containers.run(
+    image="cyberscore-scanner-recon:latest",
+    command=["nmap", "-sV", "-T3", "-F", "--unprivileged", target_host],
+    mem_limit="512m", nano_cpus=1000000000, read_only=True, user="1001:1001",
+    cap_drop=["ALL"], cap_add=["NET_RAW"], remove=True
+)
+            </div>
+        </div>
+
+        <!-- HOW 5 -->
+        <div class="how-box">
+            <div class="how-q">Q5. HOW : Comment la VM RHEL 9.5 empêche-t-elle une évasion de conteneur (Hardening) ?</div>
+            <div class="how-short">
+                <strong>Réponse courte :</strong> Grâce à SELinux actif en mode <code>Enforcing</code>, au filtrage strict de Firewalld et au remapping des utilisateurs (userns-remap).
+            </div>
+            <div class="how-detail">
+                SELinux applique le contexte mandataire <code>container_t</code>. Même si un binaire dans un conteneur est compromis, le noyau RHEL lui interdit formellement d'accéder au système de fichiers hôte (<code>/etc</code>, <code>/root</code>, <code>/proc</code>). Firewalld applique une politique <code>DROP</code> par défaut ne laissant ouverts que les ports strictement nécessaires (3000 pour Next.js, 8000 pour FastAPI).
+            </div>
+        </div>
+
+        <!-- HOW 6 -->
+        <div class="how-box">
+            <div class="how-q">Q6. HOW : Comment les rapports sont-ils certifiés avec l'empreinte SHA-256 ?</div>
+            <div class="how-short">
+                <strong>Réponse courte :</strong> Dès la fin de l'audit, le binaire PDF généré est haché par l'algorithme SHA-256 et consigné dans PostgreSQL avec un horodatage immuable.
+            </div>
+            <div class="how-detail">
+                L'empreinte cryptographique est imprimée sur la page de garde du rapport et encodée dans un QR-code de vérification. Toute tentative de modification ultérieure du contenu du document PDF produit un hash différent, prouvant immédiatement la falsification.
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4 : TABLEAU DES CHOIX TECHNIQUES -->
+    <section class="section-box">
+        <div class="section-header">
+            <span class="sec-num">04</span>
+            <h2 class="sec-title">Justification des Choix Techniques (Arguments Jury)</h2>
+        </div>
+
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Domaine</th>
+                        <th>Technologie Retenue</th>
+                        <th>Statut Sécurité</th>
+                        <th>Argument Technique Majeur</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Système Hôte</strong></td>
+                        <td>Red Hat Enterprise Linux 9.5</td>
+                        <td><span class="tag-status status-rhel">ENTREPRISE</span></td>
+                        <td>OS de référence pour les centres de cyberdéfense (SOC). Stabilité certifiée et support natif de SELinux.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Contrôle d'Accès</strong></td>
+                        <td>SELinux (Security-Enhanced Linux)</td>
+                        <td><span class="tag-status status-ok">ENFORCING</span></td>
+                        <td>Confinement mandataire au niveau noyau. Empêche toute évasion de conteneur vers l'hôte.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Isolation Outils</strong></td>
+                        <td>Docker CE (Sandboxes Dédiées)</td>
+                        <td><span class="tag-status status-ok">ISOLÉ</span></td>
+                        <td>Évite de polluer l'OS hôte. Conteneurs éphémères avec quotas stricts de RAM (512Mo) et CPU (1 cœur).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>API & Orchestration</strong></td>
+                        <td>FastAPI (Python) + Next.js 14</td>
+                        <td><span class="tag-status status-info">ASYNC</span></td>
+                        <td>Exécution non-bloquante (AsyncIO) et streaming WebSockets pour l'affichage en temps réel.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Moteur d'Analyse IA</strong></td>
+                        <td>Ollama + Modèle Qwen Local (8B)</td>
+                        <td><span class="tag-status status-info">SOUVERAIN</span></td>
+                        <td>Confidentialité absolue : aucune donnée de vulnérabilité ni résultat d'audit ne transite par le cloud.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- SECTION 5 : JALONS DES 3 SÉANCES -->
+    <section class="section-box">
+        <div class="section-header">
+            <span class="sec-num">05</span>
+            <h2 class="sec-title">Feuille de Route des 3 Séances de Validation TEK-UP</h2>
+        </div>
+
+        <div class="roadmap-grid">
+            <div class="roadmap-card active">
+                <div class="road-badge" style="color: var(--cyan);">JALON 1 &bull; CE JOUR</div>
+                <div class="road-title">Séance 1 : Architecture & Démarche</div>
+                <div class="road-body">Validation du schéma global, justification du socle RHEL 9.5 / Docker, argumentation des politiques de durcissement et définition du graphe d'agents.</div>
+            </div>
+            <div class="roadmap-card">
+                <div class="road-badge" style="color: var(--amber);">JALON 2 &bull; TECHNIQUE</div>
+                <div class="road-title">Séance 2 : Démonstration Technique</div>
+                <div class="road-body">Audit en direct d'une cible de test locale, vérification du statut SELinux Enforcing, démonstration de l'isolation Docker et streaming live dans l'interface.</div>
+            </div>
+            <div class="roadmap-card">
+                <div class="road-badge" style="color: var(--green);">JALON 3 &bull; SOUTENANCE</div>
+                <div class="road-title">Séance 3 : Soutenance & Rapport</div>
+                <div class="road-body">Soutenance publique devant le jury d'ingénieurs, présentation des résultats d'évaluation avancés et remise du rapport technique final.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="doc-footer">
+        <div>DÉPARTEMENT SÉCURITÉ DES SYSTÈMES D'INFORMATION ET RÉSEAUX &bull; <strong>TEK-UP</strong></div>
+        <div>ANNÉE UNIVERSITAIRE <strong>2026 / 2027</strong> &bull; CANDIDAT : <strong>HAMDOUNI YOSRI</strong></div>
+    </footer>
+
+</div>
+
+</body>
+</html>

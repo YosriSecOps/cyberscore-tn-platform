@@ -1,0 +1,103 @@
+{
+  "app": {
+    "title": "CyberScore TN",
+    "subtitle": "Plateforme d'évaluation cybersécurité",
+    "description": "Plateforme d'évaluation de la cybersécurité des sites gouvernementaux tunisiens"
+  },
+  "nav": {
+    "commandCenter": "Centre de Commande",
+    "scanner": "Scanner",
+    "results": "Résultats",
+    "compare": "Comparer",
+    "sectors": "Secteurs",
+    "threats": "Menaces",
+    "predictions": "Prédictions",
+    "badges": "Badges",
+    "reports": "Rapports",
+    "benchmark": "Benchmark International",
+    "history": "Historique",
+    "admin": "Administration",
+    "assistant": "Assistant IA",
+    "settings": "Paramètres"
+  },
+  "actions": {
+    "scan": "Scanner",
+    "newScan": "Nouveau Scan",
+    "export": "Exporter",
+    "compare": "Comparer",
+    "details": "Détails",
+    "close": "Fermer",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "search": "Rechercher"
+  },
+  "grades": {
+    "excellent": "Excellent",
+    "strong": "Fort",
+    "good": "Bon",
+    "fair": "Passable",
+    "poor": "Faible",
+    "critical": "Critique"
+  },
+  "sectors": {
+    "ministries": "Ministères",
+    "institutions": "Institutions Publiques",
+    "local": "Collectivités Locales",
+    "enterprises": "Entreprises Publiques"
+  },
+  "dashboard": {
+    "nationalOverview": "Vue Nationale",
+    "sectorHealth": "Santé des Secteurs",
+    "riskMatrix": "Matrice de Risque",
+    "alertFeed": "Alertes Récentes",
+    "leaderboard": "Classement",
+    "leaderboardDesc": "Classement des sites par score de sécurité",
+    "totalSites": "Total Sites Surveillés",
+    "averageScore": "Score Moyen",
+    "criticalAlerts": "Alertes Critiques",
+    "scansToday": "Scans Aujourd'hui",
+    "score": "Score",
+    "grade": "Note",
+    "stars": "Étoiles"
+  },
+  "scanner": {
+    "title": "Scanner de Sécurité",
+    "description": "Entrez l'URL du site gouvernemental pour lancer l'évaluation cybersécurité",
+    "enterUrl": "Entrez l'URL du site",
+    "scanType": "Type de scan",
+    "scanType_quick": "Rapide",
+    "scanType_standard": "Standard",
+    "scanType_deep": "Approfondi",
+    "scanType_autonomous": "Audit Autonome Multi-Agents (IA)",
+    "scanners": "scanners",
+    "startScan": "Lancer le Scan",
+    "scanning": "Scan en cours...",
+    "scanAnother": "Scanner un autre site",
+    "tryAgain": "Réessayer",
+    "categoryBreakdown": "Analyse par catégorie",
+    "findings": "Résultats découverts",
+    "severity": "Sévérité",
+    "finding": "Découverte",
+    "category": "Catégorie",
+    "phase1": "Phase 1 : Scans rapides",
+    "phase2": "Phase 2 : Scans réseau",
+    "phase3": "Phase 3 : Scans approfondis"
+  },
+  "avatar": {
+    "name": "Amina",
+    "greeting": "Bonjour ! Je suis Amina, votre assistante en cybersécurité",
+    "askMe": "Posez-moi une question...",
+    "thinking": "Réflexion en cours...",
+    "analyzing": "Analyse en cours..."
+  },
+  "theme": {
+    "dark": "Mode Sombre",
+    "light": "Mode Clair"
+  },
+  "language": {
+    "ar": "العربية",
+    "fr": "Français",
+    "en": "English"
+  }
+}

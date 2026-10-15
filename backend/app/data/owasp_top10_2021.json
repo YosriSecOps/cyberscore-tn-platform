@@ -1,0 +1,12 @@
+[
+  {"id": "A01", "name_en": "Broken Access Control", "name_fr": "Contrôle d'accès défaillant", "name_ar": "خلل في التحكم بالوصول", "description": "Restrictions on what authenticated users are allowed to do are often not properly enforced.", "year": 2021},
+  {"id": "A02", "name_en": "Cryptographic Failures", "name_fr": "Défaillances cryptographiques", "name_ar": "فشل التشفير", "description": "Failures related to cryptography which often lead to sensitive data exposure.", "year": 2021},
+  {"id": "A03", "name_en": "Injection", "name_fr": "Injection", "name_ar": "الحقن", "description": "SQL, NoSQL, OS, LDAP injection occurs when untrusted data is sent to an interpreter.", "year": 2021},
+  {"id": "A04", "name_en": "Insecure Design", "name_fr": "Conception non sécurisée", "name_ar": "تصميم غير آمن", "description": "Risks related to design and architectural flaws.", "year": 2021},
+  {"id": "A05", "name_en": "Security Misconfiguration", "name_fr": "Mauvaise configuration de sécurité", "name_ar": "خطأ في إعدادات الأمان", "description": "Missing appropriate security hardening or misconfigured permissions.", "year": 2021},
+  {"id": "A06", "name_en": "Vulnerable and Outdated Components", "name_fr": "Composants vulnérables et obsolètes", "name_ar": "مكونات ضعيفة وقديمة", "description": "Using components with known vulnerabilities.", "year": 2021},
+  {"id": "A07", "name_en": "Identification and Authentication Failures", "name_fr": "Défaillances d'identification et d'authentification", "name_ar": "فشل التعريف والمصادقة", "description": "Confirmation of the user identity, authentication, and session management.", "year": 2021},
+  {"id": "A08", "name_en": "Software and Data Integrity Failures", "name_fr": "Défaillances d'intégrité des logiciels et données", "name_ar": "فشل سلامة البرمجيات والبيانات", "description": "Code and infrastructure that does not protect against integrity violations.", "year": 2021},
+  {"id": "A09", "name_en": "Security Logging and Monitoring Failures", "name_fr": "Insuffisance de journalisation et de surveillance", "name_ar": "فشل التسجيل والمراقبة الأمنية", "description": "Without logging and monitoring, breaches cannot be detected.", "year": 2021},
+  {"id": "A10", "name_en": "Server-Side Request Forgery (SSRF)", "name_fr": "Falsification de requêtes côté serveur", "name_ar": "تزوير الطلبات من جانب الخادم", "description": "SSRF flaws occur when a web app fetches a remote resource without validating the URL.", "year": 2021}
+]

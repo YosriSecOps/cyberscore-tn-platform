@@ -1,0 +1,6 @@
+[
+  {"id": 1, "name_ar": "الوزارات", "name_fr": "Ministères", "name_en": "Ministries", "icon": "🏛️", "description": "الوزارات الحكومية التونسية"},
+  {"id": 2, "name_ar": "المؤسسات العمومية", "name_fr": "Institutions Publiques", "name_en": "Public Institutions", "icon": "🏗️", "description": "المؤسسات والهيئات العمومية"},
+  {"id": 3, "name_ar": "الجماعات المحلية", "name_fr": "Collectivités Locales", "name_en": "Local Authorities", "icon": "🏘️", "description": "البلديات والولايات"},
+  {"id": 4, "name_ar": "المؤسسات العمومية", "name_fr": "Entreprises Publiques", "name_en": "Public Enterprises", "icon": "🏭", "description": "الشركات والمؤسسات العمومية"}
+]

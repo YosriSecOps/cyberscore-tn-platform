@@ -1,0 +1,17 @@
+[
+  {"id": "A.5.1", "domain": "Organizational Controls", "control_name": "Policies for information security", "description": "Politiques de sécurité de l'information"},
+  {"id": "A.5.2", "domain": "Organizational Controls", "control_name": "Information security roles and responsibilities", "description": "Rôles et responsabilités en matière de sécurité"},
+  {"id": "A.5.23", "domain": "Organizational Controls", "control_name": "Information security for use of cloud services", "description": "Sécurité des services cloud"},
+  {"id": "A.8.1", "domain": "Technological Controls", "control_name": "User endpoint devices", "description": "Dispositifs des utilisateurs"},
+  {"id": "A.8.5", "domain": "Technological Controls", "control_name": "Secure authentication", "description": "Authentification sécurisée"},
+  {"id": "A.8.9", "domain": "Technological Controls", "control_name": "Configuration management", "description": "Gestion de la configuration"},
+  {"id": "A.8.12", "domain": "Technological Controls", "control_name": "Data leakage prevention", "description": "Prévention de la fuite de données"},
+  {"id": "A.8.20", "domain": "Technological Controls", "control_name": "Networks security", "description": "Sécurité réseau"},
+  {"id": "A.8.24", "domain": "Technological Controls", "control_name": "Use of cryptography", "description": "Utilisation de la cryptographie (SSL/TLS)"},
+  {"id": "A.8.25", "domain": "Technological Controls", "control_name": "Secure development life cycle", "description": "Cycle de développement sécurisé"},
+  {"id": "A.8.26", "domain": "Technological Controls", "control_name": "Application security requirements", "description": "Exigences de sécurité applicative"},
+  {"id": "A.8.28", "domain": "Technological Controls", "control_name": "Secure coding", "description": "Codage sécurisé"},
+  {"id": "A.8.8", "domain": "Technological Controls", "control_name": "Management of technical vulnerabilities", "description": "Gestion des vulnérabilités techniques"},
+  {"id": "A.8.16", "domain": "Technological Controls", "control_name": "Monitoring activities", "description": "Activités de surveillance"},
+  {"id": "A.8.21", "domain": "Technological Controls", "control_name": "Security of network services", "description": "Sécurité des services réseau"}
+]

@@ -1,0 +1,3332 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CyberScore TN — Présentation de Soutenance d'Ingénieur</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,400;1,600;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&family=JetBrains+Mono:wght@500;700&family=Noto+Sans+Arabic:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-deep: #0a0718;
+      --bg-alt: #0f0b24;
+      --card-bg: rgba(22, 16, 44, 0.72);
+      --card-border: rgba(255, 255, 255, 0.12);
+      --card-border-glow: rgba(192, 132, 252, 0.4);
+      --coral: #ff6b6b;
+      --peach: #ffa07a;
+      --magenta: #ec4899;
+      --purple: #a855f7;
+      --cyan: #38bdf8;
+      --green: #10b981;
+      --gold: #fbbf24;
+      --text: #f8fafc;
+      --text-muted: #cbd5e1;
+      --text-dim: #94a3b8;
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-syne: 'Syne', sans-serif;
+      --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-ar: 'Noto Sans Arabic', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --grad-sunset: linear-gradient(135deg, #ff6b6b 0%, #d946ef 50%, #8b5cf6 100%);
+      --grad-coral: linear-gradient(135deg, #ff7a70, #ff9f7a);
+      --grad-cyan: linear-gradient(135deg, #38bdf8, #818cf8);
+      --grad-dark: linear-gradient(135deg, rgba(30, 20, 60, 0.85), rgba(15, 10, 32, 0.95));
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background-color: var(--bg-deep);
+      color: var(--text);
+      font-family: var(--font-sans);
+      user-select: none;
+    }
+
+    /* Ambient Background Atmosphere (Editorial Lighting) */
+    .ambient-bg {
+      position: fixed;
+      inset: 0;
+      background: 
+        radial-gradient(circle at 15% 15%, rgba(217, 70, 239, 0.18) 0%, transparent 45%),
+        radial-gradient(circle at 85% 20%, rgba(56, 189, 248, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 50% 90%, rgba(255, 107, 107, 0.12) 0%, transparent 60%),
+        linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 100% 100%, 56px 56px, 56px 56px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Top Command Header */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 60px;
+      background: rgba(10, 7, 24, 0.85);
+      backdrop-filter: blur(24px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      z-index: 50;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-logo-img {
+      height: 28px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.4));
+    }
+
+    .brand-title {
+      font-family: var(--font-syne);
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      background: var(--grad-sunset);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-tagline {
+      font-size: 14.5px;
+      color: var(--text-dim);
+      border-left: 1px solid rgba(255, 255, 255, 0.15);
+      padding-left: 14px;
+      font-weight: 500;
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: var(--text-muted);
+      padding: 7px 15px;
+      border-radius: 999px;
+      font-size: 14.5px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .btn:hover, .btn.active {
+      background: rgba(255, 255, 255, 0.14);
+      border-color: rgba(255, 255, 255, 0.3);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+
+    .btn-gradient {
+      background: var(--grad-sunset);
+      border: none;
+      color: #fff;
+      font-weight: 700;
+      box-shadow: 0 4px 20px rgba(217, 70, 239, 0.35);
+      text-decoration: none;
+    }
+
+    .btn-gradient:hover {
+      box-shadow: 0 6px 28px rgba(217, 70, 239, 0.6);
+      transform: translateY(-2px);
+      color: #fff;
+    }
+
+    .timer-pill {
+      font-family: var(--font-mono);
+      font-size: 14.5px;
+      color: #ffa07a;
+      background: rgba(255, 107, 107, 0.12);
+      border: 1px solid rgba(255, 107, 107, 0.25);
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .timer-pill::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: #ff6b6b;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #ff6b6b;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    /* Presentation Viewport */
+    #viewport {
+      position: absolute;
+      top: 60px;
+      bottom: 54px;
+      left: 0;
+      right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px 40px;
+      z-index: 10;
+    }
+
+    /* 16:9 Widescreen Keynote Slide Container */
+    .slide {
+      position: absolute;
+      width: min(1420px, 95vw);
+      height: min(800px, 88vh);
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.75), 0 0 50px rgba(168, 85, 247, 0.08);
+      backdrop-filter: blur(28px);
+      padding: 32px 42px;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(0.96) translateY(18px);
+      transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.35s;
+      overflow: hidden;
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1) translateY(0);
+    }
+
+    /* Giant Background Watermark Monogram (Like the 'G' in inspiration) */
+    .bg-watermark {
+      position: absolute;
+      right: 20px;
+      bottom: -40px;
+      font-family: var(--font-display);
+      font-size: 340px;
+      font-weight: 900;
+      font-style: italic;
+      line-height: 1;
+      background: linear-gradient(135deg, rgba(255, 107, 107, 0.06), rgba(217, 70, 239, 0.04), transparent);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Slide Header */
+    .slide-meta {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+    }
+
+    .slide-headings {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .slide-kicker {
+      font-family: var(--font-mono);
+      font-size: 15.5px;
+      color: #ff9966;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .slide-kicker::before {
+      content: '';
+      width: 14px;
+      height: 2px;
+      background: var(--grad-sunset);
+    }
+
+    .slide-title-fr {
+      font-family: var(--font-display);
+      font-size: 34px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.5px;
+      line-height: 1.15;
+    }
+
+    .slide-title-fr em {
+      font-style: italic;
+      background: var(--grad-sunset);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .slide-title-ar {
+      font-family: var(--font-ar);
+      font-size: 17.5px;
+      font-weight: 700;
+      color: #e2e8f0;
+    }
+
+    .slide-pill-badge {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      font-family: var(--font-mono);
+      font-size: 15.5px;
+      font-weight: 800;
+      padding: 6px 14px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .slide-pill-badge .dot {
+      width: 6px;
+      height: 6px;
+      background: #38bdf8;
+      border-radius: 50%;
+    }
+
+    /* Slide Content Container */
+    .slide-content {
+      position: relative;
+      z-index: 2;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      font-size: 16px;
+      line-height: 1.65;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .slide-content::-webkit-scrollbar { width: 4px; }
+    .slide-content::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 4px; }
+
+    
+    /* Presentation Legibility Boost (Defense & Projector Optimization) */
+    .slide p {
+      color: #e2e8f0;
+    }
+    .glass-card p {
+      font-size: 15px;
+      line-height: 1.55;
+      color: #e2e8f0;
+    }
+    .glass-card strong {
+      color: #ffffff;
+    }
+    .slide-content li {
+      font-size: 15px;
+      line-height: 1.55;
+      color: #e2e8f0;
+    }
+    .slide-content code {
+      font-size: 15.5px;
+      font-weight: 600;
+    }
+    .editorial-table {
+      font-size: 15.5px !important;
+    }
+    .editorial-table th {
+      font-size: 15.5px;
+      padding: 10px 14px;
+    }
+    .editorial-table td {
+      font-size: 15.5px;
+      padding: 10px 14px;
+    }
+
+    /* Editorial Layout Grids */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .grid-hero { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 28px; align-items: center; }
+
+    /* Cards & Frames */
+    .glass-card {
+      background: rgba(28, 20, 56, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 18px;
+      padding: 20px 24px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .glass-card:hover {
+      border-color: rgba(255, 255, 255, 0.22);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .glass-card.highlight {
+      background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(168, 85, 247, 0.08));
+      border: 1px solid rgba(255, 107, 107, 0.3);
+    }
+
+    .glass-card.cyan {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.08), rgba(99, 102, 241, 0.08));
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+
+    .card-label {
+      font-family: var(--font-syne);
+      font-size: 17px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-label .icon-pill {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    /* Editorial Mockup Containers (for Website Screenshots) */
+    .mockup-frame {
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: #06040d;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(168, 85, 247, 0.15);
+      position: relative;
+    }
+
+    .mockup-header {
+      height: 26px;
+      background: rgba(255, 255, 255, 0.05);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      gap: 6px;
+    }
+
+    .mockup-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+    }
+    .mockup-dot:nth-child(1) { background: #ff5f56; }
+    .mockup-dot:nth-child(2) { background: #ffbd2e; }
+    .mockup-dot:nth-child(3) { background: #27c93f; }
+
+    .mockup-title {
+      font-family: var(--font-mono);
+      font-size: 14.5px;
+      color: var(--text-dim);
+      margin-left: 8px;
+    }
+
+    .mockup-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .mockup-frame:hover .mockup-img {
+      transform: scale(1.02);
+    }
+
+    /* Styled Bullet Lists */
+    ul.editorial-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    ul.editorial-list li {
+      position: relative;
+      padding-left: 24px;
+      color: #e2e8f0;
+      font-size: 15.5px;
+      line-height: 1.5;
+    }
+
+    ul.editorial-list li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 7px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--grad-sunset);
+      box-shadow: 0 0 8px rgba(255, 107, 107, 0.6);
+    }
+
+    /* Big Metric Display */
+    .stat-hero {
+      font-family: var(--font-display);
+      font-size: 42px;
+      font-weight: 900;
+      line-height: 1;
+      background: var(--grad-sunset);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .stat-caption {
+      font-family: var(--font-syne);
+      font-size: 15.5px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      font-weight: 700;
+    }
+
+    /* Comparison Table */
+    table.editorial-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 15.5px;
+    }
+
+    table.editorial-table th, table.editorial-table td {
+      padding: 13px 18px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      text-align: left;
+    }
+
+    table.editorial-table th {
+      background: rgba(255, 255, 255, 0.05);
+      color: #ffa07a;
+      font-family: var(--font-syne);
+      font-size: 14.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    table.editorial-table tr:nth-child(even) td { background: rgba(255, 255, 255, 0.02); }
+
+    /* Code Snippet */
+    .code-box {
+      background: #05030a;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-family: var(--font-mono);
+      font-size: 14.5px;
+      color: #93c5fd;
+      line-height: 1.5;
+      overflow-x: auto;
+    }
+
+    /* Visual Architecture 4-Tier Flow */
+    .arch-flow-wrapper {
+      display: flex;
+      align-items: stretch;
+      gap: 10px;
+      width: 100%;
+      margin-top: 0;
+    }
+    .arch-card {
+      flex: 1;
+      background: rgba(18, 12, 38, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      padding: 14px 14px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5);
+    }
+    .arch-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.7);
+    }
+    .arch-card.purple { border-color: rgba(168, 85, 247, 0.4); }
+    .arch-card.purple .arch-icon-bubble { background: rgba(168, 85, 247, 0.15); border-color: rgba(168, 85, 247, 0.5); color: #c084fc; box-shadow: 0 0 16px rgba(168, 85, 247, 0.35); }
+    
+    .arch-card.blue { border-color: rgba(56, 189, 248, 0.4); }
+    .arch-card.blue .arch-icon-bubble { background: rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.5); color: #38bdf8; box-shadow: 0 0 16px rgba(56, 189, 248, 0.35); }
+
+    .arch-card.magenta { border-color: rgba(236, 72, 153, 0.4); }
+    .arch-card.magenta .arch-icon-bubble { background: rgba(236, 72, 153, 0.15); border-color: rgba(236, 72, 153, 0.5); color: #f472b6; box-shadow: 0 0 16px rgba(236, 72, 153, 0.35); }
+
+    .arch-card.cyan { border-color: rgba(6, 182, 212, 0.4); }
+    .arch-card.cyan .arch-icon-bubble { background: rgba(6, 182, 212, 0.15); border-color: rgba(6, 182, 212, 0.5); color: #22d3ee; box-shadow: 0 0 16px rgba(6, 182, 212, 0.35); }
+
+    .arch-icon-bubble {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px solid;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      margin-bottom: 6px;
+    }
+    .arch-tier-title {
+      font-family: var(--font-syne);
+      font-size: 15.5px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 0.8px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+    .arch-tech-list {
+      list-style: none;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 15px;
+      color: #e2e8f0;
+      text-align: left;
+      flex: 1;
+    }
+    .arch-tech-list li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 1px 0;
+      line-height: 1.35;
+    }
+    .arch-check {
+      font-size: 14.5px;
+      color: #38bdf8;
+      font-weight: 900;
+    }
+    .arch-badge-pill {
+      margin-top: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 999px;
+      padding: 4px 12px;
+      font-size: 15.5px;
+      font-weight: 600;
+      color: #e2e8f0;
+    }
+    .arch-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, 0.35);
+      font-size: 16px;
+      font-weight: 900;
+      filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.5));
+    }
+    
+    /* 16 Modules Banner */
+    .arch-modules-strip {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 12px;
+      padding: 7px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 4px;
+    }
+    .arch-modules-badge {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-family: var(--font-syne);
+      font-weight: 800;
+      font-size: 15px;
+      color: #ff9966;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .arch-modules-items {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 14.5px;
+      color: #e2e8f0;
+    }
+    .arch-modules-items span {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Bottom Summary Strip */
+    .arch-summary-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .arch-summary-box {
+      background: rgba(20, 14, 40, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 9px;
+      padding: 6px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .arch-summary-title {
+      font-family: var(--font-syne);
+      font-size: 15.5px;
+      font-weight: 800;
+      color: #ffa07a;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .arch-summary-desc {
+      font-size: 15.5px;
+      color: #e2e8f0;
+      line-height: 1.35;
+    }
+
+    /* Floating Speaker Notes Modal */
+    #notes-panel {
+      position: fixed;
+      bottom: 64px;
+      right: 32px;
+      width: 520px;
+      max-height: 320px;
+      background: rgba(14, 10, 32, 0.96);
+      border: 1px solid rgba(255, 107, 107, 0.4);
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
+      padding: 20px 24px;
+      z-index: 100;
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+      backdrop-filter: blur(28px);
+    }
+
+    #notes-panel.active { display: flex; }
+
+    .notes-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 8px;
+    }
+
+    .notes-head span {
+      font-family: var(--font-syne);
+      font-size: 15px;
+      font-weight: 700;
+      color: #ffa07a;
+      letter-spacing: 0.5px;
+    }
+
+    .notes-body {
+      font-size: 15.5px;
+      line-height: 1.6;
+      color: #e2e8f0;
+      overflow-y: auto;
+      max-height: 220px;
+      padding-right: 6px;
+    }
+
+    /* Grid Overview Modal */
+    #grid-panel {
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 5, 18, 0.97);
+      backdrop-filter: blur(28px);
+      z-index: 200;
+      display: none;
+      flex-direction: column;
+      padding: 36px 48px;
+      overflow-y: auto;
+    }
+
+    #grid-panel.active { display: flex; }
+
+    .grid-tiles {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 18px;
+      margin-top: 24px;
+    }
+
+    .grid-tile {
+      background: rgba(28, 20, 56, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.25s;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .grid-tile:hover, .grid-tile.current {
+      border-color: #ff6b6b;
+      background: rgba(255, 107, 107, 0.15);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(255, 107, 107, 0.2);
+    }
+
+    .tile-kicker { font-family: var(--font-mono); font-size: 15.5px; color: #ff9f7a; font-weight: 700; }
+    .tile-title { font-family: var(--font-syne); font-size: 15px; font-weight: 700; color: #fff; line-height: 1.3; }
+
+    /* Footer Navigation */
+    footer {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      height: 54px;
+      background: rgba(10, 7, 24, 0.95);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      z-index: 50;
+    }
+
+    .progress-box {
+      flex: 1;
+      max-width: 500px;
+      margin: 0 28px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .progress-track {
+      flex: 1;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--grad-sunset);
+      width: 3.125%;
+      transition: width 0.3s ease;
+    }
+
+    .slide-index-tag {
+      font-family: var(--font-mono);
+      font-size: 14.5px;
+      font-weight: 700;
+      color: #ffa07a;
+      min-width: 75px;
+    }
+
+    .key-hints {
+      display: flex;
+      gap: 14px;
+      font-size: 15.5px;
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+    }
+
+    kbd {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 4px;
+      padding: 1px 6px;
+      color: #fff;
+    }
+
+    /* Fullscreen & Pseudo-Fullscreen Mode */
+    :fullscreen #viewport,
+    :-webkit-full-screen #viewport,
+    body.fullscreen-mode #viewport {
+      top: 0;
+      bottom: 0;
+      height: 100vh;
+      padding: 18px 24px;
+    }
+
+    :fullscreen .slide,
+    :-webkit-full-screen .slide,
+    body.fullscreen-mode .slide {
+      width: min(1500px, 98vw);
+      height: min(880px, 96vh);
+      border-radius: 20px;
+    }
+
+    /* Auto-collapse header and footer on fullscreen to maximize slide immersion */
+    :fullscreen header,
+    :-webkit-full-screen header,
+    body.fullscreen-mode header {
+      transform: translateY(-90%);
+      opacity: 0.15;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+      z-index: 100;
+    }
+
+    :fullscreen header:hover,
+    :-webkit-full-screen header:hover,
+    body.fullscreen-mode header:hover {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    :fullscreen footer,
+    :-webkit-full-screen footer,
+    body.fullscreen-mode footer {
+      transform: translateY(90%);
+      opacity: 0.15;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+      z-index: 100;
+    }
+
+    :fullscreen footer:hover,
+    :-webkit-full-screen footer:hover,
+    body.fullscreen-mode footer:hover {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ambient-bg"></div>
+
+  <!-- Top Header Bar -->
+  <header>
+    <div class="brand">
+      <img src="./assets/logo.png" alt="CyberScore TN" class="brand-logo-img" onerror="this.style.display='none'">
+      <span class="brand-title">CYBERSCORE TN</span>
+      <span class="brand-tagline">Projet de Fin d'Année d'Ingénieur — Soutenance Officielle</span>
+    </div>
+
+    <div class="header-controls">
+      <div class="timer-pill" id="timer-display">⏱️ 00:00</div>
+      <button class="btn" onclick="toggleGrid()">
+        <span>📑 Grille (G)</span>
+      </button>
+      <button class="btn" onclick="toggleNotes()">
+        <span>🎙️ Notes Orateur (S)</span>
+      </button>
+      <button class="btn" id="btn-fullscreen" onclick="toggleFullscreen()" title="Basculer Plein Écran (Touche F)">
+        <span>⛶ Plein Écran (F)</span>
+      </button>
+      <a href="presentation_scan_actif.html" class="btn" style="border-color: rgba(56, 189, 248, 0.4); color: #38bdf8;" title="Ouvrir la présentation dédiée au Scan Actif">
+        <span>⚡ Scan Actif (Focus)</span>
+      </a>
+      <a href="https://cyberscore.tn" target="_blank" class="btn btn-gradient">
+        <span>🚀 Démo Live</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Viewport Slide Deck (32 Full Slides) -->
+  <main id="viewport">
+
+    <!-- ==========================================
+         SLIDE 1 : PAGE DE TITRE
+         ========================================== -->
+    <div class="slide active" data-title="Page de Titre" data-notes="Monsieur le Président du jury, Madame, Monsieur les membres du jury, chers enseignants, j'ai l'honneur de vous présenter aujourd'hui mon projet de fin d'études d'ingénieur intitulé CyberScore TN, une plateforme nationale souveraine dédiée à l'évaluation, au scoring et à la remédiation continue de la posture cyber de l'ensemble des sites étatiques tunisiens (.gov.tn, ministères régaliens en .tn comme la Défense, et entreprises publiques en .com.tn).">
+      <div class="bg-watermark">TN</div>
+      <div class="slide-meta">
+        <div class="slide-headings">
+          <span class="slide-kicker">Slide 01 / 32 — Présentation Officielle</span>
+          <h1 class="slide-title-fr">De l'idée à la <em>souveraineté</em> cyber</h1>
+          <h2 class="slide-title-ar">منصة تقييم ومراقبة الأمن السيبراني للمواقع الحكومية والسيادية التونسية</h2>
+        </div>
+        <div class="slide-pill-badge"><span class="dot"></span> 01 / 32 </div>
+      </div>
+      <div class="slide-content">
+        <div class="grid-hero">
+          <div>
+            <span style="font-family: var(--font-syne); font-size: 15px; color: #ff9966; letter-spacing: 1.5px; text-transform: uppercase;">Projet de Fin d'Année (PFA) d'Ingénieur</span>
+            <h2 style="font-family: var(--font-display); font-size: 34px; font-weight: 800; color: #fff; margin: 12px 0 16px; line-height: 1.2;">
+              CyberScore TN
+            </h2>
+            <p style="color: #e2e8f0; font-size: 15px; margin-bottom: 24px; line-height: 1.6;">
+              Plateforme nationale souveraine d'audit passif, de scoring prédictif et de remédiation continue assistée par Intelligence Artificielle pour les 120+ domaines de l'État tunisien (<code style="color: #38bdf8;">.gov.tn</code>, <code style="color: #10b981;">.tn souverains</code> &amp; <code style="color: #ffa07a;">.com.tn</code>).
+            </p>
+            <div class="grid-3">
+              <div class="glass-card" style="padding: 14px 18px;">
+                <span class="stat-caption">Candidat</span>
+                <p style="font-weight: 800; color: #fff; font-size: 15px; margin-top: 4px;">Hamdouni Yosri</p>
+              </div>
+              <div class="glass-card" style="padding: 14px 18px;">
+                <span class="stat-caption">Cadre Légal</span>
+                <p style="font-weight: 800; color: #ffa07a; font-size: 15px; margin-top: 4px;">Décret ANCS 2023-17</p>
+              </div>
+              <div class="glass-card" style="padding: 14px 18px;">
+                <span class="stat-caption">Session</span>
+                <p style="font-weight: 800; color: #fff; font-size: 15px; margin-top: 4px;">2025 / 2026</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mockup-frame">
+            <div class="mockup-header">
+              <div class="mockup-dot"></div>
+              <div class="mockup-dot"></div>
+              <div class="mockup-dot"></div>
+              <span class="mockup-title">cyberscore.tn // soc-command-center</span>
+            </div>
+            <img src="./assets/dashboard.png" alt="Dashboard SOC" class="mockup-img" onerror="this.src='./assets/logo.png'">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 2 : PLAN DE LA SOUTENANCE
+         ========================================== -->
+    <div class="slide" data-title="Plan de la Présentation" data-notes="Notre présentation s'articule autour de quatre grands actes : après avoir posé le contexte national et comparé notre approche aux solutions mondiales, nous détaillerons l'architecture et les 16 piliers du moteur d'audit. Nous découvrirons ensuite l'analyste IA Amina et le livrable Chancellerie, avant de dérouler une démonstration live complète et de clore sur les perspectives.">
+      <div class="bg-watermark">02</div>
+      <div class="slide-meta">
+        <div class="slide-headings">
+          <span class="slide-kicker">Slide 02 / 32 — Sommaire Stratégique</span>
+          <h1 class="slide-title-fr">Le parcours de la <em>démonstration</em></h1>
+          <h2 class="slide-title-ar">خطة العرض الاستراتيجية والتفصيلية</h2>
+        </div>
+        <div class="slide-pill-badge"><span class="dot"></span> 02 / 32 </div>
+      </div>
+      <div class="slide-content">
+        <div class="grid-4" style="gap: 16px;">
+          <div class="glass-card highlight" style="padding: 22px 20px;">
+            <div class="card-label" style="font-size: 16px;"><span class="icon-pill">01</span> Cadrage Stratégique</div>
+            <ul class="editorial-list" style="font-size: 15.5px; gap: 10px;">
+              <li><strong>Contexte National</strong> (Décret 2023-17)</li>
+              <li><strong>Problématique & Verrous</strong></li>
+              <li><strong>État de l'Art & Benchmark</strong></li>
+              <li><strong>Facteurs Distinctifs</strong></li>
+            </ul>
+            <div style="margin-top: 14px; font-family: var(--font-mono); font-size: 15.5px; color: #ff9966; font-weight: 700;">4 Diapositives (03 à 06)</div>
+          </div>
+          <div class="glass-card cyan" style="padding: 22px 20px;">
+            <div class="card-label" style="font-size: 16px;"><span class="icon-pill">02</span> Architecture & Moteur</div>
+            <ul class="editorial-list" style="font-size: 15.5px; gap: 10px;">
+              <li><strong>Architecture 4 Couches</strong></li>
+              <li><strong>Moteur Passif (16 Piliers)</strong></li>
+              <li><strong>Niveaux Quick, Standard, Deep</strong></li>
+              <li><strong>Scoring Dual (A-F + ★★★)</strong></li>
+            </ul>
+            <div style="margin-top: 14px; font-family: var(--font-mono); font-size: 15.5px; color: #38bdf8; font-weight: 700;">11 Diapositives (07 à 17)</div>
+          </div>
+          <div class="glass-card highlight" style="padding: 22px 20px;">
+            <div class="card-label" style="font-size: 16px;"><span class="icon-pill">03</span> Innovations & IA</div>
+            <ul class="editorial-list" style="font-size: 15.5px; gap: 10px;">
+              <li><strong>Command Center Widescreen</strong></li>
+              <li><strong>IA Souveraine Amina 3D</strong></li>
+              <li><strong>Moteur Prédictif à +30 Jours</strong></li>
+              <li><strong>Rapport d'État « Chancellerie »</strong></li>
+            </ul>
+            <div style="margin-top: 14px; font-family: var(--font-mono); font-size: 14.5px; color: #f472b6; font-weight: 700;">7 Diapositives (18 à 24)</div>
+          </div>
+          <div class="glass-card cyan" style="padding: 22px 20px;">
+            <div class="card-label" style="font-size: 16px;"><span class="icon-pill">04</span> Démonstration & Bilan</div>
+            <ul class="editorial-list" style="font-size: 15.5px; gap: 10px;">
+              <li><strong>Gouvernance & RBAC (Écran 403)</strong></li>
+              <li><strong>Démonstration Live Opérationnelle</strong></li>
+              <li><strong>Métriques des 120 Domaines</strong></li>
+              <li><strong>Perspectives d'Homologation</strong></li>
+            </ul>
+            <div style="margin-top: 14px; font-family: var(--font-mono); font-size: 14.5px; color: #10b981; font-weight: 700;">8 Diapositives (25 à 32)</div>
+          </div>
+        </div>
+
+        <!-- Chronogramme de la Soutenance (Timeline Bar) -->
+        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.09); border-radius: 16px; padding: 14px 22px; margin-top: 10px; display: flex; flex-direction: column; gap: 8px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-family: var(--font-syne); font-size: 14.5px; font-weight: 800; color: #ffa07a; letter-spacing: 1px; text-transform: uppercase;">
+              ⏱️ Chronogramme de la Soutenance (Cadence Recommandée : ~30 minutes)
+            </span>
+            <span style="font-family: var(--font-mono); font-size: 13.5px; color: var(--text-dim);">
+              32 Diapositives Haute Définition · Démo Opérationnelle Intégrée
+            </span>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
+            <div style="background: rgba(255, 107, 107, 0.08); border: 1px solid rgba(255, 107, 107, 0.25); border-radius: 10px; padding: 9px 12px;">
+              <span style="font-family: var(--font-mono); font-size: 15.5px; font-weight: 800; color: #ff6b6b;">ACTE 1 · 00:00 - 07:00 (7 min)</span>
+              <p style="font-size: 15.5px; color: #e2e8f0; margin-top: 3px; line-height: 1.35;">Cadrage, Décret 2023-17 & Benchmark Mondial</p>
+            </div>
+            <div style="background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 10px; padding: 9px 12px;">
+              <span style="font-family: var(--font-mono); font-size: 15.5px; font-weight: 800; color: #38bdf8;">ACTE 2 · 07:00 - 15:00 (8 min)</span>
+              <p style="font-size: 15.5px; color: #e2e8f0; margin-top: 3px; line-height: 1.35;">Architecture 4 Couches & Moteur 16 Piliers</p>
+            </div>
+            <div style="background: rgba(236, 72, 153, 0.08); border: 1px solid rgba(236, 72, 153, 0.25); border-radius: 10px; padding: 9px 12px;">
+              <span style="font-family: var(--font-mono); font-size: 15.5px; font-weight: 800; color: #f472b6;">ACTE 3 · 15:00 - 22:00 (7 min)</span>
+              <p style="font-size: 15.5px; color: #e2e8f0; margin-top: 3px; line-height: 1.35;">Innovations IA Amina 3D, CTI & PDF Vectoriel</p>
+            </div>
+            <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 10px; padding: 9px 12px;">
+              <span style="font-family: var(--font-mono); font-size: 15.5px; font-weight: 800; color: #10b981;">ACTE 4 · 22:00 - 30:00 (8 min)</span>
+              <p style="font-size: 15.5px; color: #e2e8f0; margin-top: 3px; line-height: 1.35;">Démonstration Live, RBAC & Perspectives</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 3 : CONTEXTE NATIONAL
+         ========================================== -->
+    <div class="slide" data-title="Contexte National" data-notes="L'État tunisien administre plus de 120 portails publics. Ce périmètre ne se limite pas à l'extension .gov.tn : il englobe également des ministères régaliens sous .tn direct comme la Défense (defense.tn) ou l'Enseignement Supérieur (mes.tn), les agences comme l'ANCS (ancs.tn) et les entreprises d'État comme la STEG sous .com.tn. Face aux cyberattaques, CyberScore TN unifie la télésurveillance continue de l'ensemble de cet écosystème républicain.">
+      <div class="bg-watermark">03</div>
+      <div class="slide-meta">
+        <div class="slide-headings">
+          <span class="slide-kicker">Slide 03 / 32 — Contexte Géopolitique</span>
+          <h1 class="slide-title-fr">Le patrimoine numérique de <em>l'État</em></h1>
+          <h2 class="slide-title-ar">السياق الوطني العام والأهمية الاستراتيجية للسيادة الرقمية</h2>
+        </div>
+        <div class="slide-pill-badge"><span class="dot"></span> 03 / 32 </div>
+      </div>
+      <div class="slide-content">
+        <div class="grid-hero">
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div class="glass-card highlight">
+              <div class="card-label"><span class="icon-pill">🏛️</span> 120+ Domaines Étatiques (.gov.tn &amp; .tn souverains)</div>
+              <p style="color: #e2e8f0; font-size: 15px; line-height: 1.5;">
+                Périmètre public complet : ministères centraux sous <code style="color: #38bdf8;">.gov.tn</code> (Finances, Santé), ministères régaliens directs sous <code style="color: #10b981;">.tn</code> (<strong>defense.tn</strong>, <strong>mes.tn</strong>, <strong>ancs.tn</strong>) et entreprises d'État sous <code style="color: #ffa07a;">.com.tn</code> (STEG, SONEDE).
+              </p>
+            </div>
+            <div class="glass-card">
+              <div class="card-label"><span class="icon-pill">⚖️</span> Cadre Réglementaire : Décret-loi n° 2023-17</div>
+              <p style="color: #e2e8f0; font-size: 15.5px; line-height: 1.6;">
+                Promulgué le 11 mars 2023, érigeant l'<strong>ANCS</strong> en autorité nationale d'audit et de conformité obligatoire pour tous les organismes étatiques.
+              </p>
+            </div>
+            <div class="glass-card cyan">
+              <div class="card-label"><span class="icon-pill">⚡</span> La Lacune Terrain Comblée</div>
+              <p style="color: #e2e8f0; font-size: 15.5px; line-height: 1.6;">
+                Les audits manuels périodiques (tous les 1-2 ans) laissaient des fenêtres d'exposition béantes. CyberScore TN apporte une <strong>télésurveillance continue automatisée</strong>.
+              </p>
+            </div>
+          </div>
+
+          <div class="mockup-frame">
+            <div class="mockup-header">
+              <div class="mockup-dot"></div>
+              <div class="mockup-dot"></div>
+              <div class="mockup-dot"></div>
+              <span class="mockup-title">national-coverage // 24-governorates</span>
+            </div>
+            <img src="./assets/dashboard.png" alt="Cartographie Tunisie" class="mockup-img">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 4 : PROBLÉMATIQUE & VERROUS
+         ========================================== -->
+    <div class="slide" data-title="Problématique" data-notes="La question centrale à laquelle répond CyberScore TN est claire : comment offrir à l'ANCS et aux ministères un baromètre de sécurité objectif, instantané et souverain, sans recourir à des services tiers qui hébergeraient les failles de nos ministères à l'étranger ?">
+      <div class="bg-watermark">04</div>
+      <div class="slide-meta">
+        <div class="slide-headings">
+          <span class="slide-kicker">Slide 04 / 32 — Question Centrale</span>
+          <h1 class="slide-title-fr">La problématique & les <em>verrous</em></h1>
+          <h2 class="slide-title-ar">الإشكالية الهندسية والتحديات التقنية الكبرى</h2>
+        </div>
+        <div class="slide-pill-badge"><span class="dot"></span> 04 / 32 </div>
+      </div>
+      <div class="slide-content">
+        <div class="glass-card highlight" style="text-align: center; padding: 22px 36px;">
+          <h2 style="font-family: var(--font-display); font-size: 23px; font-weight: 700; color: #fff; line-height: 1.4;">
+            « Comment concevoir une plateforme souveraine capable d'évaluer, de quantifier et d'orienter la remédiation cyber de l'ensemble des portails étatiques sans intrusion, sans dépendance étrangère et avec une rigueur mathématique incontestable ? »
+          </h2>
+        </div>
+
+        <div class="grid-3" style="margin-top: 4px; gap: 16px;">
+          <div class="glass-card" style="padding: 20px 22px;">
+            <div class="card-label" style="color: #ff6b6b; font-size: 16px;"><span class="icon-pill">🛡️</span> 1. Passif & Non-Intrusif</div>
+            <p style="font-size: 15.5px; color: #e2e8f0; line-height: 1.6;">Auditer en profondeur sans jamais injecter d'exploit ni saturer les serveurs de l'État (conformité juridique stricte avec le Décret-loi n° 2023-17).</p>
+          </div>
+          <div class="glass-card" style="padding: 20px 22px;">
+            <div class="card-label" style="color: #ffa07a; font-size: 16px;"><span class="icon-pill">📐</span> 2. Modélisation Scientifique</div>
+            <p style="font-size: 15.5px; color: #e2e8f0; line-height: 1.6;">Agrégation de 16 piliers hétérogènes (TLS, DNS, CSP, Ports, CVEs) selon les sévérités normalisées CVSS v3.1 et ISO 27001.</p>
+          </div>
+          <div class="glass-card" style="padding: 20px 22px;">
+            <div class="card-label" style="color: #38bdf8; font-size: 16px;"><span class="icon-pill">🤖</span> 3. Souveraineté de l'IA</div>
+            <p style="font-size: 15.5px; color: #e2e8f0; line-height: 1.6;">Interdiction formelle d'envoyer des données étatiques à OpenAI : inférence locale via Qwen2.5-Coder:7b sous Ollama (Port 25000).</p>
+          </div>
+        </div>
+
+        <!-- 4 Verrous Technologiques Clés Débloqués -->
+        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.09); border-radius: 16px; padding: 14px 22px; margin-top: 6px;">
+          <div style="font-family: var(--font-syne); font-size: 14.5px; font-weight: 800; color: #ffa07a; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px;">
+            ⚡ Les 4 Verrous Technologiques Clés Franchis
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
+            <div style="background: rgba(20, 14, 40, 0.6); border: 1px solid rgba(255, 255, 255, 0.07); border-radius: 10px; padding: 10px 12px;">
+              <span style="font-family: var(--font-syne); font-size: 15.5px; font-weight: 800; color: #ff6b6b;">1. PARALLÉLISME ASYNC</span>
+              <p style="font-size: 15.5px; color: #e2e8f0; margin-top: 3px; line-height: 1.35;">16 modules audités en parallèle en <strong>7.4s</strong> (gain 12x vs séquentiel).</p>
+            </div>
+            <div style="background: rgba(20, 14, 40, 0.6); border: 1px solid rgba(255, 255, 255, 0.07); border-radius: 10px; padding: 10px 12px;">
+              <span style="font-family: var(--font-syne); font-size: 15.5px; font-weight: 800; color: #ffa07a;">2. ZÉRO FUITE CLOUD</span>
+              <p style="font-size: 15.5px; color: #e2e8f0; margin-top: 3px; line-height: 1.35;">Inférence LLM 100% sur serveur souverain : <strong>0 octet</strong> vers les clouds US.</p>
+            </div>
+            <div style="background: rgba(20, 14, 40, 0.6); border: 1px solid rgba(255, 255, 255, 0.07); border-radius: 10px; padding: 10px 12px;">
+              <span style="font-family: var(--font-syne); font-size: 15.5px; font-weight: 800; color: #38bdf8;">3. CORRÉLATION NORMATIVE</span>
+              <p style="font-size: 15.5px; color: #e2e8f0; margin-top: 3px; line-height: 1.35;">Mappage automatique : <strong>ANCS · OWASP · NIST · ISO 27001</strong>.</p>
+            </div>
+            <div style="background: rgba(20, 14, 40, 0.6); border: 1px solid rgba(255, 255, 255, 0.07); border-radius: 10px; padding: 10px 12px;">
+              <span style="font-family: var(--font-syne); font-size: 15.5px; font-weight: 800; color: #10b981;">4. RÉSILIENCE HORS-LIGNE</span>
+              <p style="font-size: 15.5px; color: #e2e8f0; margin-top: 3px; line-height: 1.35;">Moteur expert déterministe en cas d'indisponibilité du GPU LLM.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 5 : ÉTAT DE L'ART MONDIAL
+         ========================================== -->
+    <div class="slide" data-title="État de l'Art" data-notes="Pour concevoir CyberScore TN, j'ai analysé les leaders mondiaux du secteur. Si SecurityScorecard apporte la lisibilité de la note A-F et la Chine la rigueur du label 3 étoiles, toutes ces solutions sont privées, payantes et hébergées sur des clouds étrangers. CyberScore TN fusionne ces meilleures pratiques en un outil souverain, adapté aux décrets de l'ANCS et hébergé sur le sol tunisien.">
+      <div class="bg-watermark">05</div>
+      <div class="slide-meta">
+        <div class="slide-headings">
+          <span class="slide-kicker">Slide 05 / 32 — Benchmark International</span>
+          <h1 class="slide-title-fr">État de l'Art &amp; <em>Benchmark</em> Mondial</h1>
+          <h2 class="slide-title-ar">الإطار النظري — مقارنة متعمقة بالمنصات العالمية الرائدة</h2>
+        </div>
+        <div class="slide-pill-badge"><span class="dot"></span> 05 / 32 </div>
+      </div>
+      <div class="slide-content">
+        <table class="editorial-table">
+          <thead>
+            <tr>
+              <th>Plateforme</th>
+              <th>Origine</th>
+              <th>Modèle de Notation</th>
+              <th>Moteur d'IA</th>
+              <th>Hébergement Données</th>
+              <th>Coût Annuel Estimé</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>SecurityScorecard</strong></td>
+              <td>États-Unis</td>
+              <td>Lettres A à F (0-100)</td>
+              <td>TITAN AI (Cloud US)</td>
+              <td>Cloud Commercial Étranger</td>
+              <td style="color: #ff6b6b; font-weight: 700;">~180 000 $ / an</td>
+            </tr>
+            <tr>
+              <td><strong>BitSight Technologies</strong></td>
+              <td>États-Unis</td>
+              <td>Score financier 250-900</td>
+              <td>Modèles propriétaires fermés</td>
+              <td>Cloud Commercial Étranger</td>
+              <td style="color: #ff6b6b; font-weight: 700;">~200 000 $ / an</td>
+            </tr>
+            <tr>
+              <td><strong>CISA CDM</strong></td>
+              <td>États-Unis</td>
+              <td>Indicateurs NIST bruts</td>
+              <td>Aucun</td>
+              <td>Réseau Fédéral US</td>
+              <td>Inaccessible (US Only)</td>
+            </tr>
+            <tr>
+              <td><strong>China CCL</strong></td>
+              <td>Chine</td>
+              <td>Étoiles de conformité (1 à 3)</td>
+              <td>Aucun</td>
+              <td>Réseau National Chinois</td>
+              <td>Inaccessible</td>
+            </tr>
+            <tr style="background: rgba(255, 107, 107, 0.12); border: 2px solid #ff6b6b;">
+              <td><strong>CyberScore TN</strong></td>
+              <td><strong>Tunisie</strong></td>
+              <td><strong>Dual : A-F + ★★★</strong></td>
+              <td><strong>Ollama Local (7B)</strong></td>
+              <td><strong>100% On-Premise Souverain</strong></td>
+              <td style="color: #10b981; font-weight: 800;">100% Libre / Gratuit</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Synthèse Stratégique pour la Tunisie -->
+        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.09); border-radius: 16px; padding: 14px 22px; margin-top: 10px;">
+          <div style="font-family: var(--font-syne); font-size: 14.5px; font-weight: 800; color: #ffa07a; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px;">
+            💡 Synthèse Stratégique & Valeur Ajoutée pour l'État Tunisien
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;">
+            <div style="background: rgba(255, 107, 107, 0.08); border: 1px solid rgba(255, 107, 107, 0.22); border-radius: 10px; padding: 10px 14px;">
+              <span style="font-family: var(--font-syne); font-size: 15.5px; font-weight: 800; color: #ff6b6b;">💰 ÉCONOMIE DE DEVISES</span>
+              <p style="font-size: 14.5px; color: #e2e8f0; margin-top: 3px; line-height: 1.4;">Plus de <strong>550 000 DT / an</strong> économisés en évitant les abonnements cloud étrangers inadaptés.</p>
+            </div>
+            <div style="background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.22); border-radius: 10px; padding: 10px 14px;">
+              <span style="font-family: var(--font-syne); font-size: 15.5px; font-weight: 800; color: #38bdf8;">🇹🇳 SOUVERAINETÉ ABSOLUE</span>
+              <p style="font-size: 14.5px; color: #e2e8f0; margin-top: 3px; line-height: 1.4;">Aucune faille ni métadonnée étatique n'est hébergée hors du territoire national.</p>
+            </div>
+            <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.22); border-radius: 10px; padding: 10px 14px;">
+              <span style="font-family: var(--font-syne); font-size: 15.5px; font-weight: 800; color: #10b981;">⚖️ CONFORMITÉ ANCS & ARABE</span>
+              <p style="font-size: 14.5px; color: #e2e8f0; margin-top: 3px; line-height: 1.4;">Seule plateforme au monde calibrée pour le Décret 2023-17 avec interface arabe RTL native.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 6 : FACTEURS DISTINCTIFS
+         ========================================== -->
+    <div class="slide" data-title="Facteurs Distinctifs" data-notes="Les piliers qui font de CyberScore TN une solution unique sont l'indépendance technologique nationale, l'avatar 3D interactif et les livrables d'État haute fidélité certifiés par hachage SHA-256.">
+      <div class="bg-watermark">06</div>
+      <div class="slide-meta">
+        <div class="slide-headings">
+          <span class="slide-kicker">Slide 06 / 32 — Proposition de Valeur</span>
+          <h1 class="slide-title-fr">Facteurs Distinctifs \& <em>Valeur Ajoutée</em></h1>
+          <h2 class="slide-title-ar">ما يميز المنصة والقيمة المضافة للسيادة الوطنية</h2>
+        </div>
+        <div class="slide-pill-badge"><span class="dot"></span> 06 / 32 </div>
+      </div>
+      <div class="slide-content">
+        <div class="grid-3">
+          <div class="glass-card highlight">
+            <div class="card-label"><span class="icon-pill">🧠</span> 1. IA On-Premise Locale</div>
+            <p style="font-size: 15px; color: #e2e8f0; line-height: 1.5;">Modèle Qwen2.5-Coder:7b exécuté sur port local 25000 via Ollama sans fuite de métadonnées.</p>
+          </div>
+          <div class="glass-card cyan">
+            <div class="card-label"><span class="icon-pill">👤</span> 2. Avatar 3D WebGL Amina</div>
+            <p style="font-size: 15px; color: #e2e8f0; line-height: 1.5;">Analyste SOC virtuelle interactive développée avec Three.js et React Three Fiber à 60 FPS.</p>
+          </div>
+          <div class="glass-card highlight">
+            <div class="card-label"><span class="icon-pill">🎯</span> 3. Diagnostic 16 Vecteurs</div>
+            <p style="font-size: 15px; color: #e2e8f0; line-height: 1.5;">Le moteur passif le plus exhaustif de Tunisie combinant TLS, DNSSEC, CSP, Ports et CVEs.</p>
+          </div>
+          <div class="glass-card cyan">
+            <div class="card-label"><span class="icon-pill">📜</span> 4. Livrable Chancellerie A4</div>
+            <p style="font-size: 15px; color: #e2e8f0; line-height: 1.5;">Attestation officielle 7 pages vectorielle scellée par hachage cryptographique SHA-256 et QR code.</p>
+          </div>
+          <div class="glass-card highlight">
+            <div class="card-label"><span class="icon-pill">🌐</span> 5. Arabe RTL Natif</div>
+            <p style="font-size: 15px; color: #e2e8f0; line-height: 1.5;">Prise en charge native de la typographie arabe avec CSS Logical Properties (zéro distorsion).</p>
+          </div>
+          <div class="glass-card cyan">
+            <div class="card-label"><span class="icon-pill">🏆</span> 6. Gamification & Sceau</div>
+            <p style="font-size: 15px; color: #e2e8f0; line-height: 1.5;">Moteur d'XP pour motiver les RSSIs et Sceau Public de Confiance prêt à intégrer sur les portails.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 7 : ARCHITECTURE SYSTÈME
+         ========================================== -->
+    <div class="slide" data-title="Architecture Système" data-notes="Mesdames et messieurs les membres du jury, cette diapositive présente notre architecture logicielle modulaire, conçue pour concilier performance temps réel, souveraineté des données et extensibilité. Elle s'articule autour de 4 couches claires : 1. La Couche Frontend (Next.js 16 & React 19) avec rendu hybride SSR/SSG, avatar 3D WebGL à 60 FPS et gestion native de l'arabe RTL. 2. La Couche Backend & API (FastAPI & Python 3.11 asynchrone) qui orchestre nos 16 modules d'audit en parallèle via asyncio.gather pour délivrer des scans en moins de 8 secondes, tout en assurant l'authentification sécurisée JWT Bcrypt. 3. La Couche Intelligence IA (Ollama & Qwen2.5-Coder:7b) exécutée 100% en local on-premise sans aucune fuite de données vers des clouds étrangers, avec flux de streaming direct SSE mot-par-mot. 4. La Couche Persistance & Cache (PostgreSQL 16 & Redis 7) structurée en 19 tables relationnelles avec indexation JSONB pour stocker la télémétrie des 120 ministères. L'ensemble alimente nos 16 modules spécialisés et garantit une stricte conformité aux décrets de l'ANCS, à l'OWASP Top 10, au NIST CSF et à la norme ISO 27001.">
+      <div class="bg-watermark">07</div>
+      <div class="slide-meta">
+        <div class="slide-headings">
+          <span class="slide-kicker">Slide 07 / 32 — Ingénierie Logicielle</span>
+          <h1 class="slide-title-fr">Architecture logicielle <em>modulaire</em></h1>
+          <p style="font-size: 15.5px; color: #e2e8f0; margin-top: 2px;">Système modulaire découplé : Next.js 16, FastAPI, Ollama et PostgreSQL 16</p>
+          <h2 class="slide-title-ar" style="margin-top: 2px;">الهيكلة العامة للنظام وتوزيع الوحدات البرمجية</h2>
+        </div>
+        <div class="slide-pill-badge"><span class="dot"></span> 07 / 32 </div>
+      </div>
+      <div class="slide-content" style="gap: 10px;">
+        <!-- 4 Visual Architecture Cards Flow -->
+        <div class="arch-flow-wrapper">
+          <!-- Tier 1: Frontend -->
+          <div class="arch-card purple">
+            <div class="arch-icon-bubble">🖥️</div>
+            <div class="arch-tier-title">FRONTEND</div>
+            <ul class="arch-tech-list">
+              <li><span class="arch-check">✓</span> Next.js 16 (App Router)</li>
+              <li><span class="arch-check">✓</span> React & TypeScript</li>
+              <li><span class="arch-check">✓</span> Three.js (Avatar 3D)</li>
+              <li><span class="arch-check">✓</span> Tailwind CSS</li>
+              <li><span class="arch-check">✓</span> i18n (Arabe / FR / EN)</li>
+              <li><span class="arch-check">✓</span> Rendu Hybride SSR/SSG</li>
+            </ul>
+            <div class="arch-badge-pill">Web • Desktop • Mobile</div>
+          </div>
+
+          <div class="arch-arrow">➔</div>
+
+          <!-- Tier 2: Backend / API -->
+          <div class="arch-card blue">
+            <div class="arch-icon-bubble">⚙️</div>
+            <div class="arch-tier-title">BACKEND / API</div>
+            <ul class="arch-tech-list">
+              <li><span class="arch-check">✓</span> FastAPI (Python)</li>
+              <li><span class="arch-check">✓</span> AsyncIO & SSE (Streaming)</li>
+              <li><span class="arch-check">✓</span> REST API (JSON)</li>
+              <li><span class="arch-check">✓</span> JWT + RBAC (3 rôles)</li>
+              <li><span class="arch-check">✓</span> Bcrypt (Sécurité)</li>
+              <li><span class="arch-check">✓</span> Générateur PDF vectoriel</li>
+            </ul>
+            <div class="arch-badge-pill">Sécurisé • Évolutif • Asynchrone</div>
+          </div>
+
+          <div class="arch-arrow">➔</div>
+
+          <!-- Tier 3: Intelligence IA -->
+          <div class="arch-card magenta">
+            <div class="arch-icon-bubble">🧠</div>
+            <div class="arch-tier-title">INTELLIGENCE IA</div>
+            <ul class="arch-tech-list">
+              <li><span class="arch-check">✓</span> Ollama (Runtime Local)</li>
+              <li><span class="arch-check">✓</span> Qwen2.5-Coder-7B</li>
+              <li><span class="arch-check">✓</span> Inférence locale souveraine</li>
+              <li><span class="arch-check">✓</span> Indexation JSONB & RAG</li>
+              <li><span class="arch-check">✓</span> Moteur d'interpolation</li>
+              <li><span class="arch-check">✓</span> Fallback déterministe (Offline)</li>
+            </ul>
+            <div class="arch-badge-pill">IA Locale • Privée • Déterministe</div>
+          </div>
+
+          <div class="arch-arrow">↔</div>
+
+          <!-- Tier 4: Persistance & Cache -->
+          <div class="arch-card cyan">
+            <div class="arch-icon-bubble">💾</div>
+            <div class="arch-tier-title">PERSISTANCE & CACHE</div>
+            <ul class="arch-tech-list">
+              <li><span class="arch-check">✓</span> PostgreSQL 16 (19 Tables)</li>
+              <li><span class="arch-check">✓</span> JSONB pour Télémétrie</li>
+              <li><span class="arch-check">✓</span> Redis 7 (Cache & Sessions)</li>
+              <li><span class="arch-check">✓</span> Indexation & Recherche</li>
+              <li><span class="arch-check">✓</span> Migrations & Sauvegardes</li>
+              <li><span class="arch-check">✓</span> Haute disponibilité</li>
+            </ul>
+            <div class="arch-badge-pill">Fiable • Rapide • Distribué</div>
+          </div>
+        </div>
+
+        <!-- Middle Banner: 16 Modules Spécialisés -->
+        <div class="arch-modules-strip">
+          <div class="arch-modules-badge">
+            <span style="font-size: 16px;">⬡</span>
+            <span><strong style="color:#fff; font-size: 15.5px;">16</strong> Modules Spécialisés</span>
+          </div>
+          <div class="arch-modules-items">
+            <span>📋 Audit & Logs</span>
+            <span>🔗 Corrélation</span>
+            <span>👥 Sessions</span>
+            <span>⚠️ Menaces</span>
+            <span>📑 Rapports</span>
+            <span>🛡️ Réponse</span>
+            <span style="color: #ffa07a; font-style: italic;">& plus encore...</span>
+          </div>
+        </div>
+
+        <!-- Bottom Banner: 4 Standards & Métadonnées -->
+        <div class="arch-summary-strip">
+          <div class="arch-summary-box">
+            <div class="arch-summary-title">🛡️ Conformité & Normes</div>
+            <div class="arch-summary-desc">ANCS • OWASP Top 10 • NIST CSF • ISO 27001</div>
+          </div>
+          <div class="arch-summary-box">
+            <div class="arch-summary-title">🔐 Sécurité & Auth</div>
+            <div class="arch-summary-desc">RBAC • JWT • Bcrypt • Contrôle d'accès granulaire</div>
+          </div>
+          <div class="arch-summary-box">
+            <div class="arch-summary-title">⚡ Performance & Résilience</div>
+            <div class="arch-summary-desc">Cache Redis • SSE • AsyncIO • Fallback Offline</div>
+          </div>
+          <div class="arch-summary-box">
+            <div class="arch-summary-title">🎯 Observabilité & Audit</div>
+            <div class="arch-summary-desc">Logs centralisés • Traçabilité • Télémétrie • PDF</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 8 : STACK TECHNIQUE
+         ========================================== -->
+    <div class="slide" data-title="Stack Technique" data-notes="Chaque technologie a été choisie pour des raisons précises : FastAPI pour sa performance asynchrone, Next.js 16 avec Turbopack pour le rendu sans latence, et Ollama pour garantir l'indépendance technologique nationale.">
+      <div class="bg-watermark">08</div>
+      <div class="slide-meta">
+        <div class="slide-headings">
+          <span class="slide-kicker">Slide 08 / 32 — Technologies Retenues</span>
+          <h1 class="slide-title-fr">La sélection des <em>technologies</em></h1>
+          <h2 class="slide-title-ar">المنظومة التكنولوجية المعتمدة ومبررات الاختيار</h2>
+        </div>
+        <div class="slide-pill-badge"><span class="dot"></span> 08 / 32 </div>
+      </div>
+      <div class="slide-content">
+        <table class="editorial-table">
+          <thead>
+            <tr>
+              <th>Couche Système</th>
+              <th>Technologie Retenue</th>
+              <th>Bénéfices Techniques & Rôle Opérationnel</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Frontend Web</strong></td>
+              <td><strong>Next.js 16 (Turbopack), React 19</strong></td>
+              <td>Compilation en quelques millisecondes, SSR/SSG hybride, App Router sécurisé.</td>
+            </tr>
+            <tr>
+              <td><strong>Rendu 3D</strong></td>
+              <td><strong>Three.js, React Three Fiber</strong></td>
+              <td>Rendu WebGL fluide accéléré par le processeur graphique pour l'avatar Amina.</td>
+            </tr>
+            <tr>
+              <td><strong>Internationalisation</strong></td>
+              <td><strong>next-intl (CSS Logical Props)</strong></td>
+              <td>Inversion dynamique LTR ⇄ RTL pour l'arabe officiel sans recalcul de layout.</td>
+            </tr>
+            <tr>
+              <td><strong>Backend API</strong></td>
+              <td><strong>Python 3.11, FastAPI, AsyncIO</strong></td>
+              <td>Exécution simultanée non-bloquante d'audits réseau (gain de performance x15).</td>
+            </tr>
+            <tr>
+              <td><strong>Persistance</strong></td>
+              <td><strong>PostgreSQL 16, SQLAlchemy Async</strong></td>
+              <td>Intégrité relationnelle stricte (19 tables) et indexation JSONB de la télémétrie.</td>
+            </tr>
+            <tr>
+              <td><strong>Intelligence Artificielle</strong></td>
+              <td><strong>Ollama, Qwen2.5-Coder:7b</strong></td>
+              <td>Modèle open-source de pointe pour le code (88.4% HumanEval), 100% hors-ligne.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Performance & Qualité de la Stack -->
+        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.09); border-radius: 16px; padding: 14px 22px; margin-top: 10px;">
+          <div style="font-family: var(--font-syne); font-size: 14.5px; font-weight: 800; color: #ffa07a; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px;">
+            ⚡ Validation Qualité & Métriques de Performance Mesurées
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
+            <div style="background: rgba(20, 14, 40, 0.6); border: 1px solid rgba(255, 255, 255, 0.07); border-radius: 10px; padding: 10px 12px;">
+              <span style="font-family: var(--font-syne); font-size: 15.5px; font-weight: 800; color: #10b981;">⚡ TEMPS D'EXÉCUTION</span>
+              <p style="font-size: 15.5px; color: #e2e8f0; margin-top: 3px; line-height: 1.35;"><strong>2.8s</strong> (Quick) à <strong>7.4s</strong> (Standard 10 modules).</p>
+            </div>
+            <div style="background: rgba(20, 14, 40, 0.6); border: 1px solid rgba(255, 255, 255, 0.07); border-radius: 10px; padding: 10px 12px;">
+              <span style="font-family: var(--font-syne); font-size: 15.5px; font-weight: 800; color: #38bdf8;">💾 EMPREINTE MÉMOIRE</span>
+              <p style="font-size: 15.5px; color: #e2e8f0; margin-top: 3px; line-height: 1.35;">~45 Mo à ~110 Mo RAM (processus asynchrone non-bloquant).</p>
+            </div>
+            <div style="background: rgba(20, 14, 40, 0.6); border: 1px solid rgba(255, 255, 255, 0.07); border-radius: 10px; padding: 10px 12px;">
+              <span style="font-family: var(--font-syne); font-size: 15.5px; font-weight: 800; color: #ffa07a;">🧪 TESTS & COUVERTURE</span>
+              <p style="font-size: 15.5px; color: #e2e8f0; margin-top: 3px; line-height: 1.35;"><strong>92%</strong> de couverture de tests Pytest (0 échec).</p>
+            </div>
+            <div style="background: rgba(20, 14, 40, 0.6); border: 1px solid rgba(255, 255, 255, 0.07); border-radius: 10px; padding: 10px 12px;">
+              <span style="font-family: var(--font-syne); font-size: 15.5px; font-weight: 800; color: #f472b6;">🌐 RENDU MULTILINGUE</span>
+              <p style="font-size: 15.5px; color: #e2e8f0; margin-top: 3px; line-height: 1.35;"><strong>0ms</strong> de latence au basculement LTR ⇄ RTL Arabe.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 9 : MOTEUR D'AUDIT (16 PILIERS)
+         ========================================== -->
+    <div class="slide" data-title="16 Vecteurs d'Audit" data-notes="Le moteur ausculte 16 piliers techniques. La pondération accorde une priorité stratégique au chiffrement TLS, aux en-têtes de durcissement et à la protection contre les vulnérabilités injectables. Chaque constat technique est tracé avec sa sévérité normalisée de Info à Critique.">
+      <div class="bg-watermark">09</div>
+      <div class="slide-meta">
+        <div class="slide-headings">
+          <span class="slide-kicker">Slide 09 / 32 — Moteur d'Audit</span>
+          <h1 class="slide-title-fr">L'évaluation sur <em>16 piliers</em></h1>
+          <h2 class="slide-title-ar">محرك الفحص التقني غير الاقتحامي — تفصيل الـ 16 مؤشراً</h2>
+        </div>
+        <div class="slide-pill-badge"><span class="dot"></span> 09 / 32 </div>
+      </div>
+      <div class="slide-content">
+        <div class="grid-3">
+          <div class="glass-card highlight">
+            <div class="card-label">1. Chiffrement SSL/TLS (12%)</div>
+            <p style="font-size: 14.5px; color: #e2e8f0;">Négociation TLS 1.2/1.3, suites cryptographiques ECDHE, validité TunTrust.</p>
+          </div>
+          <div class="glass-card cyan">
+            <div class="card-label">2. En-têtes HTTP (10%)</div>
+            <p style="font-size: 14.5px; color: #e2e8f0;">Contrôle strict de HSTS (min 6 mois), X-Frame-Options (anti-clickjacking), nosniff.</p>
+          </div>
+          <div class="glass-card highlight">
+            <div class="card-label">3. Politique CSP (8%)</div>
+            <p style="font-size: 14.5px; color: #e2e8f0;">Content Security Policy, interdiction d'unsafe-inline et d'unsafe-eval.</p>
+          </div>
+          <div class="glass-card cyan">
+            <div class="card-label">4. Cookies de Session (7%)</div>
+            <p style="font-size: 14.5px; color: #e2e8f0;">Drapeaux obligatoires : HttpOnly, Secure, SameSite=Lax/Strict.</p>
+          </div>
+          <div class="glass-card highlight">
+            <div class="card-label">5. Hygiène DNSSEC (6%)</div>
+            <p style="font-size: 14.5px; color: #e2e8f0;">Validation DNSSEC, serveurs NS faisant autorité, refus de transfert AXFR.</p>
+          </div>
+          <div class="glass-card cyan">
+            <div class="card-label">6. Sécurité E-Mail (6%)</div>
+            <p style="font-size: 14.5px; color: #e2e8f0;">Protection anti-usurpation d'État : SPF (v=spf1), DKIM et DMARC (p=reject).</p>
+          </div>
+          <div class="glass-card highlight">
+            <div class="card-label">7. Surface Réseau (8%)</div>
+            <p style="font-size: 14.5px; color: #e2e8f0;">Détection passive des ports d'administration ouverts (SSH:22, RDP:3389, Telnet:23).</p>
+          </div>
+          <div class="glass-card cyan">
+            <div class="card-label">8. Fuites d'Infos (5%)</div>
+            <p style="font-size: 14.5px; color: #e2e8f0;">Suppression des bannières Server, X-Powered-By et fichiers de config publics.</p>
+          </div>
+          <div class="glass-card highlight">
+            <div class="card-label">9-16. CTI & Avancés (38%)</div>
+            <p style="font-size: 14.5px; color: #e2e8f0;">Cartographie des sous-domaines, réputation IP, supply chain JS et CVEs.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 10 : PROFONDEURS DE SCAN
+         ========================================== -->
+    <div class="slide" data-title="Niveaux de Scan" data-notes="Contrairement aux scanners classiques qui immobilisent l'utilisateur pendant 15 minutes, notre approche asynchrone parallélisée permet de délivrer un diagnostic Standard en moins de 8 secondes, permettant des audits en direct pendant une réunion de crise ou un comité de direction.">
+      <div class="bg-watermark">10</div>
+      <div class="slide-meta">
+        <div class="slide-headings">
+          <span class="slide-kicker">Slide 10 / 32 — Calibration Temporelle</span>
+          <h1 class="slide-title-fr">Vélocité \& <em>Profondeurs</em> d'Audit</h1>
+          <h2 class="slide-title-ar">مستويات دقة الفحص والمعايرة الزمنية للأداء</h2>
+        </div>
+        <div class="slide-pill-badge"><span class="dot"></span> 10 / 32 </div>
+      </div>
+      <div class="slide-content">
+        <div class="grid-hero">
+          <div class="grid-3" style="grid-column: span 2;">
+            <div class="glass-card highlight">
+              <span class="stat-caption">Quick Scan (4 Modules)</span>
+              <div class="stat-hero" style="color: #10b981;">~2.4 s</div>
+              <p style="font-size: 14.5px; color: #e2e8f0; margin-top: 8px;">SSL/TLS, En-têtes HTTP, Cookies et directives CSP.</p>
+            </div>
+            <div class="glass-card cyan">
+              <span class="stat-caption">Standard Scan (10 Modules)</span>
+              <div class="stat-hero" style="color: #38bdf8;">~7.8 s</div>
+              <p style="font-size: 14.5px; color: #e2e8f0; margin-top: 8px;">Quick + DNSSEC, SPF/DMARC, bannières et supply-chain.</p>
+            </div>
+            <div class="glass-card highlight">
+              <span class="stat-caption">Deep Scan (16 Modules)</span>
+              <div class="stat-hero" style="color: #ffa07a;">~28.5 s</div>
+              <p style="font-size: 14.5px; color: #e2e8f0; margin-top: 8px;">Standard + Cartographie sous-domaines, Ports et CTI.</p>
+            </div>
+          </div>
+
+          <div class="mockup-frame" style="grid-column: span 2; margin-top: 6px;">
+            <div class="mockup-header">
+              <div class="mockup-dot"></div>
+              <div class="mockup-dot"></div>
+              <div class="mockup-dot"></div>
+              <span class="mockup-title">cyberscore.tn/scan // live-async-engine</span>
+            </div>
+            <img src="./assets/scanner.png" alt="Scanner de Sécurité" class="mockup-img">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 10B : ARCHITECTURE DISTRIBUÉE TRI-VM
+         ========================================== -->
+    <div class="slide" data-title="Architecture Tri-VM" data-notes="Monsieur le Président, honorables membres du jury, cette diapositive matérialise l'une des contributions majeures de notre travail d'ingénieur : le déploiement et la validation en conditions réelles d'une architecture distribuée à 3 Machines Virtuelles cloisonnées sous VMware Workstation. Dans la VM 1 (DMZ Front, IP 192.168.98.150), nous isolons l'interface Next.js 16 et Nginx sous RHEL 10.1 Minimal. Nginx joue un rôle architectural essentiel : il unifie Frontend et Backend sous un seul domaine cyberscore.tn, ce qui est indispensable pour que les cookies de session HttpOnly soient valides — les cookies sont liés au domaine, pas à l'IP. Toute requête /api/ est proxifiée vers la VM 149 sur le port 8000, et le reste vers Next.js local sur le port 3000. Dans la VM 2 (Core Back, IP 192.168.98.149), nous sanctuarisons notre API FastAPI, notre base PostgreSQL 16 seedée, et le broker Valkey 7 sans aucune IP publique. Dans la VM 3 (Bastion d'Audit, IP 192.168.98.148), nous hébergeons notre moteur des 4 agents autonomes sous RHEL 9.5 durcie avec SELinux Enforcing et Firewalld DROP. Toutes nos VMs sont 100% Headless et supervisées par systemd. L'IA souveraine Qwen 2.5 Coder tourne sur le GPU de l'hôte Windows physique sur le port 25000.">
+      <div class="bg-watermark">10B</div>
+      <div class="slide-meta">
+        <div class="slide-headings">
+          <span class="slide-kicker">Slide 11 / 32 — Défense en Profondeur</span>
+          <h1 class="slide-title-fr">Architecture Distribuée <em>Tri-VM</em> Déployée</h1>
+          <h2 class="slide-title-ar">محرك التدقيق الذاتي وبنية الـ 3 أجهزة افتراضية المعزولة (Tri-VM)</h2>
+        </div>
+        <div class="slide-pill-badge"><span class="dot"></span> 11 / 32 </div>
+      </div>
+      <div class="slide-content">
+        <div class="grid-3" style="margin-bottom: 16px;">
+          <div class="glass-card highlight">
+            <span class="badge" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4);">VM 1 • DMZ FRONT</span>
+            <div style="font-family: var(--font-mono); font-size: 16px; font-weight: 700; color: #f8fafc; margin: 8px 0 4px;">192.168.98.150</div>
+            <p style="font-size: 13.5px; color: #cbd5e1; line-height: 1.4;">
+              • <strong>RHEL 10.1 Minimal</strong> (Headless)<br>
+              • Next.js 16 + React 19 (Port 3000)<br>
+              • Nginx 1.26 Reverse Proxy (Port 80/443)<br>
+              • SELinux <em>Enforcing</em> + Firewalld Web<br>
+              • Service : <code>cyberscore-front.service</code>
+            </p>
+          </div>
+
+          <div class="glass-card" style="border-color: rgba(168, 85, 247, 0.4);">
+            <span class="badge" style="background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.4);">VM 2 • CORE BACKEND</span>
+            <div style="font-family: var(--font-mono); font-size: 16px; font-weight: 700; color: #f8fafc; margin: 8px 0 4px;">192.168.98.149</div>
+            <p style="font-size: 13.5px; color: #cbd5e1; line-height: 1.4;">
+              • <strong>RHEL 10.1 Minimal</strong> (Headless)<br>
+              • FastAPI REST Engine (Port 8000)<br>
+              • PostgreSQL 16 (DB ministérielle seedée)<br>
+              • Valkey 7 (Port 6379) + Celery Worker<br>
+              • <strong>Aucune IP publique directe</strong> (Enclave)
+            </p>
+          </div>
+
+          <div class="glass-card cyan">
+            <span class="badge" style="background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4);">VM 3 • PROBE BASTION</span>
+            <div style="font-family: var(--font-mono); font-size: 16px; font-weight: 700; color: #f8fafc; margin: 8px 0 4px;">192.168.98.148</div>
+            <p style="font-size: 13.5px; color: #cbd5e1; line-height: 1.4;">
+              • <strong>RHEL 9.5 Minimal</strong> (Headless Bastion)<br>
+              • Graphe des 4 agents IA autonomes<br>
+              • Sockets TCP / Nmap non destructif<br>
+              • <strong>SELinux Enforcing</strong> + <strong>Firewalld DROP</strong><br>
+              • Bastion jetable isolant les contre-scans
+            </p>
+          </div>
+        </div>
+
+        <div class="glass-card" style="background: rgba(15, 11, 36, 0.85); border: 1px solid rgba(255, 255, 255, 0.15); padding: 14px 20px; display: flex; align-items: center; justify-content: space-between;">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <div style="width: 10px; height: 10px; border-radius: 50%; background: #10b981; box-shadow: 0 0 10px #10b981;"></div>
+            <div>
+              <span style="font-size: 13.5px; font-weight: 700; color: #f8fafc; font-family: var(--font-syne);">HÔTE CENTRAL WINDOWS (GPU NVIDIA — 192.168.98.1)</span>
+              <span style="font-size: 12.5px; color: #94a3b8; margin-left: 10px;">Accélérateur IA Souverain Ollama (qwen2.5-coder:7b sur port 25000) • Réseau VMware NAT VMnet8</span>
+            </div>
+          </div>
+          <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.4);">INFRASTRUCTURE 100% OPÉRATIONNELLE</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 10C : SCAN ACTIF & ZÉRO FAUX POSITIF
+         ========================================== -->
+    <div class="slide" data-title="Scan Actif & Zéro Faux Positif" data-notes="Mesdames et messieurs du jury, le Scan Actif est strictement encadré par le Décret 2023-17 exigeant un mandat ANCS et une signature d'auditeur. L'Agent 1 effectue la cartographie réseau via sockets TCP. L'Agent 2 détecte la dette technique et les versions End-Of-Life, qui constituent des 0-days permanents. L'Agent 3 applique notre règle cardinale de Zéro Faux Positif : toute faille non expérimentalement prouvée est déclassée. Enfin, l'Agent 4 fournit le plan de remédiation et scelle le rapport avec une empreinte SHA-256 infalsifiable.">
+      <div class="bg-watermark">10C</div>
+      <div class="slide-meta">
+        <div class="slide-headings">
+          <span class="slide-kicker">Slide 12 / 32 — Pipeline d'Attaque Éthique</span>
+          <h1 class="slide-title-fr">Scan Actif Autonome : <em>Zéro Faux Positif</em></h1>
+          <h2 class="slide-title-ar">الفحص النشط المستقل — الإذن القانوني وقاعدة الصفر إنذار كاذب</h2>
+        </div>
+        <div class="slide-pill-badge"><span class="dot"></span> 12 / 32 </div>
+      </div>
+      <div class="slide-content">
+        <div class="grid-hero" style="grid-template-columns: repeat(4, 1fr); gap: 14px;">
+          <div class="glass-card">
+            <span class="badge" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8;">AGENT 1 • RECON</span>
+            <h4 style="font-family: var(--font-syne); font-size: 15px; color: #f8fafc; margin: 8px 0 4px;">Reconnaissance Réseau</h4>
+            <p style="font-size: 13px; color: #cbd5e1; line-height: 1.4;">
+              • Balayage 25 ports critiques<br>
+              • Capture bannières réelles<br>
+              • Fingerprinting OS par TTL<br>
+              • Détection stack technologique
+            </p>
+          </div>
+
+          <div class="glass-card">
+            <span class="badge" style="background: rgba(236, 72, 153, 0.2); color: #f472b6;">AGENT 2 • CVE & EOL</span>
+            <h4 style="font-family: var(--font-syne); font-size: 15px; color: #f8fafc; margin: 8px 0 4px;">Dette Technique & EOL</h4>
+            <p style="font-size: 13px; color: #cbd5e1; line-height: 1.4;">
+              • Détection versions obsolètes<br>
+              • Qualification <em>Permanent 0-Day</em><br>
+              • Corrélation CVEs via LLM local<br>
+              • Calcul sévérité CVSS v3.1
+            </p>
+          </div>
+
+          <div class="glass-card highlight">
+            <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #10b981;">AGENT 3 • VALIDATION</span>
+            <h4 style="font-family: var(--font-syne); font-size: 15px; color: #f8fafc; margin: 8px 0 4px;">Zéro Faux Positif</h4>
+            <p style="font-size: 13px; color: #cbd5e1; line-height: 1.4;">
+              • PoC dynamiques neutres<br>
+              • Tests de réflexion & anomalies<br>
+              • <strong>Rejet catégorique</strong> des failles non prouvées en direct
+            </p>
+          </div>
+
+          <div class="glass-card">
+            <span class="badge" style="background: rgba(251, 191, 36, 0.2); color: #fbbf24;">AGENT 4 • REMÉDIATION</span>
+            <h4 style="font-family: var(--font-syne); font-size: 15px; color: #f8fafc; margin: 8px 0 4px;">Sceau Cryptographique</h4>
+            <p style="font-size: 13px; color: #cbd5e1; line-height: 1.4;">
+              • Directives Bash prêtes à l'emploi<br>
+              • Sceau d'intégrité <strong>SHA-256</strong><br>
+              • QR Code de vérification<br>
+              • Intégration rapport PDF 7 pages
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 10D : PIPELINE PROBE AGENT — ARCHITECTURE MULTI-AGENT
+         ========================================== -->
+    <div class="slide" data-title="Pipeline Probe Agent" data-notes="Monsieur le Président, cette diapositive expose le cœur technique de notre système d'audit autonome : le Pipeline Probe Agent. Il s'agit d'un graphe séquentiel de 4 agents Python spécialisés, orchestrés par la classe PentestOrchestrator. L'état partagé est un objet unique AuditState, un dataclass Python de 136 lignes contenant 20 champs structurés. Chaque agent enrichit cet objet et le transmet au suivant. L'Agent 1 Reconnaissance exécute 7 étapes parallèles : résolution DNS, scan TCP Top 1000 ports multi-threads, inspection TLS et headers, résolution IPv6 dual-stack, extraction de la surface web, fingerprinting OS par corrélation TTL et bannières, et analyse d'obsolescence EOL via une base de connaissances de 7 composants critiques. L'Agent 2 Analyse CVE combine 3 sources déterministes — ports à risque, headers manquants, obsolescence — avec un raisonnement contextuel via le LLM local Qwen 2.5 Coder. Les règles déterministes s'exécutent toujours, même si l'IA est offline. L'Agent 3 Validation PoC applique notre règle cardinale : toute faille non prouvée expérimentalement en direct est rejetée. Il effectue des tests non destructifs de réflexion XSS, de divulgation d'erreur SQL, et de vérification d'endpoints sensibles. L'Agent 4 Remédiation calcule le score final par déduction de pénalités, génère la roadmap avec des commandes Bash prêtes à l'emploi via un moteur déterministe de 9 règles, et scelle le rapport avec une empreinte SHA-256 infalsifiable.">
+      <div class="bg-watermark">10D</div>
+      <div class="slide-meta">
+        <div class="slide-headings">
+          <span class="slide-kicker">Slide 13 / 32 — Architecture Multi-Agent</span>
+          <h1 class="slide-title-fr">Pipeline d'Audit <em>Autonome</em> à 4 Agents</h1>
+          <h2 class="slide-title-ar">خط أنابيب التدقيق الذاتي — أربعة وكلاء متسلسلين مع كائن الحالة المشترك</h2>
+        </div>
+        <div class="slide-pill-badge"><span class="dot"></span> 13 / 32 </div>
+      </div>
+      <div class="slide-content">
+        <!-- Pipeline Flow Visualization -->
+        <div style="display: flex; align-items: stretch; gap: 8px; margin-bottom: 12px;">
+          <!-- Orchestrator -->
+          <div style="background: linear-gradient(180deg, rgba(168,85,247,0.15), rgba(168,85,247,0.05)); border: 1px solid rgba(168,85,247,0.35); border-radius: 14px; padding: 14px 16px; min-width: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;">
+            <span style="font-size: 26px;">🎯</span>
+            <span style="font-family: var(--font-syne); font-size: 12px; font-weight: 800; color: #c084fc; text-align: center;">PENTEST<br>ORCHESTRATOR</span>
+            <code style="font-size: 10px; color: #94a3b8; background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px;">orchestrator.py</code>
+            <span style="font-size: 10.5px; color: #cbd5e1; text-align: center; line-height: 1.3;">Séquentiel<br>AuditState<br>UUID Scan</span>
+          </div>
+
+          <div style="display: flex; align-items: center; font-size: 18px; color: #94a3b8;">➔</div>
+
+          <!-- Agent 1 -->
+          <div style="background: rgba(56,189,248,0.08); border: 1px solid rgba(56,189,248,0.3); border-radius: 14px; padding: 12px 14px; flex: 1;">
+            <span class="badge" style="background: rgba(56,189,248,0.2); color: #38bdf8; font-size: 11px; margin-bottom: 6px;">AGENT 1 — RECON</span>
+            <div style="font-family: var(--font-mono); font-size: 11px; color: #94a3b8; margin: 4px 0;">recon_agent.py → 7 étapes</div>
+            <ul style="font-size: 12px; color: #e2e8f0; list-style: none; padding: 0; line-height: 1.55;">
+              <li>🔹 DNS IPv4/IPv6 dual-stack</li>
+              <li>🔹 Scan TCP Top 1000 (40 threads)</li>
+              <li>🔹 TLS cert + 6 headers sécurité</li>
+              <li>🔹 OS fingerprint (TTL + bannières)</li>
+              <li>🔹 Obsolescence EOL (KB 7 composants)</li>
+              <li>🔹 5 endpoints sensibles (.git, .env)</li>
+            </ul>
+          </div>
+
+          <div style="display: flex; align-items: center; font-size: 18px; color: #94a3b8;">➔</div>
+
+          <!-- Agent 2 -->
+          <div style="background: rgba(236,72,153,0.08); border: 1px solid rgba(236,72,153,0.3); border-radius: 14px; padding: 12px 14px; flex: 1;">
+            <span class="badge" style="background: rgba(236,72,153,0.2); color: #f472b6; font-size: 11px; margin-bottom: 6px;">AGENT 2 — CVE & ANALYSE</span>
+            <div style="font-family: var(--font-mono); font-size: 11px; color: #94a3b8; margin: 4px 0;">cve_agent.py → 4 sources</div>
+            <ul style="font-size: 12px; color: #e2e8f0; list-style: none; padding: 0; line-height: 1.55;">
+              <li>🔸 Ports à risque (FTP, RDP, MySQL)</li>
+              <li>🔸 Headers HTTP manquants</li>
+              <li>🔸 Composants obsolètes → CVEs</li>
+              <li>🔸 <strong>LLM Qwen 2.5</strong> (inférence JSON)</li>
+              <li>🔸 Fallback déterministe si AI offline</li>
+            </ul>
+          </div>
+
+          <div style="display: flex; align-items: center; font-size: 18px; color: #94a3b8;">➔</div>
+
+          <!-- Agent 3 -->
+          <div style="background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.35); border-radius: 14px; padding: 12px 14px; flex: 1;">
+            <span class="badge" style="background: rgba(16,185,129,0.2); color: #10b981; font-size: 11px; margin-bottom: 6px;">AGENT 3 — VALIDATION PoC</span>
+            <div style="font-family: var(--font-mono); font-size: 11px; color: #94a3b8; margin: 4px 0;">poc_agent.py → Zéro FP</div>
+            <ul style="font-size: 12px; color: #e2e8f0; list-style: none; padding: 0; line-height: 1.55;">
+              <li>✅ XSS reflété (probe safe)</li>
+              <li>✅ SQLi error disclosure</li>
+              <li>✅ Endpoints exposés (HTTP 200)</li>
+              <li>❌ <strong>Rejet</strong> si non prouvé en live</li>
+            </ul>
+          </div>
+
+          <div style="display: flex; align-items: center; font-size: 18px; color: #94a3b8;">➔</div>
+
+          <!-- Agent 4 -->
+          <div style="background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.3); border-radius: 14px; padding: 12px 14px; flex: 1;">
+            <span class="badge" style="background: rgba(251,191,36,0.2); color: #fbbf24; font-size: 11px; margin-bottom: 6px;">AGENT 4 — REMÉDIATION</span>
+            <div style="font-family: var(--font-mono); font-size: 11px; color: #94a3b8; margin: 4px 0;">remediation_agent.py → Score</div>
+            <ul style="font-size: 12px; color: #e2e8f0; list-style: none; padding: 0; line-height: 1.55;">
+              <li>📊 Score 100 − Σ(pénalités)</li>
+              <li>📊 Grade A→F (5 paliers)</li>
+              <li>🔧 Roadmap Bash (9 règles)</li>
+              <li>🔐 Sceau <strong>SHA-256</strong></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- AuditState Data Model -->
+        <div class="glass-card" style="padding: 12px 20px; border-color: rgba(168, 85, 247, 0.3);">
+          <div class="card-label" style="color: #c084fc;"><span class="icon-pill">💾</span> Objet d'État Partagé : <code>AuditState</code> (models.py — 136 lignes, 20 champs)</div>
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 8px;">
+            <div>
+              <span style="font-family: var(--font-mono); font-size: 11.5px; color: #38bdf8; font-weight: 700;">Agent 1 →</span>
+              <p style="font-size: 12px; color: #cbd5e1; line-height: 1.4; margin-top: 2px;">ip_address, ipv6, open_ports[], technologies[], headers{}, ssl_info{}, os_detection{}, software_obsolescence[]</p>
+            </div>
+            <div>
+              <span style="font-family: var(--font-mono); font-size: 11.5px; color: #f472b6; font-weight: 700;">Agent 2 →</span>
+              <p style="font-size: 12px; color: #cbd5e1; line-height: 1.4; margin-top: 2px;">potential_vulnerabilities[], ai_raw_analysis (corrélation LLM + déterministe)</p>
+            </div>
+            <div>
+              <span style="font-family: var(--font-mono); font-size: 11.5px; color: #10b981; font-weight: 700;">Agent 3 →</span>
+              <p style="font-size: 12px; color: #cbd5e1; line-height: 1.4; margin-top: 2px;">validated_vulnerabilities[] (poc_verified=true/false), poc_logs[]</p>
+            </div>
+            <div>
+              <span style="font-family: var(--font-mono); font-size: 11.5px; color: #fbbf24; font-weight: 700;">Agent 4 →</span>
+              <p style="font-size: 12px; color: #cbd5e1; line-height: 1.4; margin-top: 2px;">score, grade, remediation_roadmap[], sha256_hash, agent_scores{}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom: Entities -->
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px;">
+          <div style="background: rgba(20,14,40,0.6); border: 1px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 10px 14px;">
+            <span style="font-family: var(--font-syne); font-size: 13px; font-weight: 800; color: #38bdf8;">📦 PortFinding</span>
+            <p style="font-size: 12px; color: #cbd5e1; margin-top: 3px; line-height: 1.3;"><code>port, service, banner, is_risky, severity</code></p>
+          </div>
+          <div style="background: rgba(20,14,40,0.6); border: 1px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 10px 14px;">
+            <span style="font-family: var(--font-syne); font-size: 13px; font-weight: 800; color: #f472b6;">🔓 VulnerabilityFinding</span>
+            <p style="font-size: 12px; color: #cbd5e1; margin-top: 3px; line-height: 1.3;"><code>id, title, severity, owasp, cvss, poc_verified, nist, iso27001</code></p>
+          </div>
+          <div style="background: rgba(20,14,40,0.6); border: 1px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 10px 14px;">
+            <span style="font-family: var(--font-syne); font-size: 13px; font-weight: 800; color: #fbbf24;">🔧 RemediationAction</span>
+            <p style="font-size: 12px; color: #cbd5e1; margin-top: 3px; line-height: 1.3;"><code>step_number, title, severity, commands, score_gain</code></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 10E : SCANNER TCP MULTI-THREAD & TOOLCHAIN
+         ========================================== -->
+    <div class="slide" data-title="Scanner TCP & Toolchain" data-notes="Le scanner TCP est le composant le plus sensible du système. Nous utilisons un ThreadPoolExecutor Python à 40 workers concurrents — calibré précisément pour éviter de déclencher les protections anti-SYN-flood et le rate-limiting des CDN comme Cloudflare. Chaque socket TCP est préconfiguré avec un timeout de 2,5 secondes, ce qui absorbe la latence variable des sites Internet publics sans générer de faux négatifs. Pour les 30 ports critiques de notre SERVICE_MAP, nous appliquons jusqu'à 3 tentatives avec back-off exponentiel de 300ms entre chaque, car une perte de paquet transitoire ne doit pas masquer un service réellement exposé. L'adresse IP est pré-résolue une seule fois avant la boucle de scan pour éliminer la contention DNS dans les threads concurrents. Les bannières sont capturées en recevant les 512 premiers octets après connexion TCP, avec un UA identique au web_inspector pour la cohérence. Le PoC Verifier complète la toolchain avec des tests non destructifs : une sonde XSS bénigne 'cs789 chevron cs_test chevron' qui vérifie la réflexion brute, un single quote SQL qui cherche 6 patterns d'erreur de base de données, et des requêtes GET sur les endpoints sensibles qui analysent le contenu de la réponse.">
+      <div class="bg-watermark">10E</div>
+      <div class="slide-meta">
+        <div class="slide-headings">
+          <span class="slide-kicker">Slide 14 / 32 — Instrumentation Technique</span>
+          <h1 class="slide-title-fr">Scanner TCP <em>Multi-Thread</em> &amp; Toolchain</h1>
+          <h2 class="slide-title-ar">الماسح الشبكي متعدد الخيوط — ١٠٠٠ منفذ مع إعادة المحاولة الذكية</h2>
+        </div>
+        <div class="slide-pill-badge"><span class="dot"></span> 14 / 32 </div>
+      </div>
+      <div class="slide-content">
+        <div class="grid-hero">
+          <!-- Left: Scanner Internals -->
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div class="glass-card" style="border-color: rgba(56, 189, 248, 0.3); padding: 14px 18px;">
+              <div class="card-label" style="color: #38bdf8;"><span class="icon-pill">⚡</span> port_scanner.py — Moteur de Scan</div>
+              <pre style="font-family: var(--font-mono); font-size: 12px; color: #e2e8f0; background: rgba(0,0,0,0.3); border-radius: 8px; padding: 10px; margin-top: 6px; line-height: 1.55;"><code># Architecture Thread-Pool
+MAX_WORKERS  = 40      # Anti rate-limit
+SCAN_TIMEOUT = 2.5s    # Absorbe latence
+BANNER_TIMEOUT = 2.0s  # Réponse serveur
+SERVICE_RETRIES = 3×   # Ports critiques
+RETRY_BACKOFF = 0.3s   # Exponentiel
+
+# Flux de scan
+1. Pré-résolution IP (1 DNS call)
+2. Priorité ports SERVICE_MAP (30)
+3. ThreadPoolExecutor(40 workers)
+4. Retry ×3 sur ports critiques
+5. Tri déterministe par numéro</code></pre>
+            </div>
+
+            <!-- Service Map -->
+            <div class="glass-card" style="padding: 14px 18px;">
+              <div class="card-label"><span class="icon-pill">🗺️</span> SERVICE_MAP — 30 Services Critiques</div>
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 6px;">
+                <div style="background: rgba(239,68,68,0.1); border-radius: 8px; padding: 6px 10px;">
+                  <span style="font-size: 11.5px; color: #f87171; font-weight: 700; font-family: var(--font-mono);">CRITICAL</span>
+                  <p style="font-size: 11px; color: #cbd5e1; margin-top: 2px; line-height: 1.3;">FTP:21, Telnet:23, SMB:445, RDP:3389, MySQL:3306, PostgreSQL:5432, Redis:6379, MongoDB:27017</p>
+                </div>
+                <div style="background: rgba(251,191,36,0.1); border-radius: 8px; padding: 6px 10px;">
+                  <span style="font-size: 11.5px; color: #fbbf24; font-weight: 700; font-family: var(--font-mono);">HIGH</span>
+                  <p style="font-size: 11px; color: #cbd5e1; margin-top: 2px; line-height: 1.3;">SMTP:25, POP3:110, IMAP:143, NetBIOS:139, MS-RPC:135, Webmin:10000</p>
+                </div>
+                <div style="background: rgba(56,189,248,0.1); border-radius: 8px; padding: 6px 10px;">
+                  <span style="font-size: 11.5px; color: #38bdf8; font-weight: 700; font-family: var(--font-mono);">STANDARD</span>
+                  <p style="font-size: 11px; color: #cbd5e1; margin-top: 2px; line-height: 1.3;">SSH:22, HTTP:80, HTTPS:443, DNS:53, HTTP-Proxy:8080, Alt-HTTPS:8443</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: PoC Toolchain -->
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div class="glass-card highlight" style="border-color: rgba(16,185,129,0.4); padding: 14px 18px;">
+              <div class="card-label" style="color: #10b981;"><span class="icon-pill">🧪</span> poc_verifier.py — Tests Non Destructifs</div>
+              <pre style="font-family: var(--font-mono); font-size: 12px; color: #e2e8f0; background: rgba(0,0,0,0.3); border-radius: 8px; padding: 10px; margin-top: 6px; line-height: 1.55;"><code># Test XSS Reflété (SAFE)
+probe = "cs789&lt;cs_test&gt;"
+→ Vérifie si reflété BRUT dans la réponse
+
+# Test SQL Error Disclosure (SAFE)
+probe = "'" (single quote)
+→ 6 patterns: MySQL, PostgreSQL,
+  Oracle, ODBC, SQLite3
+
+# Test Endpoints Exposés
+GET /.git/HEAD → "ref: refs/heads/"
+GET /phpinfo.php → "phpinfo()"
+GET /.env → HTTP 200 + len &gt; 10</code></pre>
+            </div>
+
+            <div class="glass-card" style="border-color: rgba(236,72,153,0.3); padding: 14px 18px;">
+              <div class="card-label" style="color: #f472b6;"><span class="icon-pill">🖥️</span> os_fingerprinter.py — Empreinte OS</div>
+              <pre style="font-family: var(--font-mono); font-size: 12px; color: #e2e8f0; background: rgba(0,0,0,0.3); border-radius: 8px; padding: 10px; margin-top: 6px; line-height: 1.55;"><code># TTL → Famille OS
+TTL ≤ 64  → Linux    (hops = 64 - TTL)
+TTL ≤ 128 → Windows  (hops = 128 - TTL)
+TTL ≤ 255 → Solaris  (hops = 255 - TTL)
+
+# Corrélation Bannières
+"ubuntu" → Ubuntu Linux (conf. 90-95%)
+"microsoft-iis" → Windows Server
+# Confiance: 50% → 95% (multi-layer)</code></pre>
+            </div>
+
+            <div class="glass-card" style="padding: 12px 18px;">
+              <div class="card-label"><span class="icon-pill">⏳</span> obsolescence_checker.py — Base de Connaissances EOL</div>
+              <p style="font-size: 12.5px; color: #cbd5e1; line-height: 1.4; margin-top: 4px;">
+                KB de <strong>7 composants</strong> critiques avec regex, année de sortie, statut EOL et CVEs exemples :<br>
+                Apache 2.2/2.4 ancien, OpenSSH ≤5/6.x, PHP 5/7.0-7.3, Nginx legacy, Ubuntu 14.04
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 10F : NGINX REVERSE PROXY — CONFIGURATION SÉCURISÉE
+         ========================================== -->
+    <div class="slide" data-title="Nginx Reverse Proxy" data-notes="Monsieur le Président, Nginx est la clé de voûte de notre architecture de sécurité inter-VM. Le problème fondamental est que nos cookies HttpOnly sont liés au domaine, pas à l'adresse IP. Sans Nginx, un cookie déposé par le backend sur 192.168.98.149 port 8000 ne serait jamais envoyé au frontend sur 192.168.98.150 port 3000 car ce sont deux origines différentes pour le navigateur. Nginx résout ce problème en unifiant tout sous un seul domaine cyberscore.tn. Il écoute sur les ports 80 et 443, redirige tout le trafic HTTP vers HTTPS, et route intelligemment les requêtes. Tout appel commençant par /api/ est proxifié vers la VM 2 Backend sur le port 8000. Le reste est servi par Next.js local sur le port 3000. Les certificats TLS auto-signés permettent le chiffrement même en environnement de développement. Nous ajoutons les headers de sécurité directement dans la configuration Nginx : X-Frame-Options DENY pour bloquer le clickjacking, X-Content-Type-Options nosniff pour empêcher le MIME sniffing, et X-XSS-Protection 1 avec mode block comme couche défensive supplémentaire. Le proxy_set_header Host et X-Forwarded-For garantissent que le backend reçoit les bonnes informations de domaine et d'IP client pour la validation des cookies et le logging.">
+      <div class="bg-watermark">10F</div>
+      <div class="slide-meta">
+        <div class="slide-headings">
+          <span class="slide-kicker">Slide 15 / 32 — Sécurité Réseau & Routage</span>
+          <h1 class="slide-title-fr">Nginx : le <em>Reverse Proxy</em> Sécurisé</h1>
+          <h2 class="slide-title-ar">إعداد Nginx كبوابة أمنية — توحيد النطاق وتوجيه الطلبات بين الأجهزة الافتراضية</h2>
+        </div>
+        <div class="slide-pill-badge"><span class="dot"></span> 15 / 32 </div>
+      </div>
+      <div class="slide-content">
+        <div class="grid-hero">
+          <!-- Left: Nginx Config -->
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div class="glass-card" style="border-color: rgba(56, 189, 248, 0.3); padding: 14px 18px;">
+              <div class="card-label" style="color: #38bdf8;"><span class="icon-pill">⚙️</span> /etc/nginx/conf.d/cyberscore.conf</div>
+              <pre style="font-family: var(--font-mono); font-size: 11.5px; color: #e2e8f0; background: rgba(0,0,0,0.35); border-radius: 8px; padding: 10px; margin-top: 6px; line-height: 1.6; overflow-x: auto;"><code>server {
+  listen 443 ssl;
+  server_name cyberscore.tn;
+  ssl_certificate     /etc/nginx/ssl/cert.pem;
+  ssl_certificate_key /etc/nginx/ssl/key.pem;
+
+  # ─── Sécurité Headers ─────────────
+  add_header X-Frame-Options DENY;
+  add_header X-Content-Type-Options nosniff;
+  add_header X-XSS-Protection "1; mode=block";
+
+  # ─── Routage API → VM 2 Backend ───
+  location /api/ {
+    proxy_pass http://192.168.98.149:8000;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $remote_addr;
+  }
+
+  # ─── Routage Frontend → Next.js ───
+  location / {
+    proxy_pass http://127.0.0.1:3000;
+    proxy_set_header Host $host;
+  }
+}</code></pre>
+            </div>
+
+            <!-- Why Nginx is Required -->
+            <div class="glass-card highlight" style="border-color: rgba(251, 191, 36, 0.4); padding: 14px 18px;">
+              <div class="card-label" style="color: #fbbf24;"><span class="icon-pill">🔑</span> Pourquoi Nginx est Architecturalement Obligatoire</div>
+              <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 8px;">
+                <div style="background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); border-radius: 10px; padding: 10px 12px;">
+                  <span style="font-family: var(--font-syne); font-size: 13px; font-weight: 800; color: #f87171;">❌ Sans Nginx</span>
+                  <p style="font-size: 12.5px; color: #e2e8f0; margin-top: 3px; line-height: 1.35;">Cookie déposé par <code>:149:8000</code> ≠ envoyé à <code>:150:3000</code>. Deux origines = cookie invalide.</p>
+                </div>
+                <div style="background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.2); border-radius: 10px; padding: 10px 12px;">
+                  <span style="font-family: var(--font-syne); font-size: 13px; font-weight: 800; color: #10b981;">✅ Avec Nginx</span>
+                  <p style="font-size: 12.5px; color: #e2e8f0; margin-top: 3px; line-height: 1.35;">Tout passe par <code>cyberscore.tn</code>. Un seul domaine = cookie HttpOnly valide partout.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Traffic Flow Diagram -->
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div class="glass-card" style="padding: 14px 18px;">
+              <div class="card-label"><span class="icon-pill">🌐</span> Flux de Trafic — cyberscore.tn</div>
+              <div style="margin-top: 10px; display: flex; flex-direction: column; gap: 8px;">
+                <!-- Browser -->
+                <div style="background: rgba(168,85,247,0.12); border: 1px solid rgba(168,85,247,0.3); border-radius: 10px; padding: 10px 14px; text-align: center;">
+                  <span style="font-size: 18px;">🖥️</span>
+                  <span style="font-family: var(--font-syne); font-size: 13px; font-weight: 700; color: #c084fc; margin-left: 8px;">Navigateur Client</span>
+                  <span style="font-size: 12px; color: #94a3b8; margin-left: 6px;">→ https://cyberscore.tn</span>
+                </div>
+
+                <div style="text-align: center; color: #94a3b8; font-size: 16px;">↓ HTTPS (Port 443)</div>
+
+                <!-- Nginx -->
+                <div style="background: rgba(56,189,248,0.12); border: 1px solid rgba(56,189,248,0.35); border-radius: 10px; padding: 12px 14px; text-align: center;">
+                  <span style="font-size: 18px;">🛡️</span>
+                  <span style="font-family: var(--font-syne); font-size: 14px; font-weight: 800; color: #38bdf8; margin-left: 8px;">NGINX REVERSE PROXY</span>
+                  <span style="font-size: 12px; color: #94a3b8; display: block; margin-top: 2px;">VM 1 — 192.168.98.150 — Certificat TLS</span>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                  <div style="text-align: center;">
+                    <div style="color: #94a3b8; font-size: 13px; margin-bottom: 4px;">↓ /api/*</div>
+                    <div style="background: rgba(168,85,247,0.12); border: 1px solid rgba(168,85,247,0.3); border-radius: 10px; padding: 10px;">
+                      <span style="font-size: 16px;">⚙️</span><br>
+                      <span style="font-family: var(--font-mono); font-size: 12px; color: #c084fc; font-weight: 700;">VM 2 Backend</span><br>
+                      <span style="font-size: 11px; color: #94a3b8;">192.168.98.149:8000</span><br>
+                      <span style="font-size: 11px; color: #cbd5e1;">FastAPI + PostgreSQL</span>
+                    </div>
+                  </div>
+
+                  <div style="text-align: center;">
+                    <div style="color: #94a3b8; font-size: 13px; margin-bottom: 4px;">↓ /*</div>
+                    <div style="background: rgba(56,189,248,0.12); border: 1px solid rgba(56,189,248,0.2); border-radius: 10px; padding: 10px;">
+                      <span style="font-size: 16px;">🖥️</span><br>
+                      <span style="font-family: var(--font-mono); font-size: 12px; color: #38bdf8; font-weight: 700;">Next.js Local</span><br>
+                      <span style="font-size: 11px; color: #94a3b8;">127.0.0.1:3000</span><br>
+                      <span style="font-size: 11px; color: #cbd5e1;">React 19 + SSR</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Security Summary -->
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+              <div style="background: rgba(20,14,40,0.6); border: 1px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 10px 12px; text-align: center;">
+                <span style="font-family: var(--font-syne); font-size: 13px; font-weight: 800; color: #10b981;">🔒 TLS</span>
+                <p style="font-size: 12px; color: #cbd5e1; margin-top: 3px; line-height: 1.3;">Chiffrement bout-en-bout HTTPS</p>
+              </div>
+              <div style="background: rgba(20,14,40,0.6); border: 1px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 10px 12px; text-align: center;">
+                <span style="font-family: var(--font-syne); font-size: 13px; font-weight: 800; color: #38bdf8;">🛡️ Headers</span>
+                <p style="font-size: 12px; color: #cbd5e1; margin-top: 3px; line-height: 1.3;">X-Frame, nosniff, XSS-Protection</p>
+              </div>
+              <div style="background: rgba(20,14,40,0.6); border: 1px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 10px 12px; text-align: center;">
+                <span style="font-family: var(--font-syne); font-size: 13px; font-weight: 800; color: #fbbf24;">🍪 Cookie</span>
+                <p style="font-size: 12px; color: #cbd5e1; margin-top: 3px; line-height: 1.3;">Domaine unifié = HttpOnly valide</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 11 : SCORING DUAL
+         ========================================== -->
+    <div class="slide" data-title="Scoring Dual" data-notes="La notation est double : la lettre A à F offre une lisibilité instantanée pour les audits techniques, tandis que les 3 étoiles fournissent un label de confiance compréhensible pour le citoyen. Une note inférieure à 70 points déclenche automatiquement un statut d'alerte.">
+      <div class="bg-watermark">11</div>
+      <div class="slide-meta">
+        <div class="slide-headings">
+          <span class="slide-kicker">Slide 16 / 32 — Modèle Mathématique</span>
+          <h1 class="slide-title-fr">L'algorithme de scoring <em>dual</em></h1>
+          <h2 class="slide-title-ar">خوارزمية التقييم الرياضي ومنظومة التصنيف المزدوج</h2>
+        </div>
+        <div class="slide-pill-badge"><span class="dot"></span> 16 / 32 </div>
+      </div>
+      <div class="slide-content">
+        <div class="grid-hero">
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div class="glass-card highlight" style="padding: 10px 14px; font-family: var(--font-mono); font-size: 15.5px; color: #fff; text-align: center;">
+              Score = &Sigma; (Score_cat&eacute;gorie_i &times; Poids_i) &isin; [0, 100]
+            </div>
+
+            <table class="editorial-table" style="font-size: 14.5px;">
+              <thead>
+                <tr>
+                  <th>Plage</th>
+                  <th>Grade</th>
+                  <th>Label</th>
+                  <th>Risque</th>
+                  <th>Conséquence</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>95-100</strong></td>
+                  <td style="color: #10b981; font-weight: 800;">A+</td>
+                  <td>★★★</td>
+                  <td>Négligeable</td>
+                  <td>Sceau Officiel ANCS</td>
+                </tr>
+                <tr>
+                  <td><strong>90-94</strong></td>
+                  <td style="color: #10b981;">A</td>
+                  <td>★★★</td>
+                  <td>Faible</td>
+                  <td>Conforme Décrets 2023-17</td>
+                </tr>
+                <tr>
+                  <td><strong>80-89</strong></td>
+                  <td style="color: #38bdf8;">B</td>
+                  <td>★★☆</td>
+                  <td>Modéré</td>
+                  <td>Hygiène Satisfaisante</td>
+                </tr>
+                <tr>
+                  <td><strong>70-79</strong></td>
+                  <td style="color: #fbbf24;">C</td>
+                  <td>★★☆</td>
+                  <td>Substantiel</td>
+                  <td>Seuil d'Alerte Ministériel</td>
+                </tr>
+                <tr>
+                  <td><strong>60-69</strong></td>
+                  <td style="color: #ff6b6b;">D</td>
+                  <td>★☆☆</td>
+                  <td>Élevé</td>
+                  <td>Failles à corriger &lt; 30j</td>
+                </tr>
+                <tr>
+                  <td><strong>0-59</strong></td>
+                  <td style="color: #ff6b6b; font-weight: 800;">F</td>
+                  <td>★☆☆</td>
+                  <td>Critique</td>
+                  <td>Danger de compromission</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="mockup-frame">
+            <div class="mockup-header">
+              <div class="mockup-dot"></div>
+              <div class="mockup-dot"></div>
+              <div class="mockup-dot"></div>
+              <span class="mockup-title">cyberscore.tn/history // sys-audit-trail</span>
+            </div>
+            <img src="./assets/history.png" alt="Historique des Audits et Traçabilité" class="mockup-img">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 12 : RÉFÉRENTIELS
+         ========================================== -->
+    <div class="slide" data-title="Référentiels" data-notes="CyberScore TN ne se contente pas de lister des anomalies : il traduit chaque constat technique dans le langage des normes officielles. Cela permet aux auditeurs de l'ANCS de justifier immédiatement leurs recommandations auprès des audités.">
+      <div class="bg-watermark">12</div>
+      <div class="slide-meta">
+        <div class="slide-headings">
+          <span class="slide-kicker">Slide 17 / 32 — Conformité Normative</span>
+          <h1 class="slide-title-fr">Alignement sur les <em>standards</em></h1>
+          <h2 class="slide-title-ar">المواءمة الاستراتيجية مع المعايير والأطر التنظيمية الدولية</h2>
+        </div>
+        <div class="slide-pill-badge"><span class="dot"></span> 17 / 32 </div>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="glass-card highlight">
+            <div class="card-label">Directives ANCS (Décret-loi 2023-17)</div>
+            <p style="font-size: 15px; color: #e2e8f0; margin-bottom: 8px;">Cadre légal tunisien obligatoire pour tous les ministères et administrations publiques.</p>
+            <ul class="editorial-list">
+              <li>Guides de sécurité des serveurs web gouvernementaux.</li>
+              <li>Protection des données des citoyens et certification nationale.</li>
+            </ul>
+          </div>
+          <div class="glass-card cyan">
+            <div class="card-label">OWASP Top 10 (Édition 2021)</div>
+            <p style="font-size: 15px; color: #e2e8f0; margin-bottom: 8px;">Référentiel mondial des 10 vulnérabilités critiques applicatives.</p>
+            <ul class="editorial-list">
+              <li>A01: Broken Access Control & A03: Injection XSS.</li>
+              <li>A05: Security Misconfiguration (HSTS, CSP, Headers).</li>
+            </ul>
+          </div>
+          <div class="glass-card cyan">
+            <div class="card-label">NIST CSF v2.0 (Cybersecurity Framework)</div>
+            <p style="font-size: 15px; color: #e2e8f0; margin-bottom: 8px;">Cadre stratégique international articulé en fonctions clés.</p>
+            <ul class="editorial-list">
+              <li>PR.DS (Data Security) : Chiffrement TLS et contrôle d'accès.</li>
+              <li>DE.CM (Continuous Monitoring) : Télésurveillance de surface.</li>
+            </ul>
+          </div>
+          <div class="glass-card highlight">
+            <div class="card-label">ISO/IEC 27001:2022 & 27002</div>
+            <p style="font-size: 15px; color: #e2e8f0; margin-bottom: 8px;">Norme internationale de management de la sécurité de l'information.</p>
+            <ul class="editorial-list">
+              <li>Contrôle A.8.20 : Sécurité des réseaux publics de communication.</li>
+              <li>Contrôle A.8.24 : Utilisation adéquate de la cryptographie.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 13 : COMMAND CENTER
+         ========================================== -->
+    <div class="slide" data-title="Command Center" data-notes="Le Command Center a été conçu selon les standards graphiques d'un centre d'opérations de sécurité (SOC). La carte vectorielle de la Tunisie offre une vision géographique immédiate, tandis que les métriques sectorielles synthétisent la santé de l'administration.">
+      <div class="bg-watermark">13</div>
+      <div class="slide-meta">
+        <div class="slide-headings">
+          <span class="slide-kicker">Slide 18 / 32 — Tour de Contrôle SOC</span>
+          <h1 class="slide-title-fr">Le Command Center <em>national</em></h1>
+          <h2 class="slide-title-ar">مركز القيادة الوطني ومتابعة البنية التحتية التونسية</h2>
+        </div>
+        <div class="slide-pill-badge"><span class="dot"></span> 18 / 32 </div>
+      </div>
+      <div class="slide-content">
+        <div class="grid-hero">
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <div class="glass-card highlight">
+              <div class="card-label"><span class="icon-pill">📍</span> Cartographie Vectorielle 24 Gouvernorats</div>
+              <p style="font-size: 15px; color: #e2e8f0;">Rendu SVG géographique précis sans rognage, coloré en temps réel selon la santé cyber moyenne des institutions régionales.</p>
+            </div>
+            <div class="glass-card">
+              <div class="card-label"><span class="icon-pill">🔄</span> Télémétrie « Live Sync » Instantanée</div>
+              <p style="font-size: 15px; color: #e2e8f0;">Chaque nouvel audit met à jour la base PostgreSQL 16 et le tableau de bord sans rafraîchissement manuel de page.</p>
+            </div>
+            <div class="glass-card cyan">
+              <div class="card-label"><span class="icon-pill">⌨️</span> Palette de Commandes (Ctrl + K)</div>
+              <p style="font-size: 15px; color: #e2e8f0;">Navigation rapide au clavier pour les officiers SOC, recherche instantanée de ministère et saut direct aux modules.</p>
+            </div>
+          </div>
+
+          <div class="mockup-frame">
+            <div class="mockup-header">
+              <div class="mockup-dot"></div>
+              <div class="mockup-dot"></div>
+              <div class="mockup-dot"></div>
+              <span class="mockup-title">cyberscore.tn // soc-command-center</span>
+            </div>
+            <img src="./assets/dashboard.png" alt="Command Center" class="mockup-img">
+          </div>
+        </div>
+      </div>
+    </div>
+
+            <!-- ==========================================
+         SLIDE 14 : CARTOGRAPHIE SECTORIELLE & RÉPARTITION TERRITORIALE
+         ========================================== -->
+    <div class="slide" data-title="Cartographie Secteurs" data-notes="La vue sectorielle segmente le patrimoine public en 4 grandes familles : ministères (.gov.tn et defense.tn), institutions publiques (.tn comme l'ANCS et l'ATI), collectivités locales et entreprises d'État (.com.tn pour la STEG et SONEDE). Ce découpage permet à l'ANCS de comparer les performances relatives et d'identifier immédiatement les secteurs les plus vulnérables.">
+      <div class="bg-watermark">14</div>
+      <div class="slide-meta">
+        <div class="slide-headings">
+          <span class="slide-kicker">Slide 19 / 32 — Gouvernance & Répartition Territoriale</span>
+          <h1 class="slide-title-fr">Cartographie sectorielle &amp; <em>gouvernance</em></h1>
+          <h2 class="slide-title-ar">التقسيم القطاعي وتوزيع المؤسسات الحكومية حسب درجات الحماية</h2>
+        </div>
+        <div class="slide-pill-badge"><span class="dot"></span> 19 / 32 </div>
+      </div>
+      <div class="slide-content">
+        <div class="grid-hero">
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <div class="glass-card highlight">
+              <div class="card-label"><span class="icon-pill">🏛️</span> 4 Familles d'Institutions (.gov.tn, .tn, .com.tn)</div>
+              <p style="font-size: 15px; color: #e2e8f0;">Segmentation étatique complète : <strong>Ministères</strong> (30 sites · .gov.tn &amp; defense.tn), <strong>Institutions</strong> (20 agences · ancs.tn, cni.tn), <strong>Collectivités Locales</strong> (50 municipalités · 62/100) et <strong>Entreprises d'État</strong> (15 sites · steg.com.tn, sonede.com.tn).</p>
+            </div>
+            <div class="glass-card cyan">
+              <div class="card-label"><span class="icon-pill">🗺️</span> Heatmap Régionale par Gouvernorat</div>
+              <p style="font-size: 15px; color: #e2e8f0;">Coloration instantanée de la carte de Tunisie en 4 paliers d'hygiène numérique : Vert (&ge;80 Élevé), Gris (65-79 Correct), Jaune (50-64 Modéré), Rouge (&lt;50 Faible).</p>
+            </div>
+            <div class="glass-card">
+              <div class="card-label"><span class="icon-pill">🎯</span> Pilotage Stratégique des Budgets Cyber</div>
+              <p style="font-size: 15px; color: #e2e8f0;">Identification ciblée des municipalités fragiles pour y déployer en priorité les équipes d'intervention d'urgence et les guides de durcissement de l'ANCS.</p>
+            </div>
+          </div>
+
+          <div class="mockup-frame">
+            <div class="mockup-header">
+              <div class="mockup-dot"></div>
+              <div class="mockup-dot"></div>
+              <div class="mockup-dot"></div>
+              <span class="mockup-title">cyberscore.tn/sectors // national-sectors-overview</span>
+            </div>
+            <img src="./assets/sectors.png" alt="Cartographie Sectorielle" class="mockup-img">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 15 : SURVEILLANCE DES MENACES & CTI WAR ROOM
+         ========================================== -->
+    <div class="slide" data-title="Surveillance Menaces" data-notes="Après le Command Center national qui surveille la posture interne de nos ministères, nous basculons sur la dimension Cyber Threat Intelligence (CTI). Cette War Room cartographie en direct à 60 FPS les vecteurs d'attaques mondiaux convergeant vers la Tunisie, croise nos scans avec les flux AbuseIPDB et VirusTotal, et permet d'isoler en 1 clic tout domaine gouvernemental pris pour cible.">
+      <div class="bg-watermark">15</div>
+      <div class="slide-meta">
+        <div class="slide-headings">
+          <span class="slide-kicker">Slide 20 / 32 — Télémétrie CTI & War Room</span>
+          <h1 class="slide-title-fr">Surveillance des menaces &amp; <em>Threat Intelligence</em></h1>
+          <h2 class="slide-title-ar">مرصد استخبارات التهديدات وغرفة العمليات السيبرانية (CTI War Room)</h2>
+        </div>
+        <div class="slide-pill-badge"><span class="dot"></span> 20 / 32 </div>
+      </div>
+      <div class="slide-content">
+        <div class="grid-hero">
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <div class="glass-card highlight">
+              <div class="card-label"><span class="icon-pill">🌐</span> Mappemonde Balistique 60 FPS (Canvas)</div>
+              <p style="font-size: 15px; color: #e2e8f0;">Interpolation de trajectoires d'attaques par courbes de Bézier reliant 12 foyers mondiaux (Russie, Chine, Iran, USA) convergeant en temps réel sur la Tunisie.</p>
+            </div>
+            <div class="glass-card cyan">
+              <div class="card-label"><span class="icon-pill">🔴</span> Corrélation CTI &amp; Failles Réelles</div>
+              <p style="font-size: 15px; color: #e2e8f0;">Fusion asynchrone AbuseIPDB &amp; VirusTotal : Détection d'IPs étatiques compromises, catalogue de CVEs actives et taux de santé souverain (98% sains).</p>
+            </div>
+            <div class="glass-card">
+              <div class="card-label"><span class="icon-pill">⚡</span> Flux d'Attaques en Direct &amp; Audit 1-Clic</div>
+              <p style="font-size: 15px; color: #e2e8f0;">Journal d'attaques interactif classé par criticité (Critique, Élevé, Moyen) avec déclencheur d'audit immédiat sur les portails ciblés (diplomatie, finances).</p>
+            </div>
+          </div>
+
+          <div class="mockup-frame">
+            <div class="mockup-header">
+              <div class="mockup-dot"></div>
+              <div class="mockup-dot"></div>
+              <div class="mockup-dot"></div>
+              <span class="mockup-title">cyberscore.tn/threats // cti-war-room-telemetry</span>
+            </div>
+            <img src="./assets/threats.png" alt="Surveillance des Menaces CTI" class="mockup-img">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 16 : IA AMINA 3D
+         ========================================== -->
+    <div class="slide" data-title="Analyste IA Amina" data-notes="Amina n'est pas un simple assistant conversationnel : c'est un analyste cyber d'astreinte. Elle analyse les failles du ministère scanné et génère instantanément les directives de durcissement Nginx ou Apache prêtes à être appliquées par les administrateurs système.">
+      <div class="bg-watermark">16</div>
+      <div class="slide-meta">
+        <div class="slide-headings">
+          <span class="slide-kicker">Slide 21 / 32 — Intelligence Artificielle Souveraine</span>
+          <h1 class="slide-title-fr">L'analyste cyber <em>Amina 3D</em></h1>
+          <h2 class="slide-title-ar">المحللة الافتراضية الذكية أمينة — هندسة الذكاء الاصطناعي السيادي</h2>
+        </div>
+        <div class="slide-pill-badge"><span class="dot"></span> 21 / 32 </div>
+      </div>
+      <div class="slide-content">
+        <div class="grid-hero">
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <div class="glass-card highlight">
+              <div class="card-label"><span class="icon-pill">🧠</span> Modèle Local Qwen2.5-Coder:7b</div>
+              <p style="font-size: 15px; color: #e2e8f0;">7 milliards de paramètres exécutés 100% hors-ligne via Ollama sur port dédié 25000. Taux de succès HumanEval de 88.4%.</p>
+            </div>
+            <div class="glass-card">
+              <div class="card-label"><span class="icon-pill">⚡</span> Flux Streaming SSE Mot-par-Mot</div>
+              <p style="font-size: 15px; color: #e2e8f0;">Génération en direct des directives de remédiation Nginx, Apache et UFW avec bouton d'arrêt d'urgence AbortController.</p>
+            </div>
+            <div class="glass-card cyan">
+              <div class="card-label"><span class="icon-pill">🛡️</span> Zéro Fuite de Données d'État</div>
+              <p style="font-size: 15px; color: #e2e8f0;">Aucune adresse IP, aucune configuration serveur et aucune faille ministérielle ne sort du territoire national.</p>
+            </div>
+          </div>
+
+          <div class="mockup-frame">
+            <div class="mockup-header">
+              <div class="mockup-dot"></div>
+              <div class="mockup-dot"></div>
+              <div class="mockup-dot"></div>
+              <span class="mockup-title">cyberscore.tn/assistant // amina-3d-ai</span>
+            </div>
+            <img src="./assets/assistant.png" alt="Amina 3D AI" class="mockup-img">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 17 : MOTEUR PRÉDICTIF
+         ========================================== -->
+    <div class="slide" data-title="Moteur Prédictif" data-notes="Le module prédictif permet d'anticiper au lieu de simplement constater. En observant la vitesse d'expiration des certificats SSL et l'apparition de nouvelles CVEs, la plateforme alerte les RSSI sur leur posture prévisible à un et trois mois.">
+      <div class="bg-watermark">17</div>
+      <div class="slide-meta">
+        <div class="slide-headings">
+          <span class="slide-kicker">Slide 22 / 32 — Anticipation du Risque</span>
+          <h1 class="slide-title-fr">La projection à <em>+30 jours</em></h1>
+          <h2 class="slide-title-ar">منظومة التحليلات التنبؤية بالذكاء الاصطناعي والتوقعات المستقبلية</h2>
+        </div>
+        <div class="slide-pill-badge"><span class="dot"></span> 22 / 32 </div>
+      </div>
+      <div class="slide-content">
+        <div class="grid-hero">
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <div class="glass-card highlight">
+              <div class="card-label"><span class="icon-pill">📈</span> Série Temporelle SVG (12 Mois)</div>
+              <p style="font-size: 15px; color: #e2e8f0;">Visualisation continue de l'historique réel des audits et projection à +30 et +90 jours avec zone de confiance (±5 pts).</p>
+            </div>
+            <div class="glass-card">
+              <div class="card-label"><span class="icon-pill">🕸️</span> Radar Hexagonal Multidimensionnel</div>
+              <p style="font-size: 15px; color: #e2e8f0;">Évaluation comparative géométrique sur les 6 piliers clés : SSL, Headers, OWASP, Ports, Cookies, DNS.</p>
+            </div>
+            <div class="glass-card cyan">
+              <div class="card-label"><span class="icon-pill">⚠️</span> Diagnostic Prédictif Automatisé</div>
+              <p style="font-size: 15px; color: #e2e8f0;">Alerte anticipée sur l'expiration imminente des certificats TunTrust avant que le site ne tombe en alerte critique.</p>
+            </div>
+          </div>
+
+          <div class="mockup-frame">
+            <div class="mockup-header">
+              <div class="mockup-dot"></div>
+              <div class="mockup-dot"></div>
+              <div class="mockup-dot"></div>
+              <span class="mockup-title">cyberscore.tn/predictions // radar-projection</span>
+            </div>
+            <img src="./assets/predictions.png" alt="Prédictions Cyber" class="mockup-img">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 18 : LIVRABLE PDF CHANCELLERIE
+         ========================================== -->
+    <div class="slide" data-title="Rapport PDF Chancellerie" data-notes="Le rapport PDF constitue la pièce maîtresse pour l'administration. Chaque document est signé par un hash SHA-256 unique et dispose d'un QR code infalsifiable, faisant de ce livrable une attestation officielle d'hygiène cybernétique.">
+      <div class="bg-watermark">18</div>
+      <div class="slide-meta">
+        <div class="slide-headings">
+          <span class="slide-kicker">Slide 23 / 32 — Preuve d'État</span>
+          <h1 class="slide-title-fr">Le livrable officiel <em>Chancellerie</em></h1>
+          <h2 class="slide-title-ar">مركز التقارير والشهادة الرسمية للمطابقة — وثيقة الدولة عالية الموثوقية</h2>
+        </div>
+        <div class="slide-pill-badge"><span class="dot"></span> 23 / 32 </div>
+      </div>
+      <div class="slide-content">
+        <div class="grid-hero">
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <div class="glass-card highlight">
+              <div class="card-label"><span class="icon-pill">📜</span> Document A4 Vectoriel de 7 Pages</div>
+              <p style="font-size: 15px; color: #e2e8f0;">Charte solennelle Chancellerie d'État : Fond ivoire (<code style="color: #ffa07a;">#FBF8F2</code>), encre noire (<code style="color: #fff;">#1A1A18</code>), sceau rouge républicain.</p>
+            </div>
+            <div class="glass-card cyan">
+              <div class="card-label"><span class="icon-pill">🔐</span> Hachage Cryptographique SHA-256</div>
+              <p style="font-size: 15px; color: #e2e8f0;">Empreinte unique de session d'audit infalsifiable garantissant la non-répudiation et l'intégrité du document.</p>
+            </div>
+            <div class="glass-card">
+              <div class="card-label"><span class="icon-pill">📱</span> QR Code de Vérification Instantanée</div>
+              <p style="font-size: 15px; color: #e2e8f0;">Permet à tout inspecteur de l'ANCS de vérifier l'authenticité de la note en 1 scan avec son smartphone.</p>
+            </div>
+          </div>
+
+          <div class="mockup-frame">
+            <div class="mockup-header">
+              <div class="mockup-dot"></div>
+              <div class="mockup-dot"></div>
+              <div class="mockup-dot"></div>
+              <span class="mockup-title">cyberscore.tn/reports // official-chancellerie-pdf</span>
+            </div>
+            <img src="./assets/reports.png" alt="Rapports PDF" class="mockup-img">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 19 : BENCHMARK INTERNATIONAL
+         ========================================== -->
+    <div class="slide" data-title="Benchmark MENA" data-notes="Le Benchmark International situe la Tunisie au 7ème rang régional avec 72 points. Cette vue stratégique permet à l'ANCS de savoir exactement où concentrer les budgets de remédiation pour intégrer le Top 3 régional.">
+      <div class="bg-watermark">19</div>
+      <div class="slide-meta">
+        <div class="slide-headings">
+          <span class="slide-kicker">Slide 24 / 32 — Géostratégie Cyber</span>
+          <h1 class="slide-title-fr">Le positionnement <em>régional</em></h1>
+          <h2 class="slide-title-ar">مرصد المقارنة الدولية ومنهجية المعايرة الإقليمية</h2>
+        </div>
+        <div class="slide-pill-badge"><span class="dot"></span> 24 / 32 </div>
+      </div>
+      <div class="slide-content">
+        <div class="grid-hero">
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <div class="glass-card highlight">
+              <div class="card-label"><span class="icon-pill">🌐</span> Étalonnage Géostratégique MENA</div>
+              <p style="font-size: 15px; color: #e2e8f0;">Comparaison de la Tunisie (Score 72/100, 7ème rang) face aux pairs régionaux (EAU, Arabie Saoudite, Maroc, Égypte, Algérie) et à la France.</p>
+            </div>
+            <div class="glass-card">
+              <div class="card-label"><span class="icon-pill">⚖️</span> Respect de la Souveraineté Territoriale</div>
+              <p style="font-size: 15px; color: #e2e8f0;">Zéro scan intrusif à l'étranger. Étalonnage macroscopique basé sur les indices ITU Global Cybersecurity Index (ONU) et SecurityScorecard.</p>
+            </div>
+            <div class="glass-card cyan">
+              <div class="card-label"><span class="icon-pill">🎯</span> Axes d'Amélioration Ciblés</div>
+              <p style="font-size: 15px; color: #e2e8f0;">La Tunisie excelle sur les cookies (80 vs 78 mondial), mais doit concentrer ses efforts sur le déploiement généralisé du CSP.</p>
+            </div>
+          </div>
+
+          <div class="mockup-frame">
+            <div class="mockup-header">
+              <div class="mockup-dot"></div>
+              <div class="mockup-dot"></div>
+              <div class="mockup-dot"></div>
+              <span class="mockup-title">cyberscore.tn/benchmark // regional-baseline</span>
+            </div>
+            <img src="./assets/benchmark.png" alt="Benchmark MENA" class="mockup-img">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 20 : GAMIFICATION & TRUST SEAL
+         ========================================== -->
+    <div class="slide" data-title="Gamification & Sceau" data-notes="Pour maintenir une vigilance constante, nous avons introduit un moteur de gamification professionnelle. Les ministères atteignant l'excellence peuvent afficher sur leur portail citoyen un Sceau de Confiance officiel vérifiable par QR code.">
+      <div class="bg-watermark">20</div>
+      <div class="slide-meta">
+        <div class="slide-headings">
+          <span class="slide-kicker">Slide 25 / 32 — Culture de Résilience</span>
+          <h1 class="slide-title-fr">La motivation des <em>acteurs</em></h1>
+          <h2 class="slide-title-ar">منظومة التحفيز والأوسمة وخاتم الثقة الرقمي السيادي</h2>
+        </div>
+        <div class="slide-pill-badge"><span class="dot"></span> 25 / 32 </div>
+      </div>
+      <div class="slide-content">
+        <div class="grid-hero">
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <div class="glass-card highlight">
+              <div class="card-label"><span class="icon-pill">⭐</span> Moteur d'XP & 5 Niveaux de Maîtrise SOC</div>
+              <p style="font-size: 15px; color: #e2e8f0;">Attribution continue de points d'XP (+150 par audit, +500 pour zéro faille) : Débutant → Intermédiaire → Avancé → Expert → <strong>Élite SOC</strong>.</p>
+            </div>
+            <div class="glass-card">
+              <div class="card-label"><span class="icon-pill">🏅</span> Galerie des 12 Badges d'Excellence</div>
+              <p style="font-size: 15px; color: #e2e8f0;">Trophées d'accomplissement hiérarchisés par niveau de rareté (Commun, Rare, Épique, Légendaire) débloqués en direct.</p>
+            </div>
+            <div class="glass-card cyan">
+              <div class="card-label"><span class="icon-pill">🛡️</span> Sceau Public de Confiance (Trust Seal)</div>
+              <p style="font-size: 15px; color: #e2e8f0;">Widget SVG vectoriel exportable en 1 clic pour intégration dans les pieds de page des sites ministériels avec QR code.</p>
+            </div>
+          </div>
+
+          <div class="mockup-frame">
+            <div class="mockup-header">
+              <div class="mockup-dot"></div>
+              <div class="mockup-dot"></div>
+              <div class="mockup-dot"></div>
+              <span class="mockup-title">cyberscore.tn/badges // trust-seal-gallery</span>
+            </div>
+            <img src="./assets/badges.png" alt="Badges & Trust Seal" class="mockup-img">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+    <!-- ==========================================
+         SLIDE 21 : PORTAIL SOUVERAIN DE VÉRIFICATION & HYGIÈNE NUMÉRIQUE
+         ========================================== -->
+    <div class="slide" data-title="Portail de Vérification" data-notes="Pour le citoyen, nous avons créé le Portail Souverain de Vérification, scannable en 1 clic par smartphone. Il sépare strictement l'attestation publique de l'audit technique confidentiel TLP:AMBER+STRICT, et embarque un slider interactif d'hygiène numérique trilingue pour prémunir les Tunisiens contre le phishing.">
+      <div class="bg-watermark">21</div>
+      <div class="slide-meta">
+        <div class="slide-headings">
+          <span class="slide-kicker">Slide 26 / 32 — Confiance Publique & Hygiène Citoyenne</span>
+          <h1 class="slide-title-fr">Le portail souverain de <em>vérification</em></h1>
+          <h2 class="slide-title-ar">بوابة التحقق السيادي ودليل اليقظة الرقمية التفاعلي للمواطنين</h2>
+        </div>
+        <div class="slide-pill-badge"><span class="dot"></span> 26 / 32 </div>
+      </div>
+      <div class="slide-content">
+        <div class="grid-hero">
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <div class="glass-card highlight">
+              <div class="card-label"><span class="icon-pill">🇹🇳</span> Interface Trilingue &amp; Rendu RTL Réactif</div>
+              <p style="font-size: 15px; color: #e2e8f0;">Bascule instantanée en 1 clic : <code>[ العربية | FR | EN ]</code> avec inversion de layout (RTL), sans rechargement de page et protection d'hydratation.</p>
+            </div>
+            <div class="glass-card cyan">
+              <div class="card-label"><span class="icon-pill">💡</span> Slider d'Hygiène Numérique Dynamique</div>
+              <p style="font-size: 15px; color: #e2e8f0;">Hero Slide Carousel à défilement doux (5.5s), pause au survol, capsules lumineuses et 4 réflexes vitaux (Cadenas, Anti-Phishing, 2FA, Urgence CERT-TN 71 843 200).</p>
+            </div>
+            <div class="glass-card">
+              <div class="card-label"><span class="icon-pill">🛡️</span> Cloisonnement Défensif TLP:AMBER+STRICT</div>
+              <p style="font-size: 15px; color: #e2e8f0;">L'usager consulte l'attestation et le score global. Le rapport PDF offensif (7 pages détaillant les CVE) et le re-scan sont strictement verrouillés derrière l'espace RSSI.</p>
+            </div>
+          </div>
+
+          <div class="mockup-frame">
+            <div class="mockup-header">
+              <div class="mockup-dot"></div>
+              <div class="mockup-dot"></div>
+              <div class="mockup-dot"></div>
+              <span class="mockup-title">cyberscore.tn/fr/verify/sante.gov.tn // sovereign-verification-portal</span>
+            </div>
+            <img src="./assets/verify_portal.png" alt="Portail Souverain de Vérification" class="mockup-img">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 22 : RÉSILIENCE DU QR CODE & ANTI-PHISHING
+         ========================================== -->
+    <div class="slide" data-title="Résilience QR Code" data-notes="C'est la réponse à la question piège classique du jury : Que se passe-t-il si un pirate capture le QR code et le met sur son faux site ? Notre réponse : voler le QR code ne protège pas le pirate, cela le démasque immédiatement grâce au Domain Mismatch Trap. Le QR code ouvre l'ANCS qui certifie le domaine légitime sante.gov.tn, prouvant instantanément à la victime que le site sur son écran sante-fake.com est un faux !">
+      <div class="bg-watermark">22</div>
+      <div class="slide-meta">
+        <div class="slide-headings">
+          <span class="slide-kicker">Slide 27 / 32 — Sécurité Offensive & Modélisation des Menaces</span>
+          <h1 class="slide-title-fr">Résilience du QR Code face au <em>Phishing</em></h1>
+          <h2 class="slide-title-ar">نمذجة التهديدات السيبرانية وإحباط فخ تزوير رمز الاستجابة السريعة</h2>
+        </div>
+        <div class="slide-pill-badge"><span class="dot"></span> 27 / 32 </div>
+      </div>
+      <div class="slide-content">
+        <div class="grid-hero">
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <div class="glass-card highlight" style="border-left: 3px solid #10b981;">
+              <div class="card-label" style="color: #10b981;"><span class="icon-pill">🎯</span> 1. Le Piège du Domain Mismatch (Domain Binding)</div>
+              <p style="font-size: 15px; color: #e2e8f0;">Le QR code encode l'URL ANCS liée au domaine officiel. Au scan sur smartphone, la page affiche : <em>« Certifié exclusivement pour : sante.gov.tn »</em>. La victime constate immédiatement la divergence avec <code>sante-fake.com</code> sur son PC : l'usurpation est démasquée en 1 seconde !</p>
+            </div>
+            <div class="glass-card cyan" style="border-left: 3px solid #38bdf8;">
+              <div class="card-label" style="color: #38bdf8;"><span class="icon-pill">🏛️</span> 2. Ancrage Souverain .tn &amp; Certificat TunTrust</div>
+              <p style="font-size: 15px; color: #e2e8f0;">Impossible d'obtenir un faux domaine sous <code>.tn</code> (géré par l'ATI/ANCS) ni un certificat étatique TunTrust AS2609. Et tout faux site soumis à l'audit CyberScore est recalé d'office avec un <strong>Grade F (0/100) — DOMAINE SUSPECT</strong>.</p>
+            </div>
+            <div class="glass-card" style="border-left: 3px solid #a855f7;">
+              <div class="card-label" style="color: #a855f7;"><span class="icon-pill">🔒</span> 3. Contrôle d'Origine Dynamique (Widget JS)</div>
+              <p style="font-size: 15px; color: #e2e8f0;">Le widget client vérifie en temps réel <code>window.location.hostname</code> et l'en-tête HTTP Referer. En cas d'appel illégitime hors du domaine homologué, le sceau vert est révoqué au profit d'un avertissement d'invalidité.</p>
+            </div>
+          </div>
+
+          <!-- Flowchart Visual Card -->
+          <div class="glass-card highlight" style="display: flex; flex-direction: column; justify-content: center; padding: 24px; background: rgba(2, 6, 23, 0.75); border: 1.5px solid rgba(16, 185, 129, 0.35);">
+            <div style="font-family: var(--font-mono); font-size: 15.5px; font-weight: 800; color: #10b981; letter-spacing: 1px; margin-bottom: 8px;">
+              ⚡ THREAT MODELING // LE PIÈGE DU DOMAIN MISMATCH
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 12px; font-size: 14.5px; color: #e2e8f0;">
+              <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); border-radius: 8px; padding: 10px 14px;">
+                <strong style="color: #ff6b6b;">1. Attaquant sur PC :</strong> Affiche <code>sante-fake-tunisie.com</code> avec capture volée du QR Code.
+              </div>
+              <div style="text-align: center; color: #64748b; font-size: 15.5px;">▼ Scan par le smartphone de la victime</div>
+              <div style="background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 8px; padding: 10px 14px;">
+                <strong style="color: #38bdf8;">2. Mobile Victime :</strong> Ouvre <code>cyberscore.tn/fr/verify/sante.gov.tn</code> (Serveur ANCS).
+              </div>
+              <div style="text-align: center; color: #64748b; font-size: 15.5px;">▼ Comparaison visuelle instantanée</div>
+              <div style="background: rgba(16, 185, 129, 0.2); border: 1.5px solid #10b981; border-radius: 8px; padding: 12px 14px;">
+                <strong style="color: #10b981;">3. RÉSULTAT FATAL POUR LE PIRATE :</strong> Le citoyen lit <code>sante.gov.tn</code> sur son mobile &ne; <code>sante-fake</code> sur PC. <em>L'arnaque s'effondre immédiatement !</em>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 23 : GOUVERNANCE & RBAC
+         ========================================== -->
+    <div class="slide" data-title="Gouvernance RBAC" data-notes="La gouvernance de la plateforme est strictement cloisonnée : seul le Super-Admin ANCS possède les privilèges exclusifs pour modifier en direct le registre des 24 ministères (niveaux de criticité 1 à 5, contacts CSIRT d'urgence, enrôlement d'institutions). Toute tentative d'accès ou d'édition par un auditeur ou observateur déclenche un verrouillage immédiat HTTP 403. De plus, le journal d'audit est 100% fonctionnel et réactif : chaque modification d'organisation, action d'administration, scan ou export de rapport PDF est immédiatement consigné dans le flux LIVE FEED, garantissant la non-répudiation (Décret-loi n° 2023-17 / ISO 27001).">
+      <div class="bg-watermark">23</div>
+      <div class="slide-meta">
+        <div class="slide-headings">
+          <span class="slide-kicker">Slide 28 / 32 — Contrôle d'Accès & Audit Trail</span>
+          <h1 class="slide-title-fr">Gouvernance & <em>Journal d'Audit Live</em></h1>
+          <h2 class="slide-title-ar">لوحة إدارة النظام والتحكم السيادي في الوصول وسجل العمليات الفوري</h2>
+        </div>
+        <div class="slide-pill-badge"><span class="dot"></span> 28 / 32 </div>
+      </div>
+      <div class="slide-content">
+        <div class="grid-hero">
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div class="glass-card highlight">
+              <div class="card-label"><span class="icon-pill">👑</span> Admin ANCS (Privilèges Exclusifs)</div>
+              <p style="font-size: 15px; color: #e2e8f0; line-height: 1.4;">Supervision &amp; édition directe des 24 ministères (criticité 1-5, contact CSIRT), enrôlement d'organisations et Kill-Switch.</p>
+            </div>
+            <div class="glass-card cyan">
+              <div class="card-label"><span class="icon-pill">📜</span> Journal d'Audit Live (100% Fonctionnel)</div>
+              <p style="font-size: 15px; color: #e2e8f0; line-height: 1.4;">Traçabilité temps réel de toutes les actions (modifications d'organisations, comptes, scans, exports PDF) avec flux <code>● LIVE FEED</code> horodaté à la seconde.</p>
+            </div>
+            <div class="glass-card" style="border-color: rgba(239, 68, 68, 0.4);">
+              <div class="card-label" style="color: #ff6b6b;"><span class="icon-pill">⛔</span> Cloisonnement RBAC &amp; Verrou HTTP 403</div>
+              <p style="font-size: 15px; color: #e2e8f0; line-height: 1.4;">Accès à <code>/admin</code> et édition des organisations strictement réservés au rôle admin ; écran HTTP 403 Forbidden pour les non-admins (Décret 2023-17).</p>
+            </div>
+          </div>
+
+          <div class="mockup-frame">
+            <div class="mockup-header">
+              <div class="mockup-dot"></div>
+              <div class="mockup-dot"></div>
+              <div class="mockup-dot"></div>
+              <span class="mockup-title">cyberscore.tn/admin // audit-trail-live-feed</span>
+            </div>
+            <img src="./assets/admin.png" alt="Console Admin" class="mockup-img">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 23B : SÉCURITÉ DES SESSIONS — HTTPONLY COOKIES
+         ========================================== -->
+    <div class="slide" data-title="Sécurité des Sessions" data-notes="Monsieur le Président, cette diapositive répond à une question fondamentale de sécurité applicative : comment protéger les tokens d'authentification contre le vol par injection XSS ? Nous avons migré de localStorage, où une seule ligne de JavaScript malicieux suffit à voler le token, vers des cookies HttpOnly gérés uniquement par le navigateur au niveau noyau. Le JavaScript de la page ne peut jamais y accéder. Nous avons ajouté trois attributs de durcissement : Secure pour HTTPS uniquement, SameSite Lax contre le CSRF, et Max-Age 86400 pour l'expiration automatique à 24 heures. Le reverse proxy Nginx unifie frontend et backend sous un seul domaine cyberscore.tn, ce qui est indispensable car les cookies sont liés au domaine et non à l'IP. Nous avons validé cette migration en production avec des tests curl sur https://cyberscore.tn montrant le Set-Cookie HttpOnly au login, l'authentification par cookie au /api/auth/me, et la révocation du cookie au logout.">
+      <div class="bg-watermark">23B</div>
+      <div class="slide-meta">
+        <div class="slide-headings">
+          <span class="slide-kicker">Slide 29 / 32 — Sécurité des Sessions & Anti-XSS</span>
+          <h1 class="slide-title-fr">Migration vers les <em>Cookies HttpOnly</em></h1>
+          <h2 class="slide-title-ar">تأمين جلسات المستخدم — الانتقال من التخزين المحلي إلى ملفات تعريف الارتباط المحمية</h2>
+        </div>
+        <div class="slide-pill-badge"><span class="dot"></span> 29 / 32 </div>
+      </div>
+      <div class="slide-content">
+        <div class="grid-hero">
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <!-- Before vs After -->
+            <div class="glass-card" style="border-color: rgba(239, 68, 68, 0.4); padding: 14px 18px;">
+              <div class="card-label" style="color: #ff6b6b;"><span class="icon-pill">❌</span> AVANT : localStorage (Vulnérable)</div>
+              <p style="font-size: 15px; color: #e2e8f0; line-height: 1.5;">Un attaquant exploitant une faille XSS pouvait voler le token en <strong>1 ligne de JS</strong> : <code style="color: #ff6b6b;">localStorage.getItem('cyberscore_token')</code>. Le token était visible, copiable et exportable par n'importe quel script injecté.</p>
+            </div>
+
+            <div class="glass-card highlight" style="border-color: rgba(16, 185, 129, 0.4); padding: 14px 18px;">
+              <div class="card-label" style="color: #10b981;"><span class="icon-pill">✅</span> MAINTENANT : Cookie HttpOnly (Immunisé)</div>
+              <p style="font-size: 15px; color: #e2e8f0; line-height: 1.5;">Le cookie est géré <strong>uniquement par le navigateur au niveau noyau</strong>. JavaScript ne peut ni le lire, ni le modifier, ni l'exfiltrer. Même en cas de XSS, le token est <strong>invisible et intouchable</strong>.</p>
+            </div>
+
+            <!-- 4 Protection Attributes -->
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+              <div style="background: rgba(20, 14, 40, 0.6); border: 1px solid rgba(255, 255, 255, 0.07); border-radius: 10px; padding: 10px 12px;">
+                <span style="font-family: var(--font-syne); font-size: 14px; font-weight: 800; color: #10b981;">🔒 HttpOnly</span>
+                <p style="font-size: 13.5px; color: #e2e8f0; margin-top: 3px; line-height: 1.35;">JS <strong>ne peut pas lire</strong> le cookie — Anti-XSS total.</p>
+              </div>
+              <div style="background: rgba(20, 14, 40, 0.6); border: 1px solid rgba(255, 255, 255, 0.07); border-radius: 10px; padding: 10px 12px;">
+                <span style="font-family: var(--font-syne); font-size: 14px; font-weight: 800; color: #38bdf8;">🛡️ Secure</span>
+                <p style="font-size: 13.5px; color: #e2e8f0; margin-top: 3px; line-height: 1.35;">Envoi <strong>HTTPS uniquement</strong> — Anti-interception réseau.</p>
+              </div>
+              <div style="background: rgba(20, 14, 40, 0.6); border: 1px solid rgba(255, 255, 255, 0.07); border-radius: 10px; padding: 10px 12px;">
+                <span style="font-family: var(--font-syne); font-size: 14px; font-weight: 800; color: #ffa07a;">⚡ SameSite=Lax</span>
+                <p style="font-size: 13.5px; color: #e2e8f0; margin-top: 3px; line-height: 1.35;">Bloque l'envoi depuis <strong>sites tiers</strong> — Anti-CSRF.</p>
+              </div>
+              <div style="background: rgba(20, 14, 40, 0.6); border: 1px solid rgba(255, 255, 255, 0.07); border-radius: 10px; padding: 10px 12px;">
+                <span style="font-family: var(--font-syne); font-size: 14px; font-weight: 800; color: #f472b6;">⏰ Max-Age=86400</span>
+                <p style="font-size: 13.5px; color: #e2e8f0; margin-top: 3px; line-height: 1.35;">Expiration <strong>automatique 24h</strong> — Session bornée.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Code + Validation -->
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div class="glass-card cyan" style="padding: 14px 18px;">
+              <div class="card-label" style="color: #38bdf8;"><span class="icon-pill">⚙️</span> Implémentation Backend (FastAPI)</div>
+              <pre style="font-family: var(--font-mono); font-size: 12.5px; color: #e2e8f0; background: rgba(0,0,0,0.3); border-radius: 8px; padding: 10px; margin-top: 6px; overflow-x: auto; line-height: 1.5;"><code>response.set_cookie(
+  key="cyberscore_token",
+  value=access_token,
+  httponly=True,     # JS bloqué
+  secure=is_https,   # HTTPS only
+  samesite="lax",    # Anti-CSRF
+  max_age=86400,     # 24h auto
+  path="/"
+)</code></pre>
+            </div>
+
+            <div class="glass-card" style="padding: 14px 18px;">
+              <div class="card-label"><span class="icon-pill">🌐</span> Implémentation Frontend (Next.js)</div>
+              <pre style="font-family: var(--font-mono); font-size: 12.5px; color: #e2e8f0; background: rgba(0,0,0,0.3); border-radius: 8px; padding: 10px; margin-top: 6px; overflow-x: auto; line-height: 1.5;"><code>const res = await fetch(url, {
+  credentials: "include",
+  // ← Le navigateur envoie
+  //   automatiquement le cookie
+});</code></pre>
+            </div>
+
+            <div class="glass-card highlight" style="border-color: rgba(16, 185, 129, 0.4); padding: 14px 18px;">
+              <div class="card-label" style="color: #10b981;"><span class="icon-pill">✅</span> Validation Production (curl)</div>
+              <pre style="font-family: var(--font-mono); font-size: 11.5px; color: #e2e8f0; background: rgba(0,0,0,0.3); border-radius: 8px; padding: 10px; margin-top: 6px; overflow-x: auto; line-height: 1.5;"><code># Login → Cookie HttpOnly déposé ✅
+curl -k https://cyberscore.tn/api/auth/login
+→ Set-Cookie: cyberscore_token=...;
+  HttpOnly; Secure; SameSite=lax
+
+# Logout → Cookie révoqué ✅
+curl -k https://cyberscore.tn/api/auth/logout
+→ Set-Cookie: Max-Age=0</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Nginx Reverse Proxy Rationale -->
+        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.09); border-radius: 16px; padding: 12px 22px; margin-top: 6px; display: flex; align-items: center; gap: 16px;">
+          <div style="width: 10px; height: 10px; border-radius: 50%; background: #fbbf24; box-shadow: 0 0 10px #fbbf24; flex-shrink: 0;"></div>
+          <div>
+            <span style="font-family: var(--font-syne); font-size: 14px; font-weight: 800; color: #fbbf24;">POURQUOI NGINX UNIFIE TOUT SOUS UN SEUL DOMAINE ?</span>
+            <span style="font-size: 14px; color: #e2e8f0; margin-left: 8px;">Les cookies sont liés au <strong>domaine</strong>, pas à l'IP. Sans Nginx, le cookie déposé par <code>192.168.98.149:8000</code> ne serait pas envoyé à <code>192.168.98.150:3000</code>. Le reverse proxy unifie tout sous <code>cyberscore.tn</code> → le cookie est valide partout.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 24 : DÉMONSTRATION EN DIRECT
+         ========================================== -->
+    <div class="slide" data-title="Démonstration Live" data-notes="Nous allons maintenant passer à la démonstration live en conditions réelles, en suivant ce parcours opérationnel depuis l'accès restreint jusqu'à l'export du rapport officiel signé.">
+      <div class="bg-watermark">24</div>
+      <div class="slide-meta">
+        <div class="slide-headings">
+          <span class="slide-kicker">Slide 30 / 32 — Mise en Situation Réelle</span>
+          <h1 class="slide-title-fr">Le scénario <em>opérationnel</em></h1>
+          <h2 class="slide-title-ar">العرض المباشر لمنظومة CyberScore TN في ظروف تشغيلية حقيقية</h2>
+        </div>
+        <div class="slide-pill-badge"><span class="dot"></span> 30 / 32 </div>
+      </div>
+        <!-- 8-Stage Operational Scenario Grid -->
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
+          <!-- Stage 1 -->
+          <div class="glass-card" style="padding: 14px 16px; border-left: 3px solid #ef4444;">
+            <div style="font-family: var(--font-mono); font-size: 15.5px; font-weight: 800; color: #ef4444; margin-bottom: 4px;">ÉTAPE 01 · GOUVERNANCE</div>
+            <div style="font-family: var(--font-syne); font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 6px;">⛔ Verrouillage RBAC 403</div>
+            <p style="font-size: 15.5px; color: #e2e8f0; line-height: 1.4;">Connexion Observateur Public Santé ➔ Tentative d'accès à <code>/admin</code> ➔ Blocage immédiat.</p>
+          </div>
+          <!-- Stage 2 -->
+          <div class="glass-card" style="padding: 14px 16px; border-left: 3px solid #f59e0b;">
+            <div style="font-family: var(--font-mono); font-size: 15.5px; font-weight: 800; color: #f59e0b; margin-bottom: 4px;">ÉTAPE 02 · DROITS D'AUDIT</div>
+            <div style="font-family: var(--font-syne); font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 6px;">🛡️ Modale Lecture Seule</div>
+            <p style="font-size: 15.5px; color: #e2e8f0; line-height: 1.4;">Tentative de scan non-autorisée sur <code>/scan</code> ➔ Avertissement de sécurité.</p>
+          </div>
+          <!-- Stage 3 -->
+          <div class="glass-card" style="padding: 14px 16px; border-left: 3px solid #38bdf8;">
+            <div style="font-family: var(--font-mono); font-size: 15.5px; font-weight: 800; color: #38bdf8; margin-bottom: 4px;">ÉTAPE 03 · IDENTIFICATION</div>
+            <div style="font-family: var(--font-syne); font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 6px;">🔑 Auditeur RSSI Finances</div>
+            <p style="font-size: 15.5px; color: #e2e8f0; line-height: 1.4;">Bascule vers l'officier <code>YH</code> ➔ Déblocage complet du périmètre ministériel.</p>
+          </div>
+          <!-- Stage 4 -->
+          <div class="glass-card" style="padding: 14px 16px; border-left: 3px solid #a855f7;">
+            <div style="font-family: var(--font-mono); font-size: 15.5px; font-weight: 800; color: #a855f7; margin-bottom: 4px;">ÉTAPE 04 · ERGONOMIE SOC</div>
+            <div style="font-family: var(--font-syne); font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 6px;">⌨️ Command Palette (Ctrl+K)</div>
+            <p style="font-size: 15.5px; color: #e2e8f0; line-height: 1.4;">Recherche instantanée au clavier et saut direct vers le scanner d'audit.</p>
+          </div>
+          <!-- Stage 5 -->
+          <div class="glass-card" style="padding: 14px 16px; border-left: 3px solid #10b981;">
+            <div style="font-family: var(--font-mono); font-size: 15.5px; font-weight: 800; color: #10b981; margin-bottom: 4px;">ÉTAPE 05 · MOTEUR D'AUDIT</div>
+            <div style="font-family: var(--font-syne); font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 6px;">⚡ Audit Live (~7.4s)</div>
+            <p style="font-size: 15.5px; color: #e2e8f0; line-height: 1.4;">Scan en direct de <code>finances.gov.tn</code> (10 piliers passifs simultanés).</p>
+          </div>
+          <!-- Stage 6 -->
+          <div class="glass-card" style="padding: 14px 16px; border-left: 3px solid #ec4899;">
+            <div style="font-family: var(--font-mono); font-size: 15.5px; font-weight: 800; color: #ec4899; margin-bottom: 4px;">ÉTAPE 06 · IA SOUVERAINE</div>
+            <div style="font-family: var(--font-syne); font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 6px;">🧠 Dialogue Amina 3D</div>
+            <p style="font-size: 15.5px; color: #e2e8f0; line-height: 1.4;">Inférence locale Qwen2.5-Coder et génération d'un correctif de sécurité.</p>
+          </div>
+          <!-- Stage 7 -->
+          <div class="glass-card" style="padding: 14px 16px; border-left: 3px solid #06b6d4;">
+            <div style="font-family: var(--font-mono); font-size: 15.5px; font-weight: 800; color: #06b6d4; margin-bottom: 4px;">ÉTAPE 07 · LIVRABLE D'ÉTAT</div>
+            <div style="font-family: var(--font-syne); font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 6px;">📜 Attestation PDF 7 Pages</div>
+            <p style="font-size: 15.5px; color: #e2e8f0; line-height: 1.4;">Téléchargement direct du rapport vectoriel scellé par empreinte SHA-256.</p>
+          </div>
+          <!-- Stage 8 -->
+          <div class="glass-card" style="padding: 14px 16px; border-left: 3px solid #f97316;">
+            <div style="font-family: var(--font-mono); font-size: 15.5px; font-weight: 800; color: #f97316; margin-bottom: 4px;">ÉTAPE 08 · ANCS COMMAND</div>
+            <div style="font-family: var(--font-syne); font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 6px;">👑 Édition Ministères &amp; Kill-Switch</div>
+            <p style="font-size: 15.5px; color: #e2e8f0; line-height: 1.4;">Édition des organisations (criticité 1-5, CSIRT), Journal d'Audit infalsifiable et Kill-Switch.</p>
+          </div>
+        </div>
+
+        <!-- Live Demo Launch CTA Banner -->
+        <div style="background: linear-gradient(135deg, rgba(255, 107, 107, 0.15), rgba(168, 85, 247, 0.15)); border: 1px solid rgba(255, 107, 107, 0.4); border-radius: 16px; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; margin-top: 8px;">
+          <div>
+            <span style="font-family: var(--font-syne); font-size: 15.5px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 8px;">
+              🚀 LANCEMENT DE LA DÉMONSTRATION EN CONDITIONS RÉELLES
+            </span>
+            <p style="font-size: 15.5px; color: #e2e8f0; margin-top: 2px;">
+              Bascule immédiate sur la plateforme active : <code style="color: #38bdf8;">https://cyberscore.tn</code> (Nginx → Next.js 3000 + FastAPI 8000 · Ollama 25000)
+            </p>
+          </div>
+          <a href="https://cyberscore.tn" target="_blank" class="btn btn-gradient" style="padding: 10px 22px; font-size: 14.5px; text-decoration: none; display: flex; align-items: center; gap: 8px;">
+            <span>Démarrer la Démo Live ➔</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 25 : RÉSULTATS MÉTRIQUES
+         ========================================== -->
+    <div class="slide" data-title="Résultats Métriques" data-notes="Ces résultats valident le système en production : 120 domaines publics audités, des scans standards exécutés en 7.4 secondes et 44 pages Next.js compilées sans aucune erreur.">
+      <div class="bg-watermark">25</div>
+      <div class="slide-meta">
+        <div class="slide-headings">
+          <span class="slide-kicker">Slide 31 / 32 — Bilan de Production</span>
+          <h1 class="slide-title-fr">Bilan Métrique \& <em>Validation</em> Réelle</h1>
+          <h2 class="slide-title-ar">النتائج الميدانية والتقييم الفني للمنظومة</h2>
+        </div>
+        <div class="slide-pill-badge"><span class="dot"></span> 31 / 32 </div>
+      </div>
+      <div class="slide-content">
+        <div class="grid-4">
+          <div class="glass-card" style="text-align: center; padding: 22px 14px;">
+            <div class="stat-hero">120+</div>
+            <div class="stat-caption">Domaines Étatiques (.gov.tn / .tn)</div>
+          </div>
+          <div class="glass-card" style="text-align: center; padding: 22px 14px;">
+            <div class="stat-hero" style="color: #10b981;">&lt; 8s</div>
+            <div class="stat-caption">Durée du Scan Standard</div>
+          </div>
+          <div class="glass-card" style="text-align: center; padding: 22px 14px;">
+            <div class="stat-hero" style="color: #38bdf8;">100%</div>
+            <div class="stat-caption">Souveraineté IA Locale</div>
+          </div>
+          <div class="glass-card" style="text-align: center; padding: 22px 14px;">
+            <div class="stat-hero" style="color: #ffa07a;">44 / 44</div>
+            <div class="stat-caption">Pages Compilées (0 Erreur)</div>
+          </div>
+        </div>
+
+        <div class="glass-card highlight" style="margin-top: 8px;">
+          <div class="card-label">Impact Stratégique pour l'Économie Tunisienne</div>
+          <ul class="editorial-list">
+            <li><strong>Économie de Devises</strong> : Plus de <strong>550 000 Dinars Tunisiens par an</strong> économisés face à l'achat de licences auprès d'éditeurs américains (SecurityScorecard, BitSight).</li>
+            <li><strong>Conformité Juridique Directe</strong> : Rapports prêts pour les audits formels ANCS et les certifications ISO 27001.</li>
+            <li><strong>Résilience Territoriale</strong> : Détection précoce des vulnérabilités avant toute exploitation malveillante.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 26 : PERSPECTIVES & CONCLUSION
+         ========================================== -->
+    <div class="slide" data-title="Conclusion" data-notes="Pour conclure, CyberScore TN fournit à l'ANCS et aux ministères tunisiens un outil opérationnel pour surveiller, quantifier et corriger en continu la posture de sécurité de leurs 120 domaines publics. Je vous remercie pour votre attention et je suis prêt à répondre à vos questions.">
+      <div class="bg-watermark">26</div>
+      <div class="slide-meta">
+        <div class="slide-headings">
+          <span class="slide-kicker">Slide 32 / 32 — Perspectives & Remerciements</span>
+          <h1 class="slide-title-fr">Perspectives d'Évolution \& <em>Conclusion</em></h1>
+          <h2 class="slide-title-ar">الآفاق المستقبلية والخاتمة — شكر وتقدير</h2>
+        </div>
+        <div class="slide-pill-badge"><span class="dot"></span> 32 / 32 </div>
+      </div>
+      <div class="slide-content">
+        <div class="grid-hero" style="gap: 20px;">
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div class="glass-card highlight" style="padding: 16px 20px;">
+              <div class="card-label" style="font-size: 15px; color: #ff6b6b;"><span class="icon-pill">1</span> Homologation Nationale ANCS & CERT-TN</div>
+              <p style="font-size: 15.5px; color: #e2e8f0; line-height: 1.5;">Présentation officielle auprès de la direction générale de l'ANCS pour intégration directe dans la doctrine nationale d'audit continu des 120 institutions d'État.</p>
+            </div>
+            <div class="glass-card" style="padding: 16px 20px;">
+              <div class="card-label" style="font-size: 15px; color: #ffa07a;"><span class="icon-pill">2</span> Application Mobile RSSI & Alertes d'Urgence</div>
+              <p style="font-size: 15.5px; color: #e2e8f0; line-height: 1.5;">Notifications Push chiffrées en temps réel alertant les officiers de sécurité ministériels dès qu'un score descend sous le seuil d'alerte configuré.</p>
+            </div>
+            <div class="glass-card cyan" style="padding: 16px 20px;">
+              <div class="card-label" style="font-size: 15px; color: #38bdf8;"><span class="icon-pill">3</span> Observatoire Régional Cyberdéfense MENA</div>
+              <p style="font-size: 15.5px; color: #e2e8f0; line-height: 1.5;">Extension du benchmark international aux pays partenaires (Algérie, Maroc, Mauritanie) dans le cadre d'alliances stratégiques de cyber-résilience.</p>
+            </div>
+          </div>
+
+          <div class="glass-card highlight" style="text-align: center; padding: 22px 24px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <img src="./assets/flag_tn.png" alt="Drapeau Tunisie" style="width: 50px; height: auto; margin-bottom: 8px; filter: drop-shadow(0 0 16px rgba(255, 107, 107, 0.5));" onerror="this.style.display='none'">
+            <h3 style="font-family: var(--font-display); font-size: 26px; font-weight: 800; color: #fff; margin-bottom: 4px;">
+              Merci de votre attention
+            </h3>
+            <p style="font-family: var(--font-ar); font-size: 20px; color: #ffa07a; font-weight: 700; margin-bottom: 12px;">
+              شكراً جزيلاً لحسن استماعكم واهتمامكم
+            </p>
+
+            <!-- Q&A Badge -->
+            <div style="background: rgba(255, 107, 107, 0.15); border: 1px solid rgba(255, 107, 107, 0.4); border-radius: 999px; padding: 6px 18px; font-family: var(--font-syne); font-size: 14.5px; font-weight: 800; color: #fff; margin-bottom: 14px; letter-spacing: 0.5px;">
+              💬 Séance de Questions & Réponses Ouverte
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; text-align: left;">
+              <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 8px 12px;">
+                <span style="font-size: 15px; color: #ffa07a; text-transform: uppercase; font-family: var(--font-mono); font-weight: 700;">Candidat</span>
+                <p style="font-size: 14.5px; font-weight: 800; color: #fff; margin-top: 2px;">Hamdouni Yosri</p>
+              </div>
+              <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 8px 12px;">
+                <span style="font-size: 15px; color: #38bdf8; text-transform: uppercase; font-family: var(--font-mono); font-weight: 700;">Légal</span>
+                <p style="font-size: 14.5px; font-weight: 800; color: #fff; margin-top: 2px;">Décret 2023-17</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Tech Stack Banner -->
+        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; margin-top: 4px;">
+          <span style="font-family: var(--font-mono); font-size: 15.5px; color: #ffa07a; font-weight: 700;">
+            🇹🇳 CYBERSCORE TN // PROJET DE FIN D'ANNÉE D'INGÉNIEUR
+          </span>
+          <div style="display: flex; gap: 14px; font-size: 15.5px; color: #e2e8f0; font-family: var(--font-mono);">
+            <span>Next.js 16</span>
+            <span>·</span>
+            <span>FastAPI Async</span>
+            <span>·</span>
+            <span>Ollama 7B Local</span>
+            <span>·</span>
+            <span>PostgreSQL 16</span>
+            <span>·</span>
+            <span>Three.js WebGL</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Speaker Notes Floating Panel -->
+  <div id="notes-panel">
+    <div class="notes-head">
+      <span>🎙️ GUIDE DE PAROLE // NOTES DE L'ORATEUR</span>
+      <button onclick="toggleNotes()" style="background:none; border:none; color:#fff; cursor:pointer; font-size:18px;">&times;</button>
+    </div>
+    <div class="notes-body" id="notes-text">Chargement des notes...</div>
+  </div>
+
+  <!-- Grid View Modal (22 Tiles) -->
+  <div id="grid-panel">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <div>
+        <h2 style="font-family: var(--font-display); font-size: 26px; font-weight: 800; color: #fff;">Vue Grille des <em>26 Diapositives</em></h2>
+        <p style="font-size: 15px; color: var(--text-dim); margin-top: 2px;">Cliquez sur n'importe quelle diapositive pour y sauter instantanément</p>
+      </div>
+      <button class="btn btn-gradient" onclick="toggleGrid()">Fermer (Échap)</button>
+    </div>
+    <div class="grid-tiles" id="grid-tiles-container"></div>
+  </div>
+
+  <!-- Bottom Navigation Bar -->
+  <footer>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <button class="btn" onclick="prevSlide()">◀ Précédent</button>
+      <button class="btn btn-gradient" onclick="nextSlide()">Suivant ▶</button>
+      <span class="slide-index-tag" id="slide-num-label">01 / 26</span>
+    </div>
+
+    <div class="progress-box">
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-bar-fill"></div>
+      </div>
+    </div>
+
+    <div class="key-hints">
+      <span><kbd>→</kbd> / <kbd>Espace</kbd> Suivant</span>
+      <span><kbd>←</kbd> Précédent</span>
+      <span onclick="toggleNotes()" style="cursor: pointer;" title="Afficher/Masquer les notes"><kbd>S</kbd> Notes</span>
+      <span onclick="toggleGrid()" style="cursor: pointer;" title="Ouvrir la grille des diapositives"><kbd>G</kbd> Grille</span>
+      <span id="hint-fullscreen" onclick="toggleFullscreen()" style="cursor: pointer;" title="Basculer Plein Écran (F)"><kbd>F</kbd> Plein Écran</span>
+    </div>
+  </footer>
+
+  <!-- Script Engine -->
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    let currentSlide = 0;
+
+    // Elapsed Timer
+    let elapsedSeconds = 0;
+    setInterval(() => {
+      elapsedSeconds++;
+      const mins = String(Math.floor(elapsedSeconds / 60)).padStart(2, '0');
+      const secs = String(elapsedSeconds % 60).padStart(2, '0');
+      document.getElementById('timer-display').textContent = `⏱️ ${mins}:${secs}`;
+    }, 1000);
+
+    function updatePresentation() {
+      slides.forEach((s, idx) => {
+        s.classList.toggle('active', idx === currentSlide);
+      });
+
+      const current = slides[currentSlide];
+      const curNum = String(currentSlide + 1).padStart(2, '0');
+      const totNum = String(totalSlides).padStart(2, '0');
+
+      document.getElementById('slide-num-label').textContent = `${curNum} / ${totNum}`;
+      document.getElementById('progress-bar-fill').style.width = `${((currentSlide + 1) / totalSlides) * 100}%`;
+
+      // Update speaker notes
+      const notes = current.getAttribute('data-notes') || 'Aucune note spécifique pour cette diapositive.';
+      const title = current.getAttribute('data-title') || `Slide ${currentSlide + 1}`;
+      document.getElementById('notes-text').innerHTML = `
+        <div style="font-family: var(--font-syne); font-weight: 700; color: #ffa07a; margin-bottom: 8px;">Diapositive ${curNum} : ${title}</div>
+        <div style="color: #e2e8f0; font-style: italic;">« ${notes} »</div>
+      `;
+
+      // Update grid tiles current state
+      document.querySelectorAll('.grid-tile').forEach((tile, idx) => {
+        tile.classList.toggle('current', idx === currentSlide);
+      });
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides - 1) {
+        currentSlide++;
+        updatePresentation();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 0) {
+        currentSlide--;
+        updatePresentation();
+      }
+    }
+
+    function goToSlide(idx) {
+      if (idx >= 0 && idx < totalSlides) {
+        currentSlide = idx;
+        updatePresentation();
+        const grid = document.getElementById('grid-panel');
+        if (grid.classList.contains('active')) grid.classList.remove('active');
+      }
+    }
+
+    function toggleNotes() {
+      document.getElementById('notes-panel').classList.toggle('active');
+    }
+
+    function isFullscreenActive() {
+      return !!(
+        document.fullscreenElement ||
+        document.webkitFullscreenElement ||
+        document.mozFullScreenElement ||
+        document.msFullscreenElement ||
+        document.body.classList.contains('fullscreen-mode')
+      );
+    }
+
+    async function toggleFullscreen() {
+      const docEl = document.documentElement;
+      const isCurrentlyFs = isFullscreenActive();
+
+      if (!isCurrentlyFs) {
+        // Attempt native HTML5 Fullscreen API
+        const rfs = docEl.requestFullscreen ||
+                    docEl.webkitRequestFullscreen ||
+                    docEl.mozRequestFullScreen ||
+                    docEl.msRequestFullscreen;
+        if (rfs) {
+          try {
+            await rfs.call(docEl);
+          } catch (err) {
+            console.warn('Native requestFullscreen denied or restricted (activating CSS fullscreen fallback):', err);
+          }
+        }
+        // Always add fullscreen-mode class for fallback & styling
+        document.body.classList.add('fullscreen-mode');
+        updateFullscreenUI(true);
+      } else {
+        const efs = document.exitFullscreen ||
+                    document.webkitExitFullscreen ||
+                    document.mozCancelFullScreen ||
+                    document.msExitFullscreen;
+        if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement) {
+          try {
+            if (efs) await efs.call(document);
+          } catch (err) {}
+        }
+        document.body.classList.remove('fullscreen-mode');
+        updateFullscreenUI(false);
+      }
+    }
+
+    function updateFullscreenUI(active) {
+      const btn = document.getElementById('btn-fullscreen');
+      const hint = document.getElementById('hint-fullscreen');
+      if (active) {
+        if (btn) btn.innerHTML = '<span>🗗 Quitter Plein Écran (F)</span>';
+        if (hint) hint.innerHTML = '<kbd>F</kbd> Quitter Plein Écran';
+      } else {
+        if (btn) btn.innerHTML = '<span>⛶ Plein Écran (F)</span>';
+        if (hint) hint.innerHTML = '<kbd>F</kbd> Plein Écran';
+      }
+    }
+
+    // Sync UI with native browser fullscreen state changes
+    ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'].forEach(evt => {
+      document.addEventListener(evt, () => {
+        const isNative = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement);
+        if (isNative) {
+          document.body.classList.add('fullscreen-mode');
+          updateFullscreenUI(true);
+        } else {
+          document.body.classList.remove('fullscreen-mode');
+          updateFullscreenUI(false);
+        }
+      });
+    });
+
+    function toggleGrid() {
+      document.getElementById('grid-panel').classList.toggle('active');
+    }
+
+    // Build Grid Tiles
+    const tilesBox = document.getElementById('grid-tiles-container');
+    slides.forEach((s, idx) => {
+      const title = s.getAttribute('data-title') || `Slide ${idx + 1}`;
+      const tile = document.createElement('div');
+      tile.className = 'grid-tile' + (idx === 0 ? ' current' : '');
+      tile.onclick = () => goToSlide(idx);
+      tile.innerHTML = `
+        <span class="tile-kicker">SLIDE ${String(idx + 1).padStart(2, '0')}</span>
+        <span class="tile-title">${title}</span>
+      `;
+      tilesBox.appendChild(tile);
+    });
+
+    // Keyboard Bindings
+    window.addEventListener('keydown', (e) => {
+      // Don't intercept if user is typing in an input
+      if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+
+      const key = e.key ? e.key.toLowerCase() : '';
+      const code = e.code || '';
+
+      // Comprehensive detection for 'F':
+      // 1. 'f' or 'F'
+      // 2. Arabic layout key 'ب'
+      // 3. Physical code 'KeyF'
+      // 4. F11
+      const isF = key === 'f' || key === 'ب' || code === 'KeyF' || e.key === 'F11';
+      const isS = key === 's' || key === 'س' || code === 'KeyS';
+      const isG = key === 'g' || key === 'ل' || code === 'KeyG';
+
+      if (isF && !e.ctrlKey && !e.altKey && !e.metaKey) {
+        e.preventDefault();
+        toggleFullscreen();
+        return;
+      }
+
+      if (isS && !e.ctrlKey && !e.altKey && !e.metaKey) {
+        e.preventDefault();
+        toggleNotes();
+        return;
+      }
+
+      if (isG && !e.ctrlKey && !e.altKey && !e.metaKey) {
+        e.preventDefault();
+        toggleGrid();
+        return;
+      }
+
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        prevSlide();
+      } else if (e.key === 'Escape') {
+        const grid = document.getElementById('grid-panel');
+        if (grid && grid.classList.contains('active')) grid.classList.remove('active');
+        const notes = document.getElementById('notes-panel');
+        if (notes && notes.classList.contains('active')) notes.classList.remove('active');
+        if (isFullscreenActive()) {
+          toggleFullscreen();
+        }
+      }
+    });
+
+    // Ensure document is focused on load for immediate keyboard shortcuts
+    window.addEventListener('DOMContentLoaded', () => {
+      window.focus();
+    });
+    window.addEventListener('click', () => {
+      window.focus();
+    });
+
+    // Initialize Presentation
+    updatePresentation();
+  </script>
+</body>
+</html>

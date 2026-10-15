@@ -1,0 +1,48 @@
+# ══════════════════════════════════════
+# CyberScore TN — Backend Dependencies
+# ══════════════════════════════════════
+
+# Framework
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+python-multipart==0.0.18
+
+# Database
+sqlalchemy[asyncio]==2.0.36
+asyncpg==0.30.0
+alembic==1.14.1
+
+# Task Queue
+celery[redis]==5.4.0
+redis==5.2.1
+
+# Security Scanners
+dnspython==2.7.0
+httpx==0.28.1
+python-nmap==0.7.1
+docker==7.1.0
+
+# AI
+google-generativeai==0.8.4
+
+# Auth
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+bcrypt==4.0.1
+
+# QR Code
+qrcode[pil]==8.0
+
+# Predictions
+numpy==2.1.3
+
+# Email
+fastapi-mail==1.4.2
+
+# VirusTotal
+vt-py==0.18.0
+
+# Utils
+pydantic==2.10.3
+pydantic-settings==2.7.0
+python-dotenv==1.0.1
