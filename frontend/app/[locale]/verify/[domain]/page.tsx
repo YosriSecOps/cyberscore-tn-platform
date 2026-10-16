@@ -774,40 +774,20 @@ export default function DomainVerifyPage() {
             {/* Direct Call-to-Actions for un-audited target */}
             <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "14px" }}>
               <Link
-                href={`/${locale}/scan?domain=${encodeURIComponent(domainInfo.domain)}`}
+                href={`/${locale}/verify`}
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
                   gap: "8px",
                   padding: "12px 24px",
                   borderRadius: "10px",
-                  background: "linear-gradient(135deg, #ff6b6b, #ec4899)",
-                  color: "#FFFFFF",
-                  fontSize: "13.5px",
-                  fontWeight: 800,
-                  textDecoration: "none",
-                  boxShadow: "0 6px 20px rgba(255, 107, 107, 0.4)",
-                  transition: "transform 0.2s ease",
-                }}
-              >
-                <Zap size={16} />
-                <span>{isAr ? "⚡ إطلاق فحص حقيقي لهذا الموقع الآن" : isEn ? "⚡ Run Live Real Scan for this Site" : "⚡ Lancer un Scan Réel de ce site maintenant"}</span>
-              </Link>
-
-              <Link
-                href={`/${locale}/verify`}
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  padding: "12px 20px",
-                  borderRadius: "10px",
                   background: "rgba(255, 255, 255, 0.08)",
-                  border: "1px solid rgba(255, 255, 255, 0.16)",
-                  color: "#E2E8F0",
+                  border: "1px solid rgba(255, 255, 255, 0.18)",
+                  color: "#F8FAFC",
                   fontSize: "13.5px",
                   fontWeight: 700,
                   textDecoration: "none",
+                  transition: "background 0.2s ease",
                 }}
               >
                 <Search size={15} />
@@ -934,27 +914,6 @@ export default function DomainVerifyPage() {
                 />
                 <span>{domainInfo.sourceLabel[locale]}</span>
               </div>
-
-              <Link
-                href={`/${locale}/scan?domain=${encodeURIComponent(domainInfo.domain)}`}
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "6px",
-                  padding: "6px 16px",
-                  borderRadius: "30px",
-                  background: "linear-gradient(135deg, #ff6b6b, #ec4899)",
-                  color: "#fff",
-                  fontSize: "12px",
-                  fontWeight: 800,
-                  textDecoration: "none",
-                  boxShadow: "0 4px 14px rgba(255, 107, 107, 0.35)",
-                  transition: "transform 0.2s ease",
-                }}
-              >
-                <Zap size={13} />
-                <span>{isAr ? "إعادة فحص مباشر" : "Relancer un Scan Live"}</span>
-              </Link>
             </div>
 
             {/* Quick Metrics Bar */}
