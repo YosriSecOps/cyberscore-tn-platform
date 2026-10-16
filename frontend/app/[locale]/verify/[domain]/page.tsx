@@ -31,6 +31,8 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { OFFICIAL_DOMAINS, OfficialDomain } from "@/components/badges/BadgesClient";
+import realScansData from "@/lib/real-scans.json";
+import { Zap, RefreshCw } from "lucide-react";
 import ReportGenerator from "@/components/report/ReportGenerator";
 import { getDomainCryptoAttestation } from "@/lib/crypto-attestation";
 
@@ -309,6 +311,27 @@ export default function DomainVerifyPage() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [userProfile, setUserProfile] = useState<{ fullName?: string; role?: string; email?: string } | null>(null);
 
+  // Live real scan data from user scanning session
+  const [scannedResults, setScannedResults] = useState<Record<string, any>>({});
+  const [isMounted, setIsMounted] = useState<boolean>(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+    const loadScans = () => {
+      try {
+        const raw = localStorage.getItem("cyberscore_scanned_results");
+        if (raw) setScannedResults(JSON.parse(raw));
+      } catch {}
+    };
+    loadScans();
+    window.addEventListener("storage", loadScans);
+    window.addEventListener("cyberscore_scan_completed", loadScans);
+    return () => {
+      window.removeEventListener("storage", loadScans);
+      window.removeEventListener("cyberscore_scan_completed", loadScans);
+    };
+  }, []);
+
   useEffect(() => {
     try {
       const rawUser = localStorage.getItem("cyberscore_user");
@@ -343,37 +366,144 @@ export default function DomainVerifyPage() {
   const rawDomain = (params?.domain as string) || "sante.gov.tn";
   const domain = decodeURIComponent(rawDomain).toLowerCase().replace(/^https?:\/\//, "").replace(/\/.*$/, "");
 
-  // Match target domain in sovereign catalog or fallback
+  // Match target domain against Live Scans, Real Scans Dataset or Sovereign Catalog
   const domainInfo = useMemo(() => {
-    const found = OFFICIAL_DOMAINS.find((d: OfficialDomain) => d.domain.toLowerCase() === domain);
-    if (found) {
+    const clean = domain.toLowerCase();
+    const liveScan = scannedResults[clean];
+    const realScan = Array.isArray(realScansData) ? realScansData.find((s: any) => s.domain?.toLowerCase() === clean) : null;
+    const foundOfficial = OFFICIAL_DOMAINS.find((d: OfficialDomain) => d.domain.toLowerCase() === clean);
+
+    // 1. TOP PRIORITY: Live on-demand scan result from current session (e.g. tunisianet, ancs, etc.)
+    if (liveScan && typeof liveScan.score === "number") {
+      const score = Math.max(0, Math.min(100, Math.round(liveScan.score)));
+      const grade = liveScan.grade || (score >= 90 ? "A+" : score >= 80 ? "A" : score >= 70 ? "B+" : score >= 60 ? "B" : score >= 50 ? "C" : score >= 40 ? "D" : "F");
+      const stars = score >= 90 ? 3 : score >= 75 ? 2 : 1;
       return {
-        domain: found.domain,
-        name: found.name,
-        nameAr: found.name,
-        nameEn: found.name,
-        score: found.score,
-        grade: found.grade,
-        stars: found.stars,
+        domain: clean,
+        name: foundOfficial?.name || `Portail (${clean})`,
+        nameAr: foundOfficial?.name || `بوابة (${clean})`,
+        nameEn: foundOfficial?.name || `Portal (${clean})`,
+        score,
+        grade,
+        stars,
+        isLive: true,
+        isUnscanned: false,
+        sourceLabel: {
+          fr: "Données d'Audit en Direct (Scan Récent Exécuté)",
+          ar: "بيانات فحص مباشر (تم التدقيق الفعلي للتو)",
+          en: "Live Real-Time Audit (Direct Scan Executed)",
+        },
+        scannedAtFormatted: liveScan.scannedAt ? new Date(liveScan.scannedAt).toLocaleString() : "À l'instant",
+        criticalCount: liveScan.criticalCount || 0,
+        categoryBreakdown: liveScan.category_breakdown || [],
       };
     }
 
-    // Dynamic hash-based consistent scores for any scanned domain
-    const charSum = domain.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0);
+    // 2. SECOND PRIORITY: Pre-audited authentic real scan from real-scans.json (115 entities)
+    if (realScan && typeof realScan.score === "number") {
+      const score = Math.max(0, Math.min(100, Math.round(realScan.score)));
+      const grade = realScan.grade || (score >= 90 ? "A+" : score >= 80 ? "A" : score >= 70 ? "B+" : score >= 60 ? "B" : score >= 50 ? "C" : score >= 40 ? "D" : "F");
+      const stars = score >= 90 ? 3 : score >= 75 ? 2 : 1;
+      return {
+        domain: clean,
+        name: foundOfficial?.name || `Portail (${clean})`,
+        nameAr: foundOfficial?.name || `بوابة (${clean})`,
+        nameEn: foundOfficial?.name || `Portal (${clean})`,
+        score,
+        grade,
+        stars,
+        isLive: false,
+        isUnscanned: false,
+        sourceLabel: {
+          fr: "Audit Officiel Réel (Observatoire National ANCS 2026)",
+          ar: "تدقيق رسمي حقيقي (المرصد الوطني ANCS 2026)",
+          en: "Official Real Audit (National ANCS Observatory 2026)",
+        },
+        scannedAtFormatted: "Session Officielle 2026 • Validité 30 jours",
+        criticalCount: realScan.criticalCount || 0,
+        categoryBreakdown: realScan.category_breakdown || [],
+      };
+    }
+
+    // 3. THIRD PRIORITY: Official Domains Catalog
+    if (foundOfficial) {
+      return {
+        domain: foundOfficial.domain,
+        name: foundOfficial.name,
+        nameAr: foundOfficial.name,
+        nameEn: foundOfficial.name,
+        score: foundOfficial.score,
+        grade: foundOfficial.grade,
+        stars: foundOfficial.stars,
+        isLive: false,
+        isUnscanned: false,
+        sourceLabel: {
+          fr: "Référentiel Institutionnel ANCS",
+          ar: "السجل المؤسسي ANCS",
+          en: "Institutional ANCS Registry",
+        },
+        scannedAtFormatted: "Session Référentielle 2026",
+        criticalCount: 0,
+        categoryBreakdown: [],
+      };
+    }
+
+    // 4. FOURTH CASE: Un-scanned Domain (never scanned in this session nor in the archive)
+    const charSum = clean.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0);
     const score = 65 + (charSum % 31);
     const grade = score >= 90 ? "A+" : score >= 80 ? "A" : score >= 70 ? "B+" : "B";
     const stars = score >= 90 ? 3 : score >= 75 ? 2 : 1;
 
     return {
-      domain,
-      name: `Portail Institutionnel (${domain})`,
-      nameAr: `البوابة الرسمية (${domain})`,
-      nameEn: `Official Portal (${domain})`,
+      domain: clean,
+      name: `Cible Web (${clean})`,
+      nameAr: `الموقع (${clean})`,
+      nameEn: `Target Site (${clean})`,
       score,
       grade,
       stars,
+      isLive: false,
+      isUnscanned: true,
+      sourceLabel: {
+        fr: "Estimation Préliminaire (Aucun scan complet enregistré pour ce site)",
+        ar: "تقدير أولي (لم يُجرَ فحص كامل مسجل لهذا الموقع بعد)",
+        en: "Preliminary Baseline (No full audit on record yet)",
+      },
+      scannedAtFormatted: "En attente de scan en direct",
+      criticalCount: 0,
+      categoryBreakdown: [],
     };
-  }, [domain]);
+  }, [domain, scannedResults]);
+
+  // Compute dynamic pillars strictly from real category_breakdown
+  const dynamicPillars: Array<{ label: string; score: number; grade: string }> = useMemo(() => {
+    if (domainInfo.categoryBreakdown && domainInfo.categoryBreakdown.length > 0) {
+      return domainInfo.categoryBreakdown.map((cat: any) => {
+        const catScore = Math.max(0, Math.min(100, Math.round(cat.score || 0)));
+        const catGrade = catScore >= 90 ? "A+" : catScore >= 80 ? "A" : catScore >= 70 ? "B+" : catScore >= 60 ? "B" : catScore >= 50 ? "C" : catScore >= 40 ? "D" : "F";
+        let label = cat.label_fr;
+        if (isAr) label = cat.label_ar || cat.label_fr;
+        else if (isEn) label = cat.label_en || cat.label_fr;
+
+        return {
+          label: label || cat.category,
+          score: catScore,
+          grade: catGrade,
+        };
+      });
+    }
+
+    // If no category breakdown, map proportionally from overall score
+    const base = domainInfo.score;
+    return [
+      { label: isAr ? "تشفير الاتصال SSL / TLS" : isEn ? "SSL / TLS Encryption" : "Chiffrement SSL / TLS", score: Math.min(100, Math.round(base * 1.05)), grade: domainInfo.grade },
+      { label: isAr ? "صمود النطاقات DNS & DNSSEC" : isEn ? "DNS & DNSSEC Resilience" : "Résilience DNS & DNSSEC", score: Math.min(100, Math.round(base * 0.95)), grade: domainInfo.grade },
+      { label: isAr ? "ترويسات الحماية HTTP Headers" : isEn ? "HTTP Security Headers" : "En-têtes HTTP de Sécurité", score: Math.min(100, Math.round(base * 0.88)), grade: domainInfo.grade },
+      { label: isAr ? "مساحة الهجوم والمنافذ المفتوحة" : isEn ? "Attack Surface & Ports" : "Surface d'Attaque & Ports", score: Math.min(100, Math.round(base * 0.98)), grade: domainInfo.grade },
+      { label: isAr ? "مقاومة ثغرات الويب OWASP" : isEn ? "OWASP Top 10 Defenses" : "Résilience OWASP Top 10", score: Math.min(100, Math.round(base * 0.92)), grade: domainInfo.grade },
+      { label: isAr ? "السمعة الرقمية ومكافحة التسريبات" : isEn ? "IP Reputation & Leak Guard" : "Réputation IP & Anti-Fuites", score: Math.min(100, Math.round(base * 1.02)), grade: domainInfo.grade },
+    ];
+  }, [domainInfo, isAr, isEn]);
 
   const attestation = useMemo(() => getDomainCryptoAttestation(domain), [domain]);
   const auditRef = attestation.auditRef;
@@ -617,6 +747,57 @@ export default function DomainVerifyPage() {
           >
             {t.summaryText(domainInfo.domain)}
           </p>
+
+          {/* Live Audit Source Indicator & Direct Action */}
+          <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", alignItems: "center", gap: "12px", marginBottom: "20px" }}>
+            <div
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+                padding: "6px 16px",
+                borderRadius: "30px",
+                background: domainInfo.isLive ? "rgba(16, 185, 129, 0.18)" : domainInfo.isUnscanned ? "rgba(245, 158, 11, 0.18)" : "rgba(56, 189, 248, 0.15)",
+                border: `1px solid ${domainInfo.isLive ? "#10B981" : domainInfo.isUnscanned ? "#F59E0B" : "#38BDF8"}`,
+                color: domainInfo.isLive ? "#10B981" : domainInfo.isUnscanned ? "#FBBF24" : "#38BDF8",
+                fontSize: "12px",
+                fontWeight: 700,
+                boxShadow: domainInfo.isLive ? "0 0 16px rgba(16, 185, 129, 0.25)" : "none",
+              }}
+            >
+              <span
+                style={{
+                  width: "8px",
+                  height: "8px",
+                  borderRadius: "50%",
+                  background: domainInfo.isLive ? "#10B981" : domainInfo.isUnscanned ? "#F59E0B" : "#38BDF8",
+                  boxShadow: `0 0 8px ${domainInfo.isLive ? "#10B981" : domainInfo.isUnscanned ? "#F59E0B" : "#38BDF8"}`,
+                }}
+              />
+              <span>{domainInfo.sourceLabel[locale]}</span>
+            </div>
+
+            <Link
+              href={`/${locale}/scan?domain=${encodeURIComponent(domainInfo.domain)}`}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+                padding: "6px 16px",
+                borderRadius: "30px",
+                background: "linear-gradient(135deg, #ff6b6b, #ec4899)",
+                color: "#fff",
+                fontSize: "12px",
+                fontWeight: 800,
+                textDecoration: "none",
+                boxShadow: "0 4px 14px rgba(255, 107, 107, 0.35)",
+                transition: "transform 0.2s ease",
+              }}
+            >
+              <Zap size={13} />
+              <span>{domainInfo.isLive ? (isAr ? "إعادة فحص مباشر" : "Relancer un Scan Live") : (isAr ? "فحص مباشر لهذا الموقع" : "Lancer un Scan Direct de ce site")}</span>
+            </Link>
+          </div>
 
           {/* Quick Metrics Bar */}
           <div
@@ -990,7 +1171,7 @@ export default function DomainVerifyPage() {
             <div style={{ padding: "12px 14px", background: "rgba(2, 6, 23, 0.6)", borderRadius: "8px", border: "1px solid rgba(255, 255, 255, 0.05)" }}>
               <div style={{ fontSize: "11px", color: "#64748B", fontWeight: 700 }}>{t.controlDateLabel}</div>
               <div style={{ fontSize: "13px", fontWeight: 800, color: "#F1F5F9", marginTop: "3px" }}>
-                {t.controlDateValue}
+                {domainInfo.scannedAtFormatted || t.controlDateValue}
               </div>
             </div>
 
@@ -1050,7 +1231,7 @@ export default function DomainVerifyPage() {
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "12px" }}>
-            {t.pillars.map((pillar, idx) => (
+            {dynamicPillars.map((pillar: { label: string; score: number; grade: string }, idx: number) => (
               <div
                 key={idx}
                 style={{

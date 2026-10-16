@@ -520,6 +520,10 @@ class ScanCoordinator {
               criticalCount: scanData.critical_count || 0,
               lastScan: "À l'instant (Audit Live)",
               scannedAt: new Date().toISOString(),
+              category_breakdown: scanData.category_breakdown || [],
+              findings: scanData.findings || [],
+              resolved_ip: scanData.resolved_ip || "0.0.0.0",
+              scanResult: scanData,
             };
             localStorage.setItem("cyberscore_scanned_results", JSON.stringify(existing));
             window.dispatchEvent(new Event("storage"));
