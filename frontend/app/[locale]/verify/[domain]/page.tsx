@@ -32,7 +32,7 @@ import {
 } from "lucide-react";
 import { OFFICIAL_DOMAINS, OfficialDomain } from "@/components/badges/BadgesClient";
 import realScansData from "@/lib/real-scans.json";
-import { Zap, RefreshCw } from "lucide-react";
+import { Zap, RefreshCw, ShieldAlert, ShieldX, Search } from "lucide-react";
 import ReportGenerator from "@/components/report/ReportGenerator";
 import { getDomainCryptoAttestation } from "@/lib/crypto-attestation";
 
@@ -387,7 +387,7 @@ export default function DomainVerifyPage() {
         grade,
         stars,
         isLive: true,
-        isUnscanned: false,
+        isVerified: true,
         sourceLabel: {
           fr: "Données d'Audit en Direct (Scan Récent Exécuté)",
           ar: "بيانات فحص مباشر (تم التدقيق الفعلي للتو)",
@@ -413,7 +413,7 @@ export default function DomainVerifyPage() {
         grade,
         stars,
         isLive: false,
-        isUnscanned: false,
+        isVerified: true,
         sourceLabel: {
           fr: "Audit Officiel Réel (Observatoire National ANCS 2026)",
           ar: "تدقيق رسمي حقيقي (المرصد الوطني ANCS 2026)",
@@ -436,7 +436,7 @@ export default function DomainVerifyPage() {
         grade: foundOfficial.grade,
         stars: foundOfficial.stars,
         isLive: false,
-        isUnscanned: false,
+        isVerified: true,
         sourceLabel: {
           fr: "Référentiel Institutionnel ANCS",
           ar: "السجل المؤسسي ANCS",
@@ -448,28 +448,23 @@ export default function DomainVerifyPage() {
       };
     }
 
-    // 4. FOURTH CASE: Un-scanned Domain (never scanned in this session nor in the archive)
-    const charSum = clean.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0);
-    const score = 65 + (charSum % 31);
-    const grade = score >= 90 ? "A+" : score >= 80 ? "A" : score >= 70 ? "B+" : "B";
-    const stars = score >= 90 ? 3 : score >= 75 ? 2 : 1;
-
+    // 4. FOURTH CASE: Un-scanned / Unknown Target -> STRICT NOT AUDITED ERROR
     return {
       domain: clean,
-      name: `Cible Web (${clean})`,
-      nameAr: `الموقع (${clean})`,
-      nameEn: `Target Site (${clean})`,
-      score,
-      grade,
-      stars,
+      name: clean,
+      nameAr: clean,
+      nameEn: clean,
+      score: null,
+      grade: null,
+      stars: 0,
       isLive: false,
-      isUnscanned: true,
+      isVerified: false,
       sourceLabel: {
-        fr: "Estimation Préliminaire (Aucun scan complet enregistré pour ce site)",
-        ar: "تقدير أولي (لم يُجرَ فحص كامل مسجل لهذا الموقع بعد)",
-        en: "Preliminary Baseline (No full audit on record yet)",
+        fr: "Attestation Introuvable (Domaine non audité)",
+        ar: "شهادة غير متوفرة (النطاق غير مسجل)",
+        en: "Attestation Not Found (Un-audited domain)",
       },
-      scannedAtFormatted: "En attente de scan en direct",
+      scannedAtFormatted: null,
       criticalCount: 0,
       categoryBreakdown: [],
     };
@@ -493,15 +488,20 @@ export default function DomainVerifyPage() {
       });
     }
 
-    // If no category breakdown, map proportionally from overall score
+    // If not verified or no score, return empty pillars
+    if (!domainInfo.isVerified || typeof domainInfo.score !== "number") {
+      return [];
+    }
+
     const base = domainInfo.score;
+    const currentGrade = domainInfo.grade || "B";
     return [
-      { label: isAr ? "تشفير الاتصال SSL / TLS" : isEn ? "SSL / TLS Encryption" : "Chiffrement SSL / TLS", score: Math.min(100, Math.round(base * 1.05)), grade: domainInfo.grade },
-      { label: isAr ? "صمود النطاقات DNS & DNSSEC" : isEn ? "DNS & DNSSEC Resilience" : "Résilience DNS & DNSSEC", score: Math.min(100, Math.round(base * 0.95)), grade: domainInfo.grade },
-      { label: isAr ? "ترويسات الحماية HTTP Headers" : isEn ? "HTTP Security Headers" : "En-têtes HTTP de Sécurité", score: Math.min(100, Math.round(base * 0.88)), grade: domainInfo.grade },
-      { label: isAr ? "مساحة الهجوم والمنافذ المفتوحة" : isEn ? "Attack Surface & Ports" : "Surface d'Attaque & Ports", score: Math.min(100, Math.round(base * 0.98)), grade: domainInfo.grade },
-      { label: isAr ? "مقاومة ثغرات الويب OWASP" : isEn ? "OWASP Top 10 Defenses" : "Résilience OWASP Top 10", score: Math.min(100, Math.round(base * 0.92)), grade: domainInfo.grade },
-      { label: isAr ? "السمعة الرقمية ومكافحة التسريبات" : isEn ? "IP Reputation & Leak Guard" : "Réputation IP & Anti-Fuites", score: Math.min(100, Math.round(base * 1.02)), grade: domainInfo.grade },
+      { label: isAr ? "تشفير الاتصال SSL / TLS" : isEn ? "SSL / TLS Encryption" : "Chiffrement SSL / TLS", score: Math.min(100, Math.round(base * 1.05)), grade: currentGrade },
+      { label: isAr ? "صمود النطاقات DNS & DNSSEC" : isEn ? "DNS & DNSSEC Resilience" : "Résilience DNS & DNSSEC", score: Math.min(100, Math.round(base * 0.95)), grade: currentGrade },
+      { label: isAr ? "ترويسات الحماية HTTP Headers" : isEn ? "HTTP Security Headers" : "En-têtes HTTP de Sécurité", score: Math.min(100, Math.round(base * 0.88)), grade: currentGrade },
+      { label: isAr ? "مساحة الهجوم والمنافذ المفتوحة" : isEn ? "Attack Surface & Ports" : "Surface d'Attaque & Ports", score: Math.min(100, Math.round(base * 0.98)), grade: currentGrade },
+      { label: isAr ? "مقاومة ثغرات الويب OWASP" : isEn ? "OWASP Top 10 Defenses" : "Résilience OWASP Top 10", score: Math.min(100, Math.round(base * 0.92)), grade: currentGrade },
+      { label: isAr ? "السمعة الرقمية ومكافحة التسريبات" : isEn ? "IP Reputation & Leak Guard" : "Réputation IP & Anti-Fuites", score: Math.min(100, Math.round(base * 1.02)), grade: currentGrade },
     ];
   }, [domainInfo, isAr, isEn]);
 
@@ -510,7 +510,15 @@ export default function DomainVerifyPage() {
   const sha256Footprint = attestation.sha256Hash;
 
   const gradeColor =
-    domainInfo.score >= 90 ? "#10B981" : domainInfo.score >= 75 ? "#3B82F6" : domainInfo.score >= 60 ? "#F59E0B" : "#EF4444";
+    typeof domainInfo.score === "number"
+      ? domainInfo.score >= 90
+        ? "#10B981"
+        : domainInfo.score >= 75
+        ? "#3B82F6"
+        : domainInfo.score >= 60
+        ? "#F59E0B"
+        : "#EF4444"
+      : "#EF4444";
 
   const handleSwitchLanguage = (newLang: "ar" | "fr" | "en") => {
     if (newLang === locale) return;
@@ -658,200 +666,351 @@ export default function DomainVerifyPage() {
 
       {/* ── Main Container ─────────────────────────────────────── */}
       <main style={{ maxWidth: "860px", margin: "0 auto", padding: "36px 20px 0" }}>
-        {/* Official Status Shield */}
-        <div
-          style={{
-            background: "linear-gradient(180deg, rgba(16, 185, 129, 0.08) 0%, rgba(15, 23, 42, 0.7) 100%)",
-            border: "1px solid rgba(16, 185, 129, 0.3)",
-            borderRadius: "16px",
-            padding: "36px 28px",
-            textAlign: "center",
-            position: "relative",
-            overflow: "hidden",
-            boxShadow: "0 20px 50px rgba(0, 0, 0, 0.4)",
-          }}
-        >
-          {/* Subtle watermark */}
+        {/* Official Status Card: Verified Certificate OR Error Not Found */}
+        {!domainInfo.isVerified ? (
+          /* ── STRICT ERROR / NOT FOUND CARD ────────────────────────── */
           <div
             style={{
-              position: "absolute",
-              right: isAr ? "auto" : "-20px",
-              left: isAr ? "-20px" : "auto",
-              top: "-20px",
-              opacity: 0.05,
-              pointerEvents: "none",
+              background: "linear-gradient(180deg, rgba(239, 68, 68, 0.12) 0%, rgba(15, 23, 42, 0.9) 100%)",
+              border: "1px solid rgba(239, 68, 68, 0.4)",
+              borderRadius: "16px",
+              padding: "40px 28px",
+              textAlign: "center",
+              position: "relative",
+              overflow: "hidden",
+              boxShadow: "0 25px 60px rgba(0, 0, 0, 0.5), 0 0 35px rgba(239, 68, 68, 0.15)",
             }}
           >
-            <Shield size={200} color="#10B981" />
-          </div>
-
-          <div
-            style={{
-              width: "68px",
-              height: "68px",
-              borderRadius: "50%",
-              background: "rgba(16, 185, 129, 0.15)",
-              border: "2px solid #10B981",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              margin: "0 auto 16px",
-              boxShadow: "0 0 30px rgba(16, 185, 129, 0.3)",
-            }}
-          >
-            <ShieldCheck size={36} color="#10B981" />
-          </div>
-
-          <div
-            style={{
-              display: "inline-block",
-              padding: "4px 14px",
-              borderRadius: "20px",
-              background: "rgba(16, 185, 129, 0.15)",
-              border: "1px solid rgba(16, 185, 129, 0.3)",
-              fontSize: "11px",
-              fontWeight: 800,
-              color: "#34D399",
-              letterSpacing: "1px",
-              textTransform: "uppercase",
-              marginBottom: "12px",
-            }}
-          >
-            {t.verifiedBadge}
-          </div>
-
-          <h1
-            style={{
-              fontSize: "28px",
-              fontWeight: 800,
-              color: "#FFFFFF",
-              letterSpacing: "-0.5px",
-              marginBottom: "6px",
-            }}
-          >
-            {domainInfo.domain}
-          </h1>
-
-          <div style={{ fontSize: "14px", color: "#38BDF8", fontWeight: 700, marginBottom: "12px" }}>
-            {isAr ? domainInfo.nameAr : isEn ? domainInfo.nameEn : domainInfo.name}
-          </div>
-
-          <p
-            style={{
-              fontSize: "13.5px",
-              color: "#94A3B8",
-              maxWidth: "600px",
-              margin: "0 auto 24px",
-              lineHeight: 1.6,
-            }}
-          >
-            {t.summaryText(domainInfo.domain)}
-          </p>
-
-          {/* Live Audit Source Indicator & Direct Action */}
-          <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", alignItems: "center", gap: "12px", marginBottom: "20px" }}>
+            {/* Subtle watermark */}
             <div
               style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "8px",
-                padding: "6px 16px",
-                borderRadius: "30px",
-                background: domainInfo.isLive ? "rgba(16, 185, 129, 0.18)" : domainInfo.isUnscanned ? "rgba(245, 158, 11, 0.18)" : "rgba(56, 189, 248, 0.15)",
-                border: `1px solid ${domainInfo.isLive ? "#10B981" : domainInfo.isUnscanned ? "#F59E0B" : "#38BDF8"}`,
-                color: domainInfo.isLive ? "#10B981" : domainInfo.isUnscanned ? "#FBBF24" : "#38BDF8",
-                fontSize: "12px",
-                fontWeight: 700,
-                boxShadow: domainInfo.isLive ? "0 0 16px rgba(16, 185, 129, 0.25)" : "none",
+                position: "absolute",
+                right: isAr ? "auto" : "-20px",
+                left: isAr ? "-20px" : "auto",
+                top: "-20px",
+                opacity: 0.04,
+                pointerEvents: "none",
               }}
             >
-              <span
-                style={{
-                  width: "8px",
-                  height: "8px",
-                  borderRadius: "50%",
-                  background: domainInfo.isLive ? "#10B981" : domainInfo.isUnscanned ? "#F59E0B" : "#38BDF8",
-                  boxShadow: `0 0 8px ${domainInfo.isLive ? "#10B981" : domainInfo.isUnscanned ? "#F59E0B" : "#38BDF8"}`,
-                }}
-              />
-              <span>{domainInfo.sourceLabel[locale]}</span>
+              <ShieldAlert size={220} color="#EF4444" />
             </div>
 
-            <Link
-              href={`/${locale}/scan?domain=${encodeURIComponent(domainInfo.domain)}`}
+            <div
               style={{
-                display: "inline-flex",
+                width: "72px",
+                height: "72px",
+                borderRadius: "50%",
+                background: "rgba(239, 68, 68, 0.15)",
+                border: "2px solid #EF4444",
+                display: "flex",
                 alignItems: "center",
-                gap: "6px",
-                padding: "6px 16px",
-                borderRadius: "30px",
-                background: "linear-gradient(135deg, #ff6b6b, #ec4899)",
-                color: "#fff",
+                justifyContent: "center",
+                margin: "0 auto 18px",
+                boxShadow: "0 0 35px rgba(239, 68, 68, 0.35)",
+              }}
+            >
+              <ShieldAlert size={38} color="#EF4444" />
+            </div>
+
+            <div
+              style={{
+                display: "inline-block",
+                padding: "6px 18px",
+                borderRadius: "20px",
+                background: "rgba(239, 68, 68, 0.18)",
+                border: "1px solid rgba(239, 68, 68, 0.45)",
                 fontSize: "12px",
                 fontWeight: 800,
-                textDecoration: "none",
-                boxShadow: "0 4px 14px rgba(255, 107, 107, 0.35)",
-                transition: "transform 0.2s ease",
+                color: "#F87171",
+                letterSpacing: "1px",
+                textTransform: "uppercase",
+                marginBottom: "14px",
               }}
             >
-              <Zap size={13} />
-              <span>{domainInfo.isLive ? (isAr ? "إعادة فحص مباشر" : "Relancer un Scan Live") : (isAr ? "فحص مباشر لهذا الموقع" : "Lancer un Scan Direct de ce site")}</span>
-            </Link>
-          </div>
+              {isAr ? "⚠️ لا توجد شهادة مطابقة معتمدة • نطاق غير مدقق" : isEn ? "⚠️ NO CERTIFIED ATTESTATION • UN-AUDITED DOMAIN" : "⚠️ ATTESTATION INTROUVABLE • DOMAINE NON AUDITÉ"}
+            </div>
 
-          {/* Quick Metrics Bar */}
+            <h1
+              style={{
+                fontSize: "28px",
+                fontWeight: 900,
+                color: "#FFFFFF",
+                letterSpacing: "-0.5px",
+                marginBottom: "8px",
+                wordBreak: "break-all",
+              }}
+            >
+              {domainInfo.domain}
+            </h1>
+
+            <div style={{ fontSize: "14px", color: "#F87171", fontWeight: 700, marginBottom: "18px" }}>
+              {isAr
+                ? "هذا النطاق غير مسجل في السجل السيادي للسلامة الرقمية (ANCS)"
+                : isEn
+                ? "This domain is not registered in the certified ANCS sovereign security database"
+                : "Ce domaine n'est pas enregistré dans le registre souverain de cybersécurité (ANCS)"}
+            </div>
+
+            <div
+              style={{
+                maxWidth: "640px",
+                margin: "0 auto 28px",
+                padding: "16px 20px",
+                background: "rgba(2, 6, 23, 0.75)",
+                borderRadius: "12px",
+                border: "1px dashed rgba(239, 68, 68, 0.35)",
+                fontSize: "13.5px",
+                color: "#CBD5E1",
+                lineHeight: 1.65,
+              }}
+            >
+              {isAr
+                ? `لم يخضع الموقع (${domainInfo.domain}) لأي تدقيق سيادي معتمد لدى الوكالة الوطنية للأمن السيبراني. لا يمكن إصدار أي رتبة أمان، أو نجوم ثقة، أو بصمة تشفير SHA-256 لهذا العنوان بدون إجراء فحص مسبق.`
+                : isEn
+                ? `The website (${domainInfo.domain}) has not undergone an authorized sovereign security audit under the National Cybersecurity Agency. No security grade, trust stars, or SHA-256 cryptographic attestation can be issued without a prior audit.`
+                : `Le site web (${domainInfo.domain}) n'a fait l'objet d'aucun audit de conformité enregistré auprès de l'ANCS ni dans cette session. Aucun grade de sécurité, étoile de confiance ou scellement cryptographique SHA-256 ne peut être délivré sans audit préalable.`}
+            </div>
+
+            {/* Direct Call-to-Actions for un-audited target */}
+            <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "14px" }}>
+              <Link
+                href={`/${locale}/scan?domain=${encodeURIComponent(domainInfo.domain)}`}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  padding: "12px 24px",
+                  borderRadius: "10px",
+                  background: "linear-gradient(135deg, #ff6b6b, #ec4899)",
+                  color: "#FFFFFF",
+                  fontSize: "13.5px",
+                  fontWeight: 800,
+                  textDecoration: "none",
+                  boxShadow: "0 6px 20px rgba(255, 107, 107, 0.4)",
+                  transition: "transform 0.2s ease",
+                }}
+              >
+                <Zap size={16} />
+                <span>{isAr ? "⚡ إطلاق فحص حقيقي لهذا الموقع الآن" : isEn ? "⚡ Run Live Real Scan for this Site" : "⚡ Lancer un Scan Réel de ce site maintenant"}</span>
+              </Link>
+
+              <Link
+                href={`/${locale}/verify`}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  padding: "12px 20px",
+                  borderRadius: "10px",
+                  background: "rgba(255, 255, 255, 0.08)",
+                  border: "1px solid rgba(255, 255, 255, 0.16)",
+                  color: "#E2E8F0",
+                  fontSize: "13.5px",
+                  fontWeight: 700,
+                  textDecoration: "none",
+                }}
+              >
+                <Search size={15} />
+                <span>{isAr ? "🔍 التحقق من موقع رسمي آخر" : isEn ? "🔍 Check Another Official Domain" : "🔍 Vérifier un autre domaine officiel"}</span>
+              </Link>
+            </div>
+          </div>
+        ) : (
+          /* ── CERTIFIED / VERIFIED AUDIT CARD ──────────────────────── */
           <div
             style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
-              gap: "14px",
-              maxWidth: "640px",
-              margin: "0 auto",
-              padding: "16px",
-              background: "rgba(15, 23, 42, 0.6)",
-              borderRadius: "12px",
-              border: "1px solid rgba(255, 255, 255, 0.08)",
+              background: "linear-gradient(180deg, rgba(16, 185, 129, 0.08) 0%, rgba(15, 23, 42, 0.7) 100%)",
+              border: "1px solid rgba(16, 185, 129, 0.3)",
+              borderRadius: "16px",
+              padding: "36px 28px",
+              textAlign: "center",
+              position: "relative",
+              overflow: "hidden",
+              boxShadow: "0 20px 50px rgba(0, 0, 0, 0.4)",
             }}
           >
-            <div>
-              <div style={{ fontSize: "11px", color: "#64748B", textTransform: "uppercase", fontWeight: 700 }}>
-                {t.scoreGlobal}
-              </div>
-              <div style={{ fontSize: "24px", fontWeight: 900, color: gradeColor, marginTop: "2px" }}>
-                {domainInfo.score}
-                <span style={{ fontSize: "13px", color: "#64748B" }}>/100</span>
-              </div>
+            {/* Subtle watermark */}
+            <div
+              style={{
+                position: "absolute",
+                right: isAr ? "auto" : "-20px",
+                left: isAr ? "-20px" : "auto",
+                top: "-20px",
+                opacity: 0.05,
+                pointerEvents: "none",
+              }}
+            >
+              <Shield size={200} color="#10B981" />
             </div>
 
-            <div>
-              <div style={{ fontSize: "11px", color: "#64748B", textTransform: "uppercase", fontWeight: 700 }}>
-                {t.officialGrade}
-              </div>
-              <div style={{ fontSize: "24px", fontWeight: 900, color: gradeColor, marginTop: "2px" }}>
-                {domainInfo.grade}
-              </div>
+            <div
+              style={{
+                width: "68px",
+                height: "68px",
+                borderRadius: "50%",
+                background: "rgba(16, 185, 129, 0.15)",
+                border: "2px solid #10B981",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                margin: "0 auto 16px",
+                boxShadow: "0 0 30px rgba(16, 185, 129, 0.3)",
+              }}
+            >
+              <ShieldCheck size={36} color="#10B981" />
             </div>
 
-            <div>
-              <div style={{ fontSize: "11px", color: "#64748B", textTransform: "uppercase", fontWeight: 700 }}>
-                {t.starsLabel}
-              </div>
-              <div style={{ fontSize: "20px", color: "#F59E0B", marginTop: "4px" }}>
-                {"★".repeat(domainInfo.stars)}
-                <span style={{ color: "rgba(255,255,255,0.15)" }}>{"★".repeat(3 - domainInfo.stars)}</span>
-              </div>
+            <div
+              style={{
+                display: "inline-block",
+                padding: "4px 14px",
+                borderRadius: "20px",
+                background: "rgba(16, 185, 129, 0.15)",
+                border: "1px solid rgba(16, 185, 129, 0.3)",
+                fontSize: "11px",
+                fontWeight: 800,
+                color: "#34D399",
+                letterSpacing: "1px",
+                textTransform: "uppercase",
+                marginBottom: "12px",
+              }}
+            >
+              {t.verifiedBadge}
             </div>
 
-            <div>
-              <div style={{ fontSize: "11px", color: "#64748B", textTransform: "uppercase", fontWeight: 700 }}>
-                {t.statusLabel}
+            <h1
+              style={{
+                fontSize: "28px",
+                fontWeight: 800,
+                color: "#FFFFFF",
+                letterSpacing: "-0.5px",
+                marginBottom: "6px",
+              }}
+            >
+              {domainInfo.domain}
+            </h1>
+
+            <div style={{ fontSize: "14px", color: "#38BDF8", fontWeight: 700, marginBottom: "12px" }}>
+              {isAr ? domainInfo.nameAr : isEn ? domainInfo.nameEn : domainInfo.name}
+            </div>
+
+            <p
+              style={{
+                fontSize: "13.5px",
+                color: "#94A3B8",
+                maxWidth: "600px",
+                margin: "0 auto 24px",
+                lineHeight: 1.6,
+              }}
+            >
+              {t.summaryText(domainInfo.domain)}
+            </p>
+
+            {/* Live Audit Source Indicator & Direct Action */}
+            <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", alignItems: "center", gap: "12px", marginBottom: "20px" }}>
+              <div
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  padding: "6px 16px",
+                  borderRadius: "30px",
+                  background: domainInfo.isLive ? "rgba(16, 185, 129, 0.18)" : "rgba(56, 189, 248, 0.15)",
+                  border: `1px solid ${domainInfo.isLive ? "#10B981" : "#38BDF8"}`,
+                  color: domainInfo.isLive ? "#10B981" : "#38BDF8",
+                  fontSize: "12px",
+                  fontWeight: 700,
+                  boxShadow: domainInfo.isLive ? "0 0 16px rgba(16, 185, 129, 0.25)" : "none",
+                }}
+              >
+                <span
+                  style={{
+                    width: "8px",
+                    height: "8px",
+                    borderRadius: "50%",
+                    background: domainInfo.isLive ? "#10B981" : "#38BDF8",
+                    boxShadow: `0 0 8px ${domainInfo.isLive ? "#10B981" : "#38BDF8"}`,
+                  }}
+                />
+                <span>{domainInfo.sourceLabel[locale]}</span>
               </div>
-              <div style={{ fontSize: "12px", fontWeight: 800, color: "#10B981", marginTop: "8px" }}>
-                {t.statusValue}
+
+              <Link
+                href={`/${locale}/scan?domain=${encodeURIComponent(domainInfo.domain)}`}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  padding: "6px 16px",
+                  borderRadius: "30px",
+                  background: "linear-gradient(135deg, #ff6b6b, #ec4899)",
+                  color: "#fff",
+                  fontSize: "12px",
+                  fontWeight: 800,
+                  textDecoration: "none",
+                  boxShadow: "0 4px 14px rgba(255, 107, 107, 0.35)",
+                  transition: "transform 0.2s ease",
+                }}
+              >
+                <Zap size={13} />
+                <span>{isAr ? "إعادة فحص مباشر" : "Relancer un Scan Live"}</span>
+              </Link>
+            </div>
+
+            {/* Quick Metrics Bar */}
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
+                gap: "14px",
+                maxWidth: "640px",
+                margin: "0 auto",
+                padding: "16px",
+                background: "rgba(15, 23, 42, 0.6)",
+                borderRadius: "12px",
+                border: "1px solid rgba(255, 255, 255, 0.08)",
+              }}
+            >
+              <div>
+                <div style={{ fontSize: "11px", color: "#64748B", textTransform: "uppercase", fontWeight: 700 }}>
+                  {t.scoreGlobal}
+                </div>
+                <div style={{ fontSize: "24px", fontWeight: 900, color: gradeColor, marginTop: "2px" }}>
+                  {domainInfo.score}
+                  <span style={{ fontSize: "13px", color: "#64748B" }}>/100</span>
+                </div>
+              </div>
+
+              <div>
+                <div style={{ fontSize: "11px", color: "#64748B", textTransform: "uppercase", fontWeight: 700 }}>
+                  {t.officialGrade}
+                </div>
+                <div style={{ fontSize: "24px", fontWeight: 900, color: gradeColor, marginTop: "2px" }}>
+                  {domainInfo.grade}
+                </div>
+              </div>
+
+              <div>
+                <div style={{ fontSize: "11px", color: "#64748B", textTransform: "uppercase", fontWeight: 700 }}>
+                  {t.starsLabel}
+                </div>
+                <div style={{ fontSize: "20px", color: "#F59E0B", marginTop: "4px" }}>
+                  {"★".repeat(domainInfo.stars)}
+                  <span style={{ color: "rgba(255,255,255,0.15)" }}>{"★".repeat(3 - domainInfo.stars)}</span>
+                </div>
+              </div>
+
+              <div>
+                <div style={{ fontSize: "11px", color: "#64748B", textTransform: "uppercase", fontWeight: 700 }}>
+                  {t.statusLabel}
+                </div>
+                <div style={{ fontSize: "12px", fontWeight: 800, color: "#10B981", marginTop: "8px" }}>
+                  {t.statusValue}
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* ── 💡 Citizen Cybersecurity Advice — Interactive Slides Carousel ── */}
         <div
@@ -1130,7 +1289,10 @@ export default function DomainVerifyPage() {
           </div>
         </div>
 
-        {/* Audit Details & Cryptographic Traceability */}
+        {/* ── ONLY RENDERED FOR VERIFIED SITES ── */}
+        {domainInfo.isVerified && (
+          <>
+            {/* Audit Details & Cryptographic Traceability */}
         <div
           style={{
             marginTop: "24px",
@@ -1420,6 +1582,8 @@ export default function DomainVerifyPage() {
             {t.footerSubtext}
           </div>
         </div>
+          </>
+        )}
       </main>
     </div>
   );
