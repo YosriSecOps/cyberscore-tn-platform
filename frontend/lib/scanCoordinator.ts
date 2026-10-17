@@ -185,14 +185,20 @@ class ScanCoordinator {
       if (saved) {
         const parsed = JSON.parse(saved);
         if (parsed) {
+          // Error states are transient — never restore them on page load.
+          // Autonomous scan type requires fresh mandate validation each time — reset it.
+          const restoredStatus = parsed.status === "error" ? "idle" : (parsed.status || "idle");
+          const restoredScanType = parsed.scanType === "autonomous" ? "standard" : (parsed.scanType || this.state.scanType);
+
           this.state = {
             ...this.state,
             url: parsed.url || this.state.url,
-            scanType: parsed.scanType || this.state.scanType,
-            status: parsed.status || "idle",
-            progress: parsed.progress || (parsed.status === "complete" ? 100 : 0),
-            result: parsed.result || null,
-            error: parsed.error || "",
+            scanType: restoredScanType,
+            status: restoredStatus,
+            progress: restoredStatus === "idle" ? 0 : (parsed.progress || (parsed.status === "complete" ? 100 : 0)),
+            result: restoredStatus === "idle" ? null : (parsed.result || null),
+            // Never restore error messages from previous sessions
+            error: "",
             startTime: parsed.startTime || 0,
             expectedDurationMs: parsed.expectedDurationMs || 8000,
             isAutonomousUnlocked: parsed.isAutonomousUnlocked ?? this.state.isAutonomousUnlocked,
@@ -222,6 +228,11 @@ class ScanCoordinator {
   private persist() {
     if (typeof window === "undefined") return;
     try {
+      // Never persist error states — they are transient and should not ghost the UI on reload
+      if (this.state.status === "error") {
+        sessionStorage.removeItem(STORAGE_KEY);
+        return;
+      }
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify(this.state));
     } catch {}
   }
@@ -346,7 +357,7 @@ class ScanCoordinator {
     this.abortCtrl = new AbortController();
 
     const expectedDurationMs =
-      scanType === "autonomous" ? 110000 : scanType === "deep" ? 35000 : scanType === "standard" ? 15000 : 5000;
+      scanType === "autonomous" ? 110000 : scanType === "deep" ? 85000 : scanType === "standard" ? 15000 : 5000;
 
     this.state = {
       ...this.state,
@@ -422,16 +433,16 @@ class ScanCoordinator {
         // 1. Try FastAPI backend first (via Nginx reverse proxy /api/ or direct backend API)
         const endpoints = [
           "/api/scans/run",
-          `${API}/api/scans/run`,
-          "http://192.168.98.149:8000/api/scans/run",
+          ...(API && API !== "/api" && !API.includes("127.0.0.1") && !API.includes("localhost") ? [`${API}/api/scans/run`] : []),
         ];
 
+        const fastApiTimeoutMs = scanType === "deep" ? 90000 : scanType === "standard" ? 35000 : 15000;
         let validationErrorOccurred = false;
 
         for (const ep of endpoints) {
           try {
             const fastApiCtrl = new AbortController();
-            const timeoutId = setTimeout(() => fastApiCtrl.abort(), 35000);
+            const timeoutId = setTimeout(() => fastApiCtrl.abort(), fastApiTimeoutMs);
             const res = await fetch(ep, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
@@ -454,8 +465,12 @@ class ScanCoordinator {
                 }
               } catch {}
               if (res.status === 400 || res.status === 422) {
-                validationErrorOccurred = true;
-                break;
+                // If it is a transient backend DNS resolution error, allow fallback to Next.js /api/scan
+                const isDnsFailure = String(scanError || "").toLowerCase().includes("dns");
+                if (!isDnsFailure) {
+                  validationErrorOccurred = true;
+                  break;
+                }
               }
             }
           } catch {
@@ -498,8 +513,15 @@ class ScanCoordinator {
         return;
       }
 
-      // Successful completion
+      // 1. Set progress to 100% so the final phase lights up and displays its checkmark
       this.state.progress = 100;
+      this.persist();
+      this.notify();
+
+      // 2. Graceful completion pause (1.2s) so user & jury can see all phases completed
+      await new Promise((resolve) => setTimeout(resolve, 1200));
+
+      // 3. Complete and display results
       this.state.result = scanData;
       this.state.status = "complete";
       this.state.error = "";
@@ -520,6 +542,10 @@ class ScanCoordinator {
               criticalCount: scanData.critical_count || 0,
               lastScan: "À l'instant (Audit Live)",
               scannedAt: new Date().toISOString(),
+              category_breakdown: scanData.category_breakdown || [],
+              findings: scanData.findings || [],
+              resolved_ip: scanData.resolved_ip || "0.0.0.0",
+              scanResult: scanData,
             };
             localStorage.setItem("cyberscore_scanned_results", JSON.stringify(existing));
             window.dispatchEvent(new Event("storage"));

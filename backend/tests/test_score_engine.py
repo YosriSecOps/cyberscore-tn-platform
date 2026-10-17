@@ -1,37 +1,27 @@
-"""
-Unit tests for the CyberScore TN Score Engine.
-Validates scoring weights, grade assignments, and penalty formulas.
-"""
-
 import pytest
-from app.scanners.score_engine import calculate_global_score, determine_grade, CATEGORY_WEIGHTS
+from app.scanners.base import ScanCategoryResult, CATEGORY_WEIGHTS
+from app.scanners.score_engine import calculate_total_score
 
+def _result(cat, pct):
+    cfg = CATEGORY_WEIGHTS[cat]
+    return ScanCategoryResult(category=cat, score=cfg["max_score"] * pct / 100,
+                              max_score=cfg["max_score"], weight=cfg["weight"])
 
-def test_category_weights_sum_to_one():
-    """Verify that all category weights sum to 100% (1.0)."""
-    total_weight = sum(CATEGORY_WEIGHTS.values())
-    assert abs(total_weight - 1.0) < 0.001, f"Total weights sum to {total_weight}, expected 1.0"
+def test_weights_sum_to_one():
+    assert abs(sum(c["weight"] for c in CATEGORY_WEIGHTS.values()) - 1.0) < 1e-9
 
+def test_perfect_and_zero():
+    p = calculate_total_score([_result(c, 100) for c in CATEGORY_WEIGHTS])
+    assert p["total_score"] == 100 and p["grade"] == "A+" and p["star_rating"] == 3
+    z = calculate_total_score([_result(c, 0) for c in CATEGORY_WEIGHTS])
+    assert z["total_score"] == 0 and z["grade"] == "F" and z["star_rating"] == 1
 
-def test_determine_grade_boundaries():
-    """Verify official grade scale (A+ >= 93, A >= 85, B >= 70, C >= 50, D >= 35, F < 35)."""
-    assert determine_grade(95) in ["A+", "A"]
-    assert determine_grade(85) in ["A", "B+"]
-    assert determine_grade(75) in ["B", "B+"]
-    assert determine_grade(55) in ["C", "C+"]
-    assert determine_grade(30) in ["D", "F"]
-    assert determine_grade(15) == "F"
+@pytest.mark.parametrize("pct,grade,stars",
+    [(95, "A+", 3), (90, "A", 3), (80, "B", 2), (70, "C", 2), (60, "D", 1), (59, "F", 1)])
+def test_grade_boundaries(pct, grade, stars):
+    r = calculate_total_score([_result("ssl", pct)])
+    assert r["grade"] == grade and r["star_rating"] == stars
 
-
-def test_perfect_score_calculation():
-    """Verify that 100/100 in all categories yields a global score of 100."""
-    category_scores = {cat: 100.0 for cat in CATEGORY_WEIGHTS}
-    global_score = calculate_global_score(category_scores)
-    assert round(global_score) == 100
-
-
-def test_zero_score_calculation():
-    """Verify that 0/100 in all categories yields a global score of 0."""
-    category_scores = {cat: 0.0 for cat in CATEGORY_WEIGHTS}
-    global_score = calculate_global_score(category_scores)
-    assert round(global_score) == 0
+def test_failed_scanner_is_excluded_not_penalised():
+    failed = ScanCategoryResult(category="dns", score=0, max_score=0, weight=0, error="timeout")
+    assert calculate_total_score([_result("ssl", 100), failed])["total_score"] == 100

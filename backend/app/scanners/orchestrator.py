@@ -108,22 +108,26 @@ async def run_scan(
     if not hostname or len(hostname) < 3:
         raise ValueError(f"Cible invalide : '{target}'.")
 
-    # Fast DNS pre-validation check
+    # Fast DNS pre-validation check (prioritize IPv4 to avoid IPv6 timeouts)
     dns_ok = False
-    try:
-        loop = asyncio.get_running_loop()
-        await loop.getaddrinfo(hostname, 80, family=socket.AF_UNSPEC, type=socket.SOCK_STREAM)
-        dns_ok = True
-    except Exception:
-        if not hostname.startswith("www."):
+    for fam in (socket.AF_INET, socket.AF_UNSPEC):
+        try:
+            loop = asyncio.get_running_loop()
+            await loop.getaddrinfo(hostname, 80, family=fam, type=socket.SOCK_STREAM)
+            dns_ok = True
+            break
+        except Exception:
+            pass
+
+    if not dns_ok and not hostname.startswith("www."):
+        for fam in (socket.AF_INET, socket.AF_UNSPEC):
             try:
                 loop = asyncio.get_running_loop()
-                await loop.getaddrinfo(f"www.{hostname}", 80, family=socket.AF_UNSPEC, type=socket.SOCK_STREAM)
+                await loop.getaddrinfo(f"www.{hostname}", 80, family=fam, type=socket.SOCK_STREAM)
                 dns_ok = True
+                break
             except Exception:
-                dns_ok = False
-        else:
-            dns_ok = False
+                pass
 
     if not dns_ok:
         raise ValueError(f"Résolution DNS impossible pour '{hostname}'. Vérifiez que le domaine existe et est actif sur Internet.")

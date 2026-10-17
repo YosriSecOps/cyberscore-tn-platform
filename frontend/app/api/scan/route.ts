@@ -11,12 +11,46 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import dns from "dns/promises";
+import net from "net";
 import { execFile } from "child_process";
 import { promisify } from "util";
 import path from "path";
 import fs from "fs";
 
 const execFileAsync = promisify(execFile);
+
+const HOSTNAME_RE = /^(?=.{3,253}$)([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,24}$/;
+
+function isPrivateIp(ip: string): boolean {
+  if (net.isIPv4(ip)) {
+    const [a, b] = ip.split(".").map(Number);
+    return a === 0 || a === 10 || a === 127 || (a === 169 && b === 254) ||
+           (a === 172 && b >= 16 && b <= 31) || (a === 192 && b === 168) ||
+           (a === 100 && b >= 64 && b <= 127);
+  }
+  const v = ip.toLowerCase();
+  return v === "::1" || v.startsWith("fc") || v.startsWith("fd") || v.startsWith("fe80");
+}
+
+// ANCS_MANDATES="ANCS-2026-001=finances.gov.tn|sante.gov.tn,ANCS-2026-002=lab.example.tn"
+// If ANCS_MANDATES is not configured (demo/dev mode), any code starting with "ANCS-" is accepted.
+function mandateAllows(code: string, domain: string): boolean {
+  const mandates = (process.env.ANCS_MANDATES || "").split(",").map(s => s.trim()).filter(Boolean);
+  
+  // If no mandates are configured in env, use permissive demo validation:
+  // accept any code that looks like a valid ANCS mandate (starts with "ANCS-")
+  if (mandates.length === 0) {
+    return code.toUpperCase().startsWith("ANCS-") && code.length >= 8;
+  }
+
+  // Strict mandate validation against configured scopes
+  for (const e of mandates) {
+    const [c, scope] = e.split("=");
+    if (c && scope && c.toUpperCase() === code.toUpperCase())
+      return scope.split("|").some(d => domain === d.trim() || domain.endsWith("." + d.trim()));
+  }
+  return false;
+}
 
 interface CategoryScore {
   category: string;
@@ -243,7 +277,7 @@ export async function POST(req: NextRequest) {
       .replace(/^www\./, "")
       .replace(/\/.*$/, "");
 
-    if (!cleanDomain || cleanDomain.length < 3) {
+    if (!cleanDomain || cleanDomain.length < 3 || !HOSTNAME_RE.test(cleanDomain)) {
       return NextResponse.json({ error: "Nom de domaine invalide" }, { status: 400 });
     }
 
@@ -254,35 +288,35 @@ export async function POST(req: NextRequest) {
     let mxRecords: string[] = [];
     let txtRecords: string[] = [];
 
-    try {
-      const lookup = await dns.lookup(cleanDomain);
-      ipAddress = lookup.address;
-      dnsSuccess = true;
-      // Accurate Tunisian sovereign infrastructure check (ATI AS2609: 193.95.0.0/18, 41.224.0.0/13, 197.10.0.0/16)
-      const isSovereignIp = (ip: string) => {
-        if (ip.startsWith("193.95.")) return true;
-        const p = ip.split(".").map(Number);
-        return p.length === 4 && ((p[0] === 41 && p[1] >= 224 && p[1] <= 231) || (p[0] === 197 && p[1] === 10));
-      };
-      isSovereignHost = isSovereignIp(ipAddress);
-    } catch {
-      // Try with www prefix
+    // Accurate Tunisian sovereign infrastructure check (ATI AS2609: 193.95.0.0/18, 41.224.0.0/13, 197.10.0.0/16)
+    const isSovereignIp = (ip: string) => {
+      if (ip.startsWith("193.95.")) return true;
+      const p = ip.split(".").map(Number);
+      return p.length === 4 && ((p[0] === 41 && p[1] >= 224 && p[1] <= 231) || (p[0] === 197 && p[1] === 10));
+    };
+
+    const resolveDomainIps = async (domain: string): Promise<string[]> => {
       try {
-        const lookupWww = await dns.lookup(`www.${cleanDomain}`);
-        ipAddress = lookupWww.address;
-        dnsSuccess = true;
-        const isSovereignIp = (ip: string) => {
-          if (ip.startsWith("193.95.")) return true;
-          const p = ip.split(".").map(Number);
-          return p.length === 4 && ((p[0] === 41 && p[1] >= 224 && p[1] <= 231) || (p[0] === 197 && p[1] === 10));
-        };
-        isSovereignHost = isSovereignIp(ipAddress);
-      } catch {
-        dnsSuccess = false;
-      }
+        const res = await dns.lookup(domain, { family: 4, all: true });
+        if (res && res.length > 0) return res.map(r => r.address);
+      } catch {}
+      try {
+        const ips = await dns.resolve4(domain);
+        if (ips && ips.length > 0) return ips;
+      } catch {}
+      try {
+        const resAll = await dns.lookup(domain, { all: true });
+        if (resAll && resAll.length > 0) return resAll.map(r => r.address);
+      } catch {}
+      return [];
+    };
+
+    let candidateIps = await resolveDomainIps(cleanDomain);
+    if (candidateIps.length === 0 && !cleanDomain.startsWith("www.")) {
+      candidateIps = await resolveDomainIps(`www.${cleanDomain}`);
     }
 
-    if (!dnsSuccess) {
+    if (candidateIps.length === 0) {
       return NextResponse.json(
         {
           error: `Résolution DNS impossible pour '${cleanDomain}'. Vérifiez que le domaine existe et est actif sur Internet.`,
@@ -291,16 +325,26 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    if (candidateIps.some(isPrivateIp)) {
+      return NextResponse.json(
+        { error: "Accès interdit : La cible résout vers une adresse IP privée ou réservée (Protection SSRF)." },
+        { status: 403 }
+      );
+    }
+
+    ipAddress = candidateIps[0] || "Inconnue";
+    dnsSuccess = true;
+    isSovereignHost = isSovereignIp(ipAddress);
+
     // ── 2. Autonomous Multi-Agent AI Pentest Handler ──────────
     if (scanType === "autonomous") {
       // ── RBAC / Mandat ANCS & RoE Validation ──────────────
-      const validCodes = ["ANCS-2026", "ANCS-SEC-2026", "ANCS-VAL-2026"];
-      const isCodeValid = validCodes.includes(authorizationCode.toUpperCase()) || authorizationCode.toUpperCase().startsWith("ANCS-");
+      const isCodeValid = mandateAllows(authorizationCode, cleanDomain);
       
       if (!isCodeValid || !roeAccepted || !auditorSignature) {
         return NextResponse.json(
           {
-            error: "Accès Refusé [ANCS-RBAC] : L'Audit Autonome Multi-Agents requiert un Mandat ANCS valide (Code d'Autorisation) et la signature intégrale des Règles d'Engagement (RoE).",
+            error: "Accès Refusé [ANCS-RBAC] : L'Audit Autonome Multi-Agents requiert un Mandat ANCS valide couvrant explicitement ce domaine et la signature intégrale des Règles d'Engagement (RoE).",
           },
           { status: 403 }
         );

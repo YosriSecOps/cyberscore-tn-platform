@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CyberScore TN — Console Présentateur & Script (Double Écran)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #070a16;
+      --bg-panel: rgba(16, 22, 44, 0.75);
+      --border-panel: rgba(255, 255, 255, 0.1);
+      --coral: #ff6b6b;
+      --peach: #ffa07a;
+      --cyan: #38bdf8;
+      --green: #10b981;
+      --purple: #a855f7;
+      --gold: #fbbf24;
+      --text: #f8fafc;
+      --text-muted: #cbd5e1;
+      --text-dim: #94a3b8;
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-syne: 'Syne', sans-serif;
+      --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --script-font-size: 24px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: var(--bg-main);
+      color: var(--text);
+      font-family: var(--font-sans);
+      display: flex;
+      flex-direction: column;
+      user-select: text;
+    }
+
+    /* Top Command Header */
+    header {
+      height: 64px;
+      background: rgba(10, 14, 28, 0.95);
+      border-bottom: 1px solid var(--border-panel);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      gap: 16px;
+      flex-shrink: 0;
+      backdrop-filter: blur(20px);
+    }
+
+    .brand-section {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-title {
+      font-family: var(--font-syne);
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      background: linear-gradient(135deg, #ff6b6b, #d946ef, #38bdf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-badge {
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #38bdf8;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .header-center {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .clock-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 6px 14px;
+      border-radius: 30px;
+      font-family: var(--font-mono);
+      font-size: 14.5px;
+      font-weight: 700;
+      color: #f1f5f9;
+    }
+
+    .timer-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 107, 107, 0.12);
+      border: 1px solid rgba(255, 107, 107, 0.35);
+      padding: 6px 14px;
+      border-radius: 30px;
+      font-family: var(--font-mono);
+      font-size: 14.5px;
+      font-weight: 700;
+      color: #ff9f7a;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .font-ctrl {
+      display: flex;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .font-btn {
+      background: transparent;
+      border: none;
+      color: #fff;
+      padding: 6px 12px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .font-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .font-size-label {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: #38bdf8;
+      padding: 0 8px;
+      border-left: 1px solid rgba(255, 255, 255, 0.1);
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+      min-width: 52px;
+      text-align: center;
+    }
+
+    .sync-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #10b981;
+      font-family: var(--font-mono);
+    }
+
+    .sync-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 8px #10b981;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    /* Main Grid Viewport */
+    .console-main {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 20px;
+      padding: 20px 24px;
+      overflow: hidden;
+    }
+
+    /* Left Panel: Script & Live Speech */
+    .script-panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-panel);
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(24px);
+    }
+
+    .script-header {
+      padding: 16px 24px;
+      background: rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid var(--border-panel);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+
+    .slide-badge-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .slide-num-pill {
+      background: linear-gradient(135deg, rgba(255, 107, 107, 0.2), rgba(217, 70, 239, 0.2));
+      border: 1px solid rgba(255, 107, 107, 0.4);
+      color: #ffa07a;
+      font-family: var(--font-mono);
+      font-weight: 800;
+      font-size: 14px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .slide-title-text {
+      font-family: var(--font-syne);
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .script-content-box {
+      flex: 1;
+      padding: 28px 36px;
+      overflow-y: auto;
+      font-size: var(--script-font-size);
+      line-height: 1.75;
+      color: #f1f5f9;
+      white-space: pre-wrap;
+      font-weight: 450;
+      letter-spacing: 0.2px;
+    }
+
+    .script-content-box p {
+      margin-bottom: 16px;
+    }
+
+    .script-footer {
+      padding: 14px 24px;
+      background: rgba(10, 14, 28, 0.9);
+      border-top: 1px solid var(--border-panel);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .nav-btn-group {
+      display: flex;
+      gap: 10px;
+    }
+
+    .nav-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: #fff;
+      font-family: var(--font-sans);
+      font-weight: 700;
+      font-size: 15px;
+      padding: 10px 22px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .nav-btn:hover {
+      background: rgba(56, 189, 248, 0.25);
+      border-color: #38bdf8;
+      transform: translateY(-1px);
+    }
+
+    .nav-btn.primary {
+      background: linear-gradient(135deg, #ff6b6b, #ec4899);
+      border: none;
+      box-shadow: 0 4px 16px rgba(255, 107, 107, 0.3);
+    }
+
+    .nav-btn.primary:hover {
+      background: linear-gradient(135deg, #ff7a70, #f43f5e);
+      box-shadow: 0 6px 24px rgba(255, 107, 107, 0.5);
+    }
+
+    .slide-select {
+      background: rgba(16, 22, 44, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: #fff;
+      font-family: var(--font-sans);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 8px;
+      outline: none;
+      max-width: 320px;
+      cursor: pointer;
+    }
+
+    .slide-select option {
+      background: #0f1325;
+      color: #fff;
+    }
+
+    /* Right Panel: Next Slide Preview & Memory Prompts */
+    .sidebar-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      overflow-y: auto;
+    }
+
+    .preview-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-panel);
+      border-radius: 18px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .preview-kicker {
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .preview-title {
+      font-family: var(--font-syne);
+      font-size: 17px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.35;
+    }
+
+    .preview-snippet {
+      font-size: 14px;
+      line-height: 1.55;
+      color: #cbd5e1;
+      max-height: 130px;
+      overflow-y: auto;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .rules-card {
+      background: var(--bg-panel);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 18px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .rules-title {
+      font-family: var(--font-syne);
+      font-size: 14.5px;
+      font-weight: 800;
+      color: #10b981;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .rules-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 13px;
+      color: #94a3b8;
+      line-height: 1.45;
+    }
+
+    .rules-list li strong {
+      color: #e2e8f0;
+    }
+
+    /* Keyboard shortcuts helper */
+    .shortcuts-bar {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: #64748b;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 4px;
+    }
+
+    kbd {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 4px;
+      padding: 1px 5px;
+      color: #cbd5e1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Command Header -->
+  <header>
+    <div class="brand-section">
+      <span class="brand-title">CYBERSCORE TN</span>
+      <span class="brand-badge">CONSOLE PRÉSENTATEUR</span>
+    </div>
+
+    <div class="header-center">
+      <div class="clock-pill" id="wall-clock">🕒 00:00:00</div>
+      <div class="timer-pill" id="deck-timer">⏱️ 00:00</div>
+    </div>
+
+    <div class="header-actions">
+      <div class="font-ctrl">
+        <button class="font-btn" onclick="adjustFontSize(-2)" title="Diminuer la police (Touche -)">A-</button>
+        <div class="font-size-label" id="font-size-label">24px</div>
+        <button class="font-btn" onclick="adjustFontSize(2)" title="Agrandir la police (Touche +)">A+</button>
+      </div>
+
+      <div class="sync-status">
+        <span class="sync-dot"></span>
+        <span id="sync-label">Synchronisé</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Viewport -->
+  <main class="console-main">
+    
+    <!-- Left Script Panel -->
+    <section class="script-panel">
+      <div class="script-header">
+        <div class="slide-badge-title">
+          <span class="slide-num-pill" id="slide-num-pill">Slide 01 / 46</span>
+          <h1 class="slide-title-text" id="slide-title-text">Titre de la Diapositive</h1>
+        </div>
+      </div>
+
+      <div class="script-content-box" id="script-content">
+        Chargement du script orateur...
+      </div>
+
+      <div class="script-footer">
+        <div class="nav-btn-group">
+          <button class="nav-btn" onclick="prevSlide()" title="Diapositive précédente (←)">
+            ◀ Précédent
+          </button>
+          <button class="nav-btn primary" onclick="nextSlide()" title="Diapositive suivante (→ ou Espace)">
+            Suivant ▶
+          </button>
+        </div>
+
+        <select class="slide-select" id="slide-dropdown" onchange="onSelectSlide(this.value)">
+          <!-- Generated options -->
+        </select>
+      </div>
+    </section>
+
+    <!-- Right Context Panel -->
+    <aside class="sidebar-panel">
+      
+      <!-- Next Slide Preview Card -->
+      <div class="preview-card">
+        <div class="preview-kicker">
+          <span>⏭️ À VENIR (TRANSITION)</span>
+          <span id="next-slide-num" style="color: #94a3b8; margin-left: auto;">Slide 02</span>
+        </div>
+        <div class="preview-title" id="next-slide-title">Titre de la slide suivante</div>
+        <div class="preview-snippet" id="next-slide-snippet">Aperçu des notes de la slide suivante...</div>
+      </div>
+
+      <!-- Presentation Rules & Guidance -->
+      <div class="rules-card">
+        <div class="rules-title">
+          <span>🏛️ Repères de Soutenance</span>
+        </div>
+        <ul class="rules-list">
+          <li><strong>Minutage :</strong> ~25 à 30s / slide (Cible 20 min).</li>
+          <li><strong>Crédibilité :</strong> Zéro chiffre inventé, tout est prouvé dans le code et les 115 scans.</li>
+          <li><strong>Posture :</strong> Répondre avec rigueur technique et clarté sur la souveraineté ANCS.</li>
+        </ul>
+      </div>
+
+      <!-- Shortcuts helper -->
+      <div class="shortcuts-bar">
+        <span><kbd>→</kbd> / <kbd>Espace</kbd> Suivant</span>
+        <span><kbd>←</kbd> Précédent</span>
+        <span><kbd>+</kbd> / <kbd>-</kbd> Zoom texte</span>
+      </div>
+
+    </aside>
+
+  </main>
+
+  <script>
+    // Embedded Slide Deck Database
+    const SLIDES_DB = [{"index": 0, "title": "slide-1 - Projet de Fin d'Études · Soutenance d'Ingénieur", "notes": "[Timing: 00:00 | Durée: 1 min]\n\nMonsieur le Président du jury, Madame, Monsieur les membres du jury, chers encadrants académiques et professionnels, j'ai l'honneur de vous présenter aujourd'hui mon projet de fin d'études d'ingénieur en sécurité informatique, réalisé au sein de TEK-UP en collaboration étroite avec l'Agence Nationale de la Cybersécurité (ANCS). Face à la prolifération des menaces ciblant les infrastructures critiques de l'État tunisien, CyberScore TN répond à un impératif d'indépendance technologique : concevoir et déployer une plateforme nationale souveraine capable d'auditer en continu, de scorer mathématiquement et d'assister la remédiation technique de l'ensemble des portails publics et souverains de la République Tunisienne, sans dépendre d'acteurs ou de services tiers hébergés à l'étranger."}, {"index": 1, "title": "slide-2 - Structure de l'Exposé · 35 à 45 Minutes", "notes": "[Timing: 01:00 | Durée: 1 min]\n\nPour structurer nos échanges, j'ai organisé cette présentation en sept étapes logiques, respectant un budget temps global de 40 minutes. Nous commencerons par le cadrage stratégique et l'analyse de l'existant en 4 minutes, avant d'aborder l'architecture globale Tri-VM en 4 minutes. Le cœur de notre exposé sera consacré pendant 14 minutes aux deux moteurs d'analyse : l'orchestrateur passif à 16 facteurs et la sonde autonome multi-agents. Nous détaillerons ensuite les fonctionnalités produit en 6 minutes, puis les résultats empiriques et la validation logicielle en 3 minutes. Une démonstration opérationnelle de 7 minutes précédera la conclusion et l'ouverture de la session de questions-réponses avec le jury."}, {"index": 2, "title": "slide-3 - Campagne Réelle · Source real-scans.json", "notes": "[Timing: 02:00 | Durée: 1 min]\n\nPour fonder notre travail sur des données empiriques irréfutables et non sur des conjectures théoriques, nous avons mené un audit d'envergure portant sur 121 domaines publics tunisiens, consolidé dans le fichier real-scans.json. Les résultats dressent un constat lucide : la moyenne nationale globale s'établit à 57,6 sur 100, traduisant une posture générale classée en Grade D. Il est fondamental d'observer la dichotomie opérationnelle : 66 sites sont effectivement joignables et atteignent une moyenne de 65,0 sur 100. À l'inverse, 55 portails, soit plus de 45 % du périmètre, se sont révélés hors ligne lors de la campagne. Dans notre modèle, ces sites ne sont pas exclus mais pénalisés par une note plancher d'environ 48,8, ce qui tire mathématiquement l'indice étatique vers le bas."}, {"index": 3, "title": "slide-4 - Défis & Vulnérabilités Systémiques", "notes": "[Timing: 03:00 | Durée: 1 min]\n\nCette cartographie met en lumière une asymétrie de sécurité critique. D'un côté, les attaquants scrutent les infrastructures 24 heures sur 24 à l'aide d'outils automatisés, exploitant la moindre vulnérabilité dès sa publication. De l'autre, les institutions publiques s'appuient historiquement sur des audits d'homologation périodiques, menés tous les un à trois ans par des auditeurs externes. Ces audits manuels sont coûteux, lents et fournissent une photographie figée dans le temps, obsolète dès le déploiement de la mise à jour logicielle suivante. Il manquait à l'État un instrument souverain de télémétrie continue capable d'alerter instantanément sur les régressions de sécurité, de vérifier les preuves de concept sans risque d'indisponibilité, et de piloter la remédiation à l'échelle nationale."}, {"index": 4, "title": "slide-5 - Benchmarking & Souveraineté Technologique", "notes": "[Timing: 04:00 | Durée: 1 min]\n\nFace à cette problématique, on pourrait s'interroger sur l'opportunité de recourir à des solutions internationales réputées telles que SecurityScorecard ou BitSight. L'analyse comparative met en évidence des verrous stratégiques majeurs. Premièrement, la souveraineté : ces plateformes SaaS imposent de transmettre les inventaires réseau et la cartographie des vulnérabilités nationales vers des datacenters étrangers. Deuxièmement, le modèle économique : ces services requièrent des souscriptions annuelles très onéreuses en devises fortes. Troisièmement, l'adéquation réglementaire : leurs algorithmes ignorent les spécificités de la réglementation tunisienne, notamment le Décret 2023-17 et le bloc d'adressage ATI AS2609. CyberScore TN apporte une réponse sur-mesure, souveraine et hébergée localement."}, {"index": 5, "title": "slide-6 - Découpage Fonctionnel & Séparation des Responsabilités", "notes": "[Timing: 04:00 | Durée: 1 min]\n\nL'architecture de CyberScore TN a été pensée selon un modèle à quatre tiers strictement cloisonnés, garantissant la modularité et la sécurité des traitements. Au sommet, le Tier Présentation repose sur Next.js 15, délivrant un tableau de bord SOC trilingue, interactif et réactif. Le Tier Métier & Orchestration s'appuie sur FastAPI en Python 3.12, assurant la coordination asynchrone des analyses et le calcul mathématique du score. Le Tier Raisonnement IA héberge notre accélérateur local Ollama exécutant le modèle Qwen2.5-Coder:7b, sollicité pour l'analyse sémantique des bannières et la rédaction de feuilles de route, avec repli automatique sur un moteur déterministe en cas d'indisponibilité. Enfin, le Tier Collecte & Moteur Réseau regroupe les 15 scanners passifs et la sonde d'audit active. Soulignons ici une rigueur d'ingénierie : aucun magasin vectoriel ni RAG n'est utilisé, l'IA opérant par injection structurée JSON directe."}, {"index": 6, "title": "slide-7 - Sécurité des Périmètres · Isolation des Zones", "notes": "[Timing: 05:00 | Durée: 1 min]\n\nPour respecter les standards d'homologation des réseaux de l'État, le déploiement opérationnel segmente l'infrastructure en trois machines virtuelles distinctes. La VM 1, positionnée en zone démilitarisée (DMZ), expose le frontal Next.js derrière un reverse proxy Nginx avec durcissement SSL strict. La VM 2, confinée dans le réseau interne d'administration, héberge l'API FastAPI et la base de données PostgreSQL 16. Elle est totalement inaccessible depuis Internet. La VM 3 héberge le service d'inférence Ollama et le runner de la sonde autonome multi-agents, bénéficiant d'un accès contrôlé sortant sous proxy pour exécuter les audits actifs. Cette séparation garantit qu'une éventuelle compromission du frontal web en DMZ ne permet en aucun cas d'accéder aux données d'audit ministérielles ou de corrompre les modèles d'analyse."}, {"index": 7, "title": "slide-8 - Routage, Cloisonnement & Protection des Flux", "notes": "[Timing: 06:00 | Durée: 1 min]\n\nCette diapositive détaille la circulation des requêtes et le durcissement du proxy inverse Nginx. L'ensemble du trafic HTTPS converge vers le point d'entrée unique. Nginx applique les en-têtes de sécurité recommandés par l'ANCS (HSTS à 31536000 secondes, X-Frame-Options DENY, X-Content-Type-Options nosniff) et achemine le trafic : les pages web vers le serveur Next.js en local sur le port 3000, et les appels `/api/v1/` vers l'API FastAPI sur le port 8000. Sur le plan de l'authentification, les sessions utilisent des jetons Bearer JWT à durée de vie maîtrisée (24 heures). Dans une optique de transparence totale avec le jury, soulignons que la transition vers des cookies de session `HttpOnly; SameSite=Strict; Secure` générés côté serveur est identifiée comme un axe de renforcement prioritaire pour l'industrialisation."}, {"index": 8, "title": "slide-9 - Technologies, Rationale & Arbitrages", "notes": "[Timing: 07:00 | Durée: 1 min]\n\nChaque composant de notre pile technologique a été sélectionné sur la base d'arbitrages d'ingénierie rigoureux. Pour le backend, Python 3.12 et FastAPI s'imposent par leur gestion native de la programmation asynchrone via `asyncio`, permettant de déclencher des dizaines de sondes réseau concurrentes avec une consommation mémoire minime. Pour la persistance, PostgreSQL 16 structure 18 modèles de données intégrant les référentiels nationaux et l'historique des scores. La couche de cache associe Redis en développement conteneurisé à Valkey 7 lors des déploiements sur machine virtuelle Debian, garantissant l'indépendance de licence. Côté interface, Next.js 15 avec Tailwind CSS v4 concilie performance brute, accessibilité multilingue arabe-français et ergonomie SOC de classe opérationnelle. Enfin, Ollama assure l'hébergement de Qwen2.5-Coder sur le sol national, éliminant tout appel à des API propriétaires étrangères."}, {"index": 9, "title": "slide-10 - Orchestration & Résilience des Flux", "notes": "[Timing: 08:00 | Durée: 1 min]\n\nCyberScore TN ne repose pas sur un algorithme monolithique mais orchestre trois chemins d'exécution distincts, chacun calibré pour un niveau de criticité opérationnelle spécifique. Le Chemin A est l'orchestrateur Python principal : il évalue 16 facteurs de risque via des modules asynchrones et calcule le score officiel de production. Le Chemin B est une implémentation alternative native en TypeScript intégrée dans Next.js : elle analyse 6 piliers fondamentaux et sert de solution de secours haute disponibilité si le backend Python est inaccessible lors d'une consultation publique. Le Chemin C est la sonde autonome multi-agents : exécutée sous mandat strict, elle engage des investigations dynamiques pour valider l'exploitabilité réelle des vulnérabilités. Cette tripartition garantit à la fois exhaustivité, résilience et séparation stricte des privilèges."}, {"index": 10, "title": "slide-11 - Orchestrateur Asynchrone · backend/app/scanners/orchestrator.py", "notes": "[Timing: 09:00 | Durée: 1 min]\n\nExaminons en détail le fonctionnement interne de l'orchestrateur Python. Contrairement à une affirmation simpliste selon laquelle seize modules s'exécuteraient en vrac simultanément, le code organise l'audit en phases ordonnées. Cette séparation est fondamentale pour éviter d'inonder la cible : la Phase 1 inspecte les en-têtes et le certificat TLS ; puis la Phase 2 analyse l'infrastructure de noms DNS, la messagerie et les technologies ; enfin la Phase 3 engage les contrôles applicatifs et de réseau étendu. Au sein de chaque phase, les scanners sont lancés en parallèle via `asyncio.gather`. Chaque scanner est encapsulé dans un `asyncio.wait_for` avec un timeout individuel strict. Si un scanner échoue ou subit un timeout réseau, il renvoie un résultat nul : notre moteur l'exclut gracieusement du dénominateur sans lui infliger une note de zéro injustifiée."}, {"index": 11, "title": "slide-12 - Profondeurs de Scan · SCAN_PHASES", "notes": "[Timing: 10:00 | Durée: 1 min]\n\nPour adapter la charge d'évaluation aux besoins opérationnels, CyberScore TN implémente trois profondeurs d'audit prédéfinies. Le mode Quick exécute la seule Phase 1 : 4 scanners focalisés sur la surface web immédiate (SSL, Headers, Cookie, CSP) en environ 30 secondes. Le mode Standard, recommandé pour le monitoring national régulier, enchaîne la Phase 1 et la Phase 2 : 10 scanners totalisant la vérification DNS, la sécurité de messagerie SPF/DMARC, l'exposition d'informations sensibles, la détection technologique et les certificats en environ 2 minutes. Le mode Deep combine les trois phases : 15 scanners exécutés jusqu'aux tests OWASP, cartographie réseau et réputation d'adresses IP en environ 10 minutes. Soulignons que sur les 16 catégories du référentiel, 15 scanners sont pleinement implémentés, la seizième catégorie relative au patching CVE étant réservée pour une intégration locale."}, {"index": 12, "title": "slide-13 - Structure des Constatations · backend/app/scanners/base.py", "notes": "[Timing: 11:00 | Durée: 1 min]\n\nLa rigueur de notre architecture repose sur une modélisation standardisée des constatations de sécurité. Chaque module hérite de la classe abstraite `BaseScanner` et instancie des objets `Finding` strictement typés. Comme l'illustre cette diapositive, un `Finding` intègre son titre, sa sévérité normalisée, sa description, la recommandation de remédiation, le score CVSS estimé et le triple alignement normatif : OWASP 2021, NIST CSF et ISO 27002. Le calcul du score de chaque catégorie obéit à la méthode `_deduct` : le score démarre au maximum possible du facteur, puis déduit des points selon la sévérité des anomalies constatées : 3 points pour une faille critique, 2 points pour une faille haute, 1 point pour une moyenne et un demi-point pour une faible, avec un plancher strict à zéro."}, {"index": 13, "title": "slide-14 - Pondérations Officielles · CATEGORY_WEIGHTS", "notes": "[Timing: 12:00 | Durée: 1 min]\n\nVoici la matrice complète et authentique des 16 facteurs de risque configurés dans CATEGORY_WEIGHTS. La somme arithmétique de ces coefficients est rigoureusement égale à 1,000, soit 100 %, ce qui est validé par notre suite de tests unitaires. Les trois piliers prépondérants reflètent les vecteurs d'attaque majeurs constatés sur les portails publics : les vulnérabilités applicatives OWASP représentent 15 % du score, la sécurité du chiffrement SSL/TLS compte pour 12 %, et les en-têtes HTTP de protection pèsent pour 10 %. Suivent la sécurité réseau et le patching logiciel à hauteur de 8 % chacun. L'ensemble des autres contrôles (DNS, CSP, fuite d'information, sous-domaines, cyber-renseignement, fraîcheur technologique, cookies, e-mail et certificats) totalisent les 47 % restants, garantissant un équilibre parfait sans angle mort."}, {"index": 14, "title": "slide-15 - Algorithme de Score · backend/app/scanners/score_engine.py", "notes": "[Timing: 13:00 | Durée: 1 min]\n\nCette diapositive formalise l'algorithme mathématique de calcul du score final. Chaque catégorie produit un score brut rapporté à son maximum pour donner une note normalisée sur 100. La note globale est ensuite obtenue par la moyenne pondérée de ces notes normalisées, divisée par la somme des poids des catégories ayant abouti. Cette formulation protège le site contre les défaillances de sondes extérieures : un module qui expire ne compte pas comme un zéro, mais est neutralisé. Le score obtenu sur 100 est ensuite transcrit selon une double grille : un grade alphabétique de A+ à F inspiré des standards internationaux, et une distinction souveraine sous forme d'étoiles ANCS : 3 étoiles pour un score supérieur ou égal à 90, 2 étoiles entre 70 et 89, et 1 étoile en deçà de 70, traduisant une posture nécessitant un plan de remédiation d'urgence."}, {"index": 15, "title": "slide-16 - Traçabilité Normative Internationale", "notes": "[Timing: 14:00 | Durée: 1 min]\n\nPour qu'un score de cybersécurité soit opposable aux auditeurs d'État et aux décideurs ministériels, chaque vulnérabilité détectée par notre système fait l'objet d'une triple corrélation normative avec les standards mondiaux de sécurité. Prenons un exemple récurrent sur nos sites étatiques : l'absence de l'en-tête HTTP Strict-Transport-Security (HSTS). CyberScore TN ne se contente pas de signaler une ligne manquante : notre moteur le rattache immédiatement à la catégorie OWASP Top 10 A05:2021 (Security Misconfiguration), au contrôle NIST CSF PR.DS-2 (Protection des données en transit), et à la mesure ISO/IEC 27002:2022 contrôle A.8.24 (Utilisation de la cryptographie). Cette taxonomie rigoureuse permet de convertir automatiquement un constat technique en rapport d'audit de conformité réglementaire exploitable par les auditeurs ANCS."}, {"index": 16, "title": "slide-17 - Gouvernance & Habilitation · Chemin C", "notes": "[Timing: 15:00 | Durée: 1 min]\n\nNous abordons maintenant le volet le plus novateur et exigeant du projet : l'audit autonome actif par sonde multi-agents. S'agissant d'investigations actives sur des machines réelles, la gouvernance de sécurité doit être irréprochable. Aucun test actif ne peut être amorcé sans respecter une triple barrière d'autorisation. Premièrement, l'auditeur doit saisir un code de mandat officiel émis par l'ANCS (par exemple ANCS-2026-001). Ce code est vérifié par notre routeur d'API contre une liste d'autorisation stricte qui contrôle la correspondance exacte avec le domaine cible. Deuxièmement, l'officier doit signer numériquement les Règles d'Engagement (RoE) formalisant le créneau horaire, les adresses IP d'origine et l'engagement formel de non-altération des bases de données. Troisièmement, un contrôle anti-SSRF bloque automatiquement toute tentative de cibler une adresse IP privée du réseau d'administration."}, {"index": 17, "title": "slide-18 - Orchestration Multi-Agents · probe_architecture.png", "notes": "[Timing: 16:00 | Durée: 1 min]\n\nCette diapositive présente l'architecture globale de notre sonde autonome, documentée dans le schéma probe_architecture.png. La sonde fonctionne comme un sous-processus Python isolé recevant la cible validée. Elle instancie quatre agents spécialisés exécutés de manière séquentielle, chacun recevant et enrichissant un objet partagé unique appelé AuditState. L'Agent 1 effectue la reconnaissance active de surface : détection de ports, bannières et signatures d'obsolescence. L'Agent 2 prend le relais pour corréler ces découvertes avec des hypothèses de vulnérabilités, en sollicitant l'accélérateur local Ollama. L'Agent 3 intervient alors pour filtrer ces hypothèses par des tests de preuve dynamiques non destructifs, éliminant impitoyablement tout faux positif. Enfin, l'Agent 4 calcule la note finale par déductions, génère le plan de remédiation technique et scelle le rapport par une empreinte SHA-256."}, {"index": 18, "title": "slide-19 - État Partagé & Modèle de Données · probe_agent/models.py", "notes": "[Timing: 17:00 | Durée: 1 min]\n\nPour garantir la cohérence des échanges entre agents sans dépendre de structures de données volatiles, notre architecture repose sur un objet pivot unique et fortement typé : la dataclass AuditState définie dans models.py. Composé de 27 champs structurés, AuditState encapsule l'intégralité du cycle de vie de l'audit. Il contient l'identifiant unique de scan, la cible, les horodatages UTC, l'adresse IP résolue, la liste des objets PortFinding retournés par l'Agent 1, les hypothèses de l'Agent 2 dans potential_vulnerabilities, les failles confirmées par l'Agent 3 dans validated_vulnerabilities, et enfin la note finale, les étapes de remédiation et l'empreinte SHA-256 générées par l'Agent 4. Cette conception assure une traçabilité totale et permet de sérialiser l'audit sous forme de rapport JSON exhaustif."}, {"index": 19, "title": "slide-20 - Agent 1 · Reconnaissance Active Réseau", "notes": "[Timing: 18:00 | Durée: 1 min]\n\nL'Agent 1 pose les fondations de l'audit actif en établissant la cartographie factuelle de la cible. Il mobilise trois outils spécialisés développés en interne. Premièrement, le scanneur de ports (`port_scanner.py`) réalise un TCP connect scan multi-threadé. Pour éviter tout déni de service et préserver la bande passante des liaisons étatiques, le parallélisme est plafonné à 40 threads ouvriers. Il interroge une table de 33 services connus (SSH, HTTP, bases de données, services d'administration distante). Deuxièmement, il analyse les en-têtes et le TTL pour déduire la famille du système d'exploitation sous-jacent. Troisièmement, le module d'obsolescence (`obsolescence_checker.py`) confronte les versions logicielles extraites à une base de 8 motifs d'obsolescence, identifiant immédiatement les versions en fin de vie (EOL) telles que PHP 7.x ou Apache 2.4 vulnérable."}, {"index": 20, "title": "slide-21 - Agent 3 · poc_verifier.py & Élimination des Hallucinations", "notes": "[Timing: 19:00 | Durée: 1 min]\n\nLa prolifération des faux positifs est le fléau des outils d'audit automatisés : submergés de fausses alertes, les analystes de sécurité finissent par ignorer les vrais dangers. Pour résoudre ce défi, l'Agent 3 applique notre règle de conception 'Zéro Faux Positif'. Il sépare rigoureusement les faits des hypothèses : les constatations factuelles de l'Agent 1 (ports ouverts, absence d'en-tête, versions obsolètes) sont admises car mesurées. En revanche, les hypothèses spéculatives de failles web émises par l'IA de l'Agent 2 sont soumises à un banc de test dynamique non destructif. Le vérificateur `PoCVerifier` envoie une sonde d'injection bénigne : si aucune erreur SQL n'est divulguée et si aucun paramètre XSS n'est reflété sans échappement, l'hypothèse est purement et simplement jetée à la corbeille. Mentionnons avec transparence la limite de cette approche : le test de fichiers sensibles accepte tout code HTTP 200 supérieur à 10 octets, ce qui peut admettre un faux positif en présence de pages d'erreur personnalisées soft-404."}, {"index": 21, "title": "slide-22 - Agent 4 · remediation_agent.py & models.py", "notes": "[Timing: 20:00 | Durée: 1 min]\n\nL'Agent 4 clôture le pipeline d'audit actif en assurant la synthèse opérationnelle et l'intégrité du rapport. Il applique un système de notation par déduction directe à partir d'un capital initial de 100 points, borné entre 10 et 100 : chaque vulnérabilité critique validée par preuve retranche 22 points, une faille haute 12 points, une moyenne 6 points et une faible 2 points. Le grade officiel en découle : A dès 85, B dès 70, C dès 55, D dès 40 et F en deçà. Parallèlement, l'Agent 4 génère la feuille de route technique détaillant les commandes bash exactes à exécuter. Enfin, la méthode compute_sha256() calcule l'empreinte cryptographique des résultats validés. Précisons formellement qu'il s'agit d'un condensat (digest) garantissant l'intégrité des données, et non d'une signature numérique asymétrique."}, {"index": 22, "title": "slide-23 - Intelligence Artificielle Souveraine · probe_agent/ai_client.py", "notes": "[Timing: 21:00 | Durée: 1 min]\n\nPour clore l'étude de nos moteurs, abordons la doctrine d'intégration de l'intelligence artificielle dans CyberScore TN. Nous résumons notre philosophie par une maxime stricte : 'Le LLM propose, la preuve dispose'. L'IA n'est jamais laissée en roue libre sur des infrastructures étatiques : le modèle Qwen2.5-Coder:7b s'exécute localement sous Ollama, avec une température verrouillée à 0.1 pour éliminer toute créativité indésirable, un format de sortie contraint en JSON strict, et une taille de contexte bornée à 2048 tokens. Plus fondamental encore : le LLM ne décide jamais du score et ne peut valider lui-même une faille. Il formule des hypothèses d'investigation et propose des scripts de correction. Et en cas d'indisponibilité du serveur Ollama, la plateforme commute instantanément sur un moteur de règles déterministe d'audit, garantissant la continuité de service en toute circonstance."}, {"index": 23, "title": "slide-24 - Interface Opérationnelle · Command Center", "notes": "[Timing: 22:00 | Durée: 1 min]\n\nNous entrons dans la présentation du produit CyberScore TN avec le Command Center du SOC. Conçue pour des analystes de cyberdéfense et des officiers de sécurité ministériels, l'interface adopte une ergonomie sombre haute densité permettant de visualiser instantanément l'état de santé du cyberespace gouvernemental. L'écran synthétise l'indice cyber national global (57,6/100), la répartition des 121 entités auditées, le flux des alertes récentes et la distribution par niveau de criticité. Pour accélérer les investigations opérationnelles en conditions de crise, le système intègre une Command Palette accessible par le raccourci Clavier Ctrl+K, permettant une recherche instantanée par nom d'organisme, adresse IP ou nom de domaine, et un saut direct vers le scanner d'audit."}, {"index": 24, "title": "slide-25 - Cartographie Sectorielle · Source real-scans.json + tunisia_organizations.json", "notes": "[Timing: 23:00 | Durée: 1 min]\n\nL'analyse globale prend tout son sens lorsqu'elle est ventilée par secteur institutionnel. En croisant nos 121 scans réels avec la nomenclature administrative officielle, nous obtenons une distribution sectorielle exhaustive. Le secteur des Ministères regroupe 45 entités avec un score moyen de 59,3 sur 100. Les Collectivités Locales, qui rassemblent 42 municipalités et gouvernorats, affichent le score moyen le plus faible à 51,9 sur 100, reflétant une pénurie critique de compétences et de ressources dédiées à la cyber-hygiène de base. Les Institutions Publiques et les Entreprises Publiques stratégiques (comme la STEG ou la SONEDE) comptent chacune 17 entités et atteignent les moyennes les plus honorables, respectivement 62,8 et 62,1 sur 100."}, {"index": 25, "title": "slide-26 - Visualisation de Surface · threats.png", "notes": "[Timing: 24:00 | Durée: 1 min]\n\nL'écran de cyber-surveillance fournit une vue dynamique des vecteurs de menace pesant sur le territoire numérique tunisien. Il modélise les attaques par déni de service, le scan agressif de vulnérabilités et les tentatives de force brute sur les services exposés. Dans notre démarche de rigueur scientifique avec le jury, nous précisons explicitement que les flux géographiques visualisés constituent une animation illustrative de simulation ergonomique, calibrée sur les tendances réelles de cyber-menaces recensées par l'ANCS. Cette vue permet aux opérateurs de SOC de matérialiser la provenance des sondages malveillants et d'identifier en un coup d'œil les blocs d'adresses IP réputés hostiles nécessitant un blocage sur les pare-feux frontaliers de l'ATI."}, {"index": 26, "title": "slide-27 - Moteur Prédictif · predictions.png", "notes": "[Timing: 25:00 | Durée: 1 min]\n\nCyberScore TN ne se contente pas de constater les failles actuelles : il anticipe leur évolution grâce à son module prédictif. Comme exposé précédemment, nous qualifions honnêtement ce modèle de 'modèle heuristique à +30 jours'. Il analyse l'historique des scans passés, la vélocité observée de déploiement des correctifs dans l'organisation et l'apparition de nouvelles CVE ciblant les technologies identifiées. Sur cette base, l'algorithme extrapole une trajectoire de score prévisionnelle à 30 jours avec un intervalle de confiance. Cette projection permet au RSSI d'anticiper les dégradations de note avant qu'elles ne surviennent et de justifier auprès de sa hiérarchie l'urgence d'allouer les ressources d'ingénierie nécessaires à la remédiation."}, {"index": 27, "title": "slide-28 - Livrable Réglementaire · frontend/components/report/", "notes": "[Timing: 26:00 | Durée: 1 min]\n\nL'aboutissement opérationnel d'un audit de cybersécurité réside dans la clarté et l'exploitabilité de son livrable. CyberScore TN intègre un générateur de rapports vectoriels haute définition de 7 pages, développé en TypeScript avec React-PDF. Sa structure obéit scrupuleusement aux standards des chancelleries et des corps de contrôle de l'État : la Page 1 est la couverture officielle aux armoiries républicaines ; la Page 2 fournit le résumé exécutif pour le ministre ; la Page 3 détaille l'analyse des 16 piliers ; la Page 4 dresse la matrice exhaustive des vulnérabilités classées par sévérité ; la Page 5 contient la feuille de route de remédiation prête à l'emploi avec commandes bash ; la Page 6 positionne l'entité par rapport au benchmark sectoriel national ; et la Page 7 délivre l'attestation finale scellée par l'empreinte cryptographique SHA-256."}, {"index": 28, "title": "slide-29 - Transparence Publique · /verify/[domain]", "notes": "[Timing: 27:00 | Durée: 1 min]\n\nLa confiance numérique ne doit pas rester confinée aux salles de serveurs : elle doit être vérifiable par chaque citoyen. Chaque attestation générée par CyberScore TN comporte un QR code sécurisé renvoyant vers le portail public de vérification `/verify/[domain]`. En scannant ce code avec un simple smartphone, l'usager accède à une page officielle attestant de l'authenticité de l'audit. Le portail affiche le score certifié, le grade attribué par l'ANCS, la validité de l'empreinte SHA-256 et la confirmation d'hébergement souverain. De plus, le portail intègre un volet pédagogique interactif dispensant des conseils de cyber-hygiène pour sensibiliser les citoyens contre le phishing et l'usurpation d'identité sur les services publics en ligne."}, {"index": 29, "title": "slide-30 - Sécurité du Vecteur QR · Modèle de Menace", "notes": "[Timing: 28:00 | Durée: 1 min]\n\nL'usage d'un QR code pour certifier la sécurité d'un site soulève une question légitime du jury : qu'est-ce qui empêche un attaquant de coller un faux QR code menant vers un faux portail de vérification ? Cette diapositive détaille notre modèle de menace. Sur le plan juridique, seul le sous-domaine `.gov.tn` est strictement réservé aux institutions de la République par décret. Techniquement, le portail effectue un contrôle d'autorité : l'adresse de vérification doit obligatoirement résider sous le domaine officiel de l'ANCS. Concernant l'hébergement, notre code source implémente un test de préfixe IP vérifiant l'appartenance aux blocs souverains de l'ATI. Si un site public est hébergé à l'étranger, le système ne disqualifie pas arbitrairement le site à zéro mais applique une déduction de 12 points sur le pilier réseau, matérialisant le risque de souveraineté tout en restant scientifiquement juste."}, {"index": 30, "title": "slide-31 - Badges Web & Contrôle d'Accès · admin.png & badges.png", "notes": "[Timing: 29:00 | Durée: 1 min]\n\nPour clore le volet produit, nous abordons la valorisation publique par les badges de confiance et la gouvernance interne. CyberScore TN met à disposition des ministères des badges SVG dynamiques intégrables en pied de page de leurs portails officiels. Ces badges reflètent en temps réel le grade attribué (A+, A ou B) et s'actualisent automatiquement à chaque cycle d'audit, incitant les équipes techniques à maintenir un niveau de cyber-hygiène exemplaire. Côté administration, la console RBAC sépare rigoureusement les profils : l'observateur public consulte les scores en lecture seule ; l'auditeur ministériel pilote le périmètre de son ministère ; et le super-administrateur ANCS supervise la politique nationale, édite le niveau de criticité des entités de 1 à 5 et dispose d'un kill-switch permettant de suspendre immédiatement un audit en cas d'incident opérationnel sur une cible."}, {"index": 31, "title": "slide-32 - Campagne Expérimentale · 121 Domaines Publics", "notes": "[Timing: 30:00 | Durée: 1 min]\n\nCette diapositive consolide le bilan chiffré de notre campagne d'audit national sur les 121 domaines publics tunisiens. La distribution des grades met en lumière l'ampleur du chantier de cyber-sécurisation : seuls deux sites sur 121 atteignent le Grade A (plus de 90 points), tandis que 7 sites se situent en catégorie B. À l'autre extrémité du spectre, 54 sites (près de 45 % du parc) sont relégués en Grade D et 26 sites en Grade F critique. Parmi les défaillances récurrentes les plus alarmantes, citons l'absence quasi-généralisée de politique de sécurité de contenu (CSP) sur plus de 80 % des portails, l'omission fréquente de l'en-tête HSTS, et l'exposition directe de sous-domaines de test non sécurisés. Ce diagnostic objectif fournit à l'ANCS la première base factuelle quantifiée pour prioriser ses actions de remédiation ministérielle."}, {"index": 32, "title": "slide-33 - Rigueur Logicielle · Commande pytest --cov", "notes": "[Timing: 31:00 | Durée: 1 min]\n\nPour garantir la fiabilité de nos algorithmes, nous avons soumis notre socle à une campagne de tests unitaires rigoureuse avec pytest. Comme l'exige la Règle Zéro, nous présentons ici les résultats authentiques mesurés lors de l'exécution en direct, en rompant avec toute affirmation non vérifiée. Les 17 tests unitaires de notre suite s'exécutent avec un taux de succès de 100 % en 0,10 seconde. L'analyse de couverture par `pytest-cov` confirme une couverture exemplaire de 100 % sur le moteur de score (`score_engine.py`), de 98 % sur les abstractions de scanners (`base.py`), de 99 % sur les modèles de sonde et de 82 % sur la logique de validation PoC. À l'échelle des 3 205 lignes de l'ensemble de l'application, la couverture globale s'établit à 6 %, ciblant délibérément le cœur de calcul algorithmique."}, {"index": 33, "title": "slide-34 - Transparence Académique · Résilience & Limites", "notes": "[Timing: 32:00 | Durée: 1 min]\n\nUne démarche d'ingénieur digne de ce nom doit exposer avec la même rigueur les réussites et les limites de son travail. Nos tests de résilience ont éprouvé la robustesse du système face à des pannes réelles. Le découplage par timeout protège l'orchestrateur contre les serveurs cibles bloqués ou excessivement lents. En cas de panne du service d'IA local Ollama, le basculement automatique sur le moteur déterministe garantit que l'audit produit toujours un rapport conforme. En toute transparence avec le jury, nous soulignons trois limites actuelles : la sensibilité du vérificateur de fichiers exposés aux erreurs personnalisées soft-404 ; le fait que le contrôle de l'hébergement souverain repose sur un test de préfixe IP et non un lookup BGP ASN en direct ; et l'absence d'authentification par session sur l'endpoint /api/scan, que nous avons documentée comme une limitation de prototype de recherche."}, {"index": 34, "title": "slide-35 - Mise en Situation Réelle · 7 Minutes Allouées", "notes": "[Timing: 33:00 | Durée: 7 min]\n\nMonsieur le Président, mesdames et messieurs les membres du jury, nous passons maintenant à la phase la plus concrète de cette soutenance : la démonstration opérationnelle en direct de CyberScore TN. Pendant sept minutes, nous allons dérouler un scénario de bout en bout en conditions réelles d'exploitation. Nous commencerons par démontrer le cloisonnement de la gouvernance : tentative d'accès non autorisé et déclenchement de l'écran 403. Nous nous connecterons ensuite avec les privilèges d'officier de sécurité ANCS pour lancer un audit passif en mode Standard sur le portail d'un ministère. Puis, nous engagerons la sonde autonome multi-agents sous mandat officiel sur notre cible de laboratoire, pour observer en temps réel la neutralisation d'une fausse alerte par l'Agent 3 et le scellement SHA-256 par l'Agent 4. Enfin, nous téléchargerons l'attestation PDF vectorielle et la vérifierons publiquement via le portail citoyen."}, {"index": 35, "title": "slide-36 - Bilan de Fin d'Études · Synthèse Opérationnelle", "notes": "[Timing: 40:00 | Durée: 1 min]\n\nAu terme de ce projet de fin d'études, nous avons mené à bien l'ensemble des objectifs fixés en partenariat avec l'ANCS. CyberScore TN n'est plus un concept de laboratoire mais une plateforme opérationnelle complète, capable d'auditer de manière autonome la surface d'attaque externe de la République Tunisienne. Nous avons conçu et validé un orchestrateur passif à 16 facteurs, une sonde active multi-agents dotée d'une règle stricte anti-faux positifs, et une architecture souveraine découplée associant inférence locale d'IA et scellement d'intégrité par empreinte SHA-256. La campagne menée sur 121 sites gouvernementaux fournit le premier baromètre étatique quantifié de la posture cyber nationale, démontrant la faisabilité d'une alternative 100 % souveraine aux solutions propriétaires étrangères."}, {"index": 36, "title": "slide-37 - Feuille de Route Post-Soutenance · Horizons R&D", "notes": "[Timing: 41:00 | Durée: 1 min]\n\nPour guider l'industrialisation future de la plateforme au sein du SOC de l'ANCS, nous avons identifié quatre axes de perfectionnement majeurs. Le premier axe concerne la cryptographie : faire évoluer le scellement SHA-256 actuel vers une véritable signature numérique asymétrique Ed25519 adossée à un module de sécurité matériel (HSM) ou à un certificat délivré par l'autorité racine TunTrust. Le deuxième axe vise l'infrastructure réseau : remplacer le filtrage par préfixe IP par une interrogation dynamique des tables BGP ASN auprès d'AFRINIC. Le troisième axe concerne la gouvernance : implémenter un journal d'audit serveur infalsifiable en écriture seule (WORM) et des sessions par cookies HttpOnly durcis. Enfin, le quatrième axe permettra le passage à l'échelle via Celery et Redis pour auditer l'ensemble des 2 000 opérateurs d'importance vitale tunisiens."}, {"index": 37, "title": "slide-38 - Clôture de la Soutenance · Échanges avec le Jury", "notes": "[Timing: 42:00 | Durée: 1 min]\n\nMonsieur le Président, mesdames et messieurs les membres du jury, chers enseignants, je tiens à vous exprimer ma plus sincère gratitude pour votre attention bienveillante tout au long de cet exposé. Mes remerciements les plus chaleureux s'adressent à mon encadrant académique à TEK-UP pour son suivi méthodologique constant, ainsi qu'à mon tuteur à l'ANCS pour ses précieux éclairages opérationnels sur les impératifs de sécurité des infrastructures de notre pays. Ce projet a été pour moi une aventure d'ingénierie passionnante, associant rigueur cryptographique, génie logiciel et conscience des enjeux de souveraineté nationale. Je me tiens désormais à votre entière disposition pour répondre à toutes vos questions."}, {"index": 38, "title": "slide-39 - Backup 01 · Spécification Algorithmique", "notes": "[Timing: Annexe | À la demande du jury]\n\nCette diapositive de réserve fournit la table exhaustive des 16 catégories d'évaluation configurées dans le fichier base.py. Chaque catégorie est associée à son poids relatif, son score maximum attribué, son identifiant système et son intitule officiel. Le jury peut constater la rigueur arithmétique de la normalisation : les catégories critiques comme OWASP (15 points), SSL (12 points) et Headers (10 points) constituent le socle de sécurité fondamental. Les déductions sont calculées par sévérité de constatation (−3, −2, −1, −0.5) sans jamais descendre sous zéro. La somme exacte de l'ensemble des poids est garantie égale à 1,000 par test unitaire automatique."}, {"index": 39, "title": "slide-40 - Backup 02 · Sérialisation & Interopérabilité", "notes": "[Timing: Annexe | À la demande du jury]\n\nCette diapositive présente la sérialisation standardisée d'une vulnérabilité sous forme d'objet JSON. Chaque anomalie constatée produit un enregistrement structuré respectant ce schéma rigoureux. L'analyste du SOC ou le système SIEM y retrouve le titre trilingue, le niveau de criticité normalisé, le score CVSS v3.1 quantifié, la preuve brute capturée lors de la mesure réseau, la commande de remédiation technique, et les trois identifiants de référence aux normes mondiales : OWASP, NIST CSF et ISO/IEC 27002. Cette interopérabilité native permet d'exporter directement les alertes vers des plateformes de gestion d'incidents (SOAR/SIEM) telles que Wazuh, TheHive ou Elasticsearch."}, {"index": 40, "title": "slide-41 - Backup 03 · Interface de Programmation", "notes": "[Timing: Annexe | À la demande du jury]\n\nL'architecture de CyberScore TN expose une API REST complète développée avec FastAPI en Python 3.12. Cette diapositive recense les principaux points d'accès disponibles pour les clients web et les sondes automatisées. Le groupe d'authentification gère l'inscription, la connexion JWT et la restitution du profil utilisateur. Le groupe de scan permet d'initier des audits passifs synchrones ou asynchrones et d'interroger la progression par tâche Celery. Le groupe des organisations fournit les données sectorielles des 121 entités publiques et permet aux administrateurs de moduler les niveaux de criticité. Enfin, le groupe IA encapsule les requêtes sécurisées vers le modèle souverain local Qwen2.5-Coder."}, {"index": 41, "title": "slide-42 - Backup 04 · Persistance & Modélisation", "notes": "[Timing: Annexe | À la demande du jury]\n\nPour répondre précisément aux questions sur la persistance, le schéma de données PostgreSQL 16 est articulé autour de 18 modèles SQLAlchemy distincts, situés dans backend/app/models/. La table `organizations` structure les ministères, collectivités et agences avec leur secteur d'appartenance et leur criticité. La table `scans` consigne chaque session d'audit, reliée à `scan_results` pour le détail des catégories et `findings` pour les vulnérabilités individuelles. Les tables `scores` et `predictions` gèrent les séries temporelles et les extrapolations à 30 jours. Les modèles `badges`, `threat_intel`, `supply_chain` et `subdomains` stockent les informations de surface d'attaque étendue. Enfin, `users` et `ai_chat_history` assurent la traçabilité des accès et des interactions d'assistance."}, {"index": 42, "title": "slide-43 - Backup 05 · Confiance Numérique & Badges", "notes": "[Timing: Annexe | À la demande du jury]\n\nCette diapositive détaille les règles algorithmiques régissant l'attribution des badges de confiance CyberScore TN. Le badge de confiance n'est pas une simple image statique mais un composant SVG interactif signé. Pour obtenir le Badge Or d'Excellence Républicaine (Grade A+), un portail doit cumuler un score supérieur ou égal à 95/100, une conformité stricte sur le chiffrement TLS et le DNSSEC, et zéro vulnérabilité de criticité critique ou haute. Le Badge Argent (Grade A) exige au moins 90/100 et l'absence de faille critique. Le Badge Bronze (Grade B) requiert un score minimal de 80/100. En deçà de 80 points (Grades C, D et F), aucun badge de confiance ne peut être délivré, stimulant l'émulation technique des équipes."}, {"index": 43, "title": "slide-44 - Backup 06 · Étalonnage Comparatif", "notes": "[Timing: Annexe | À la demande du jury]\n\nCette diapositive précise la méthodologie adoptée pour le benchmark international présenté sur la plateforme. Il est fondamental d'éviter toute ambiguïté devant le jury : CyberScore TN n'a pas procédé à l'audit réseau direct de serveurs étrangers, ce qui constituerait une action hors juridiction et contraire au mandat étatique. Les scores attribués aux pays de référence (France, Estonie, Maroc, Allemagne...) constituent une baseline illustrative calibrée sur des indices publics reconnus, principalement l'ITU Global Cybersecurity Index (GCI) publié par l'Union Internationale des Télécommunications, croisé avec les rapports du National Cyber Security Index (NCSI) de l'Académie de Gouvernance Numérique d'Estonie. Cette baseline sert d'étalon contextuel pour apprécier la marge de progression de la Tunisie à l'échelle régionale."}, {"index": 44, "title": "slide-45 - Backup 07 · Ventilation Détaillée", "notes": "[Timing: Annexe | À la demande du jury]\n\nCette diapositive de réserve présente la matrice détaillée des 4 secteurs d'État issus de tunisia_sectors.json, croisée avec les résultats de notre campagne sur 121 sites. Elle détaille le nombre d'organismes répertoriés, les exemples emblématiques et le niveau de criticité moyen. Le secteur 1 regroupe les ministères régaliens avec un niveau de criticité moyen de 4.1 sur 5. Le secteur 2 comprend les agences souveraines et régulateurs indépendants (criticité 4.4). Le secteur 3 couvre les collectivités locales et gouvernorats régionaux (criticité 3.5). Le secteur 4 concerne les entreprises publiques et opérateurs d'infrastructures d'énergie et d'eau (criticité 4.8). Cette segmentation permet à l'ANCS de ventiler ses alertes selon la valeur stratégique des cibles."}, {"index": 45, "title": "slide-46 - Backup 08 · Taxonomie & Référentiels", "notes": "[Timing: Annexe | À la demande du jury]\n\nPour clore nos annexes de soutenance, cette diapositive récapitule les principaux sigles, notions cryptographiques et cadres réglementaires mobilisés tout au long de ce projet de fin d'études. Elle explicite les missions de l'Agence Nationale de la Cybersécurité (ANCS), les exigences de la norme internationale ISO/IEC 27002:2022, les fonctions du NIST Cybersecurity Framework 2.0, les catégories de vulnérabilités applicatives OWASP Top 10:2021, et les concepts de digest cryptographique SHA-256, d'Autonomous Penetration Testing et de règles d'engagement (RoE). Ce glossaire témoigne de la cohérence terminologique appliquée de bout en bout dans nos livrables."}];
+    const totalSlides = SLIDES_DB.length;
+
+    let currentIndex = 0;
+    let timerSeconds = 0;
+    let currentFontSize = 24;
+
+    // BroadcastChannel for cross-window real-time synchronization
+    const deckChannel = typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel('cyberscore_deck_sync') : null;
+
+    // Populate dropdown
+    const selectEl = document.getElementById('slide-dropdown');
+    SLIDES_DB.forEach((s, idx) => {
+      const opt = document.createElement('option');
+      opt.value = idx;
+      opt.textContent = `${String(idx + 1).padStart(2, '0')}. ${s.title}`;
+      selectEl.appendChild(opt);
+    });
+
+    function updatePresenterUI(index) {
+      if (index < 0 || index >= totalSlides) return;
+      currentIndex = index;
+
+      const cur = SLIDES_DB[currentIndex];
+      const next = currentIndex < totalSlides - 1 ? SLIDES_DB[currentIndex + 1] : null;
+
+      // Update Header & Badge
+      document.getElementById('slide-num-pill').textContent = `Slide ${String(currentIndex + 1).padStart(2, '0')} / ${totalSlides}`;
+      document.getElementById('slide-title-text').textContent = cur.title;
+      document.getElementById('script-content').textContent = cur.notes || 'Aucune note orateur définie.';
+      selectEl.value = currentIndex;
+
+      // Update Next Slide Card
+      if (next) {
+        document.getElementById('next-slide-num').textContent = `Slide ${String(currentIndex + 2).padStart(2, '0')}`;
+        document.getElementById('next-slide-title').textContent = next.title;
+        document.getElementById('next-slide-snippet').textContent = next.notes ? (next.notes.slice(0, 150) + '...') : 'Fin de la présentation';
+      } else {
+        document.getElementById('next-slide-num').textContent = 'Fin';
+        document.getElementById('next-slide-title').textContent = 'Conclusion de la Soutenance';
+        document.getElementById('next-slide-snippet').textContent = 'Prêt pour la séance de questions/réponses avec le jury.';
+      }
+
+      // Scroll script to top
+      document.getElementById('script-content').scrollTop = 0;
+    }
+
+    function goToSlide(index) {
+      updatePresenterUI(index);
+      broadcastChange(index);
+      if (window.opener && typeof window.opener.goToSlide === 'function') {
+        try { window.opener.goToSlide(index); } catch(e) {}
+      }
+    }
+
+    function nextSlide() {
+      if (currentIndex < totalSlides - 1) {
+        goToSlide(currentIndex + 1);
+      }
+    }
+
+    function prevSlide() {
+      if (currentIndex > 0) {
+        goToSlide(currentIndex - 1);
+      }
+    }
+
+    function onSelectSlide(val) {
+      goToSlide(parseInt(val, 10));
+    }
+
+    function broadcastChange(index) {
+      if (deckChannel) {
+        deckChannel.postMessage({ type: 'SLIDE_CHANGE', index: index });
+      }
+      try {
+        localStorage.setItem('cyberscore_active_slide', JSON.stringify({ index: index, timestamp: Date.now() }));
+      } catch(e) {}
+    }
+
+    // Text Size Control
+    function adjustFontSize(delta) {
+      currentFontSize = Math.max(16, Math.min(40, currentFontSize + delta));
+      document.documentElement.style.setProperty('--script-font-size', currentFontSize + 'px');
+      document.getElementById('font-size-label').textContent = currentFontSize + 'px';
+      try { localStorage.setItem('cyberscore_notes_font_size', currentFontSize); } catch(e) {}
+    }
+
+    // Load saved font size
+    try {
+      const savedFs = localStorage.getItem('cyberscore_notes_font_size');
+      if (savedFs) adjustFontSize(parseInt(savedFs, 10) - currentFontSize);
+    } catch(e) {}
+
+    // Wall Clock
+    setInterval(() => {
+      const d = new Date();
+      const h = String(d.getHours()).padStart(2, '0');
+      const m = String(d.getMinutes()).padStart(2, '0');
+      const s = String(d.getSeconds()).padStart(2, '0');
+      document.getElementById('wall-clock').textContent = `🕒 ${h}:${m}:${s}`;
+    }, 1000);
+
+    // Deck Timer Sync
+    setInterval(() => {
+      timerSeconds++;
+      const mins = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
+      const secs = String(timerSeconds % 60).padStart(2, '0');
+      document.getElementById('deck-timer').textContent = `⏱️ ${mins}:${secs}`;
+    }, 1000);
+
+    // Sync from Main Presentation
+    if (deckChannel) {
+      deckChannel.onmessage = (event) => {
+        if (event.data && typeof event.data.index === 'number') {
+          updatePresenterUI(event.data.index);
+          if (typeof event.data.timerSeconds === 'number') {
+            timerSeconds = event.data.timerSeconds;
+          }
+        }
+      };
+    }
+
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'cyberscore_active_slide' && e.newValue) {
+        try {
+          const data = JSON.parse(e.newValue);
+          if (typeof data.index === 'number') updatePresenterUI(data.index);
+        } catch(err) {}
+      }
+    });
+
+    // Keyboard bindings for presenter window
+    window.addEventListener('keydown', (e) => {
+      if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA')) return;
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp' || e.key === 'Backspace') {
+        e.preventDefault();
+        prevSlide();
+      } else if (e.key === '+' || e.key === '=') {
+        e.preventDefault();
+        adjustFontSize(2);
+      } else if (e.key === '-' || e.key === '_') {
+        e.preventDefault();
+        adjustFontSize(-2);
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        goToSlide(0);
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        goToSlide(totalSlides - 1);
+      }
+    });
+
+    // Initialize state
+    try {
+      const saved = localStorage.getItem('cyberscore_active_slide');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (typeof parsed.index === 'number') currentIndex = parsed.index;
+      }
+    } catch(e) {}
+
+    updatePresenterUI(currentIndex);
+
+    // Notify opener that presenter console is open
+    if (deckChannel) {
+      deckChannel.postMessage({ type: 'PRESENTER_READY' });
+    }
+  </script>
+</body>
+</html>
