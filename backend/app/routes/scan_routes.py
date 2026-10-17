@@ -62,22 +62,24 @@ async def verify_dns_resolution(hostname: str) -> str:
     """Verifies that the target hostname resolves via DNS, returning resolved IP or raising HTTPException."""
     loop = asyncio.get_running_loop()
 
-    # 1. Try hostname as given
-    try:
-        infos = await loop.getaddrinfo(hostname, 80, family=socket.AF_UNSPEC, type=socket.SOCK_STREAM)
-        if infos and len(infos) > 0:
-            return infos[0][4][0]
-    except (socket.gaierror, socket.herror, OSError):
-        pass
-
-    # 2. Try with www. prefix if not already present
-    if not hostname.startswith("www."):
+    # 1. Try hostname as given (IPv4 prioritized for speed and VMware NAT compatibility)
+    for fam in (socket.AF_INET, socket.AF_UNSPEC):
         try:
-            infos = await loop.getaddrinfo(f"www.{hostname}", 80, family=socket.AF_UNSPEC, type=socket.SOCK_STREAM)
+            infos = await loop.getaddrinfo(hostname, 80, family=fam, type=socket.SOCK_STREAM)
             if infos and len(infos) > 0:
                 return infos[0][4][0]
         except (socket.gaierror, socket.herror, OSError):
             pass
+
+    # 2. Try with www. prefix if not already present
+    if not hostname.startswith("www."):
+        for fam in (socket.AF_INET, socket.AF_UNSPEC):
+            try:
+                infos = await loop.getaddrinfo(f"www.{hostname}", 80, family=fam, type=socket.SOCK_STREAM)
+                if infos and len(infos) > 0:
+                    return infos[0][4][0]
+            except (socket.gaierror, socket.herror, OSError):
+                pass
 
     raise HTTPException(
         status_code=400,

@@ -193,3 +193,10 @@ CyberScore TN traduit la complexité technique en indicateurs visuels immédiate
 ### Q32. Quelles sont les trois priorités absolues pour l'avenir de CyberScore TN après votre PFA ?
 **Réponse type (88 mots) :**
 La première priorité est la signature cryptographique asymétrique des attestations via une clé privée ANCS et la vérification ASN temps réel. La deuxième est l'industrialisation de la file de distribution asynchrone Celery/Redis pour porter le périmètre national à plus de 2 000 domaines publics et OIV (Opérateurs d'Importance Vitale). La troisième est l'intégration d'un journal d'audit serveur append-only infalsifiable couplé à une authentification forte par carte d'identité électronique ou certificat professionnel TunTrust pour tous les officiers d'audit.
+
+---
+
+### Q33. Comment est orchestrée la progression visuelle des audits (passifs et actifs) sans tromper l'utilisateur ?
+**Réponse type (95 mots) :**
+Afin d'éviter l'écueil des barres de progression artificielles qui stagnent arbitrairement à 98 %, CyberScore TN adapte dynamiquement son pipeline d'affichage au profil d'audit sélectionné. Pour les scans passifs, un stepper multi-étapes dédié reflète la profondeur réelle : 2 phases pour le mode Quick (4 scanners), 3 phases pour le mode Standard (10 scanners) et 4 phases pour le mode Deep (16 scanners avec DAST et Nmap). Pour le scan actif autonome, le graphe séquentiel visualise en temps réel l'avancement des 4 agents IA (Recon, CVE, PoC et Remédiation). Chaque palier est assorti d'une sous-tâche validée, garantissant une télémétrie transparente et fidèle.
+

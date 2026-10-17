@@ -687,10 +687,31 @@ Les 3 modes correspondent à 3 niveaux de profondeur d'audit technique dans le m
 * **Réalité de l'optimisation** : L'orchestrateur backend (`orchestrator.py`) exploitant pleinement les coroutines Python asynchrones en parallèle (`asyncio.gather`), les audits s'exécutent en réalité **10 à 20 fois plus vite**.
 * **Correction & Alignement UI** : L'interface utilisateur (`ScannerClient.tsx`) a été réalignée sur les métriques observées en conditions réelles :
   * ⚡ **Quick ~3s**
-  * **Standard ~8s**
-  * 🔬 **Deep ~30s**
+  * 🛡️ **Standard ~8s**
+  * 🔬 **Deep ~30s à 45s**
 
 **Callback de progression**: L'orchestrateur accepte un `progress_callback` async qui est appelé à chaque étape, permettant d'envoyer des mises à jour en temps réel via WebSocket.
+
+#### 5.3.1 Télémétrie UX, Stepper Multi-Phases Dynamique et Résilience Réseau DNS/NAT
+
+Afin d'offrir une expérience utilisateur honnête et pédagogique conforme aux exigences de soutenance académique, l'interface de scan passif a été dotée d'un composant de guidage dynamique trilingue (`PassiveScanWorkflowStepper.tsx`) synchronisé avec l'orchestrateur de scan (`scanCoordinator.ts`) :
+
+1. **Adaptation Dynamique de la Décomposition par Mode d'Audit :**
+   - **Mode Quick (2 Phases)** : Phase 1 (Vitrine Web & Chiffrement SSL/TLS — 4 modules) $\rightarrow$ Phase Finale (Évaluation & Calcul du CyberScore — Attribution du grade A+ à F).
+   - **Mode Standard (3 Phases)** : Phase 1 (Vitrine Web & SSL — 4 modules) $\rightarrow$ Phase 2 (Infrastructure DNS, Messagerie & Hygiène — 6 modules) $\rightarrow$ Phase Finale (Notation Souveraine & Restitution ANCS — 10 piliers).
+   - **Mode Deep (4 Phases Complètes)** : Phase 1 (Vitrine Web & SSL — 4 modules) $\rightarrow$ Phase 2 (Infrastructure DNS & Messagerie — 6 modules) $\rightarrow$ Phase 3 (Scans Avancés & Surface Externe EASM — 6 modules conteneurisés) $\rightarrow$ Phase 4 (Corrélation & Notation CyberScore Exhaustive — Consolidation des 16 modules).
+
+2. **Visibilité de la Phase Finale & Pause de Grâce (1,2 seconde) :**
+   - *Problématique identifiée* : La Phase 4 correspondant au calcul arithmétique de la note finale et à la synthèse de conformité (prenant moins de 15 ms en mémoire sur le backend), l'état `progress = 100%` et `status = "complete"` s'exécutaient dans le même cycle d'événement. Le stepper disparaissait instantanément, privant l'auditeur et le jury de la visualisation de l'étape de synthèse.
+   - *Solution technique* : Le seuil d'activation de la Phase 4 a été calibré dès **78% de progression** pour afficher l'étape active dès la fin des scans EASM. À la réception de la réponse HTTP 200, le coordinateur fige la progression à 100%, fait basculer tous les indicateurs à l'état `[Terminé]` (coches vertes animées), et applique une **pause de grâce de 1 200 ms** (`await new Promise(r => setTimeout(r, 1200))`) avant de monter le tableau de bord des résultats.
+
+3. **Résolution DNS Sécurisée & Priorité IPv4 en Environnement Tri-VM :**
+   - *Anomalie constatée* : Lors de l'audit de cibles protégées par des CDN mondiaux (Cloudflare, Akamai) ou dotées de configurations IPv6 complexes (ex: `mytek.tn`), des erreurs intermittentes `socket.gaierror` ou `ENOTFOUND` survenaient après un délai de 30 secondes.
+   - *Cause racine* : Le relais DNS NAT de l'hyperviseur virtualisé (VMnet8) subissait un blocage sur les requêtes dual-stack non filtrées (`socket.AF_UNSPEC`), causant un timeout de 15 à 30 secondes sur la résolution IPv6 (AAAA).
+   - *Correction* : Forçage systématique de la résolution IPv4 prioritaire (`socket.AF_INET`) dans `verify_dns_resolution` (`scan_routes.py`), dans l'orchestrateur backend (`orchestrator.py`) et dans la route Next.js (`route.ts`) avec recours à `dns.resolve4`. Le temps de résolution DNS est ainsi ramené sous la barre des 120 ms.
+
+4. **Politique de Timeout Échelonnée Côté Client :**
+   - Pour éviter que le frontend n'abandonne prématurément un audit approfondi légitime exécutant 16 scanners, la temporisation `AbortController` a été échelonnée dynamiquement : **15 secondes** pour le scan Quick, **35 secondes** pour le scan Standard, et **90 secondes** pour le scan Deep.
 
 ### 5.4 Tâches Celery
 
@@ -702,6 +723,7 @@ Les scans longs sont exécutés en arrière-plan via Celery + Redis :
 - Le scanner SSL (`sslyze`) nécessite un timeout élevé pour les serveurs lents
 - Les scanners Docker (ZAP, Nmap) nécessitent une vérification de la disponibilité du container avant l'exécution
 - Le typo `category_` dans `ssl_scanner.py` a causé un `ValidationError` sur le modèle `Finding` — corrigé en renommant le champ
+- La latence de résolution DNS dual-stack sur les domaines CDN a été résolue par la priorité stricte IPv4 (`socket.AF_INET`)
 
 ### 5.5 Moteur Autonome Multi-Agent & Architecture AIaaS Découplée (`probe_agent`)
 

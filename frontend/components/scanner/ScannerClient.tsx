@@ -7,6 +7,7 @@ import { Link } from "@/i18n/navigation";
 import { Zap, Shield, Microscope, CheckCircle, AlertTriangle, ShieldAlert, Terminal, RefreshCw, FileDown, Sparkles, Copy, Check, Network, Cpu, Globe, Clock, Server, Lock, Unlock, X } from "lucide-react";
 import { convertScanResultToScanReport } from "@/lib/report-data";
 import AgentWorkflowGraph from "./AgentWorkflowGraph";
+import PassiveScanWorkflowStepper from "./PassiveScanWorkflowStepper";
 import { scanCoordinator, ScanType, ScanStatus, ScanResult, ScanState } from "@/lib/scanCoordinator";
 
 const ReportGenerator = dynamic(() => import("@/components/report/ReportGenerator"), { ssr: false });
@@ -870,33 +871,51 @@ export default function ScannerClient() {
       {status === "scanning" && (
         <div
           className="scan-progress"
-          style={scanType === "autonomous" ? { maxWidth: "860px", width: "100%" } : undefined}
+          style={{ maxWidth: "920px", width: "100%", margin: "0 auto" }}
         >
-          <div className="scan-progress-value">{Math.round(progress)}%</div>
-          <div className="scan-progress-label">
-            {scanType === "autonomous"
-              ? isAr
-                ? "جاري تنفيذ التدقيق الذاتي متعدد الوكلاء عبر الذكاء الاصطناعي السيادي..."
-                : isFr
-                ? "Orchestration multi-agents autonome en cours via l'IA souveraine..."
-                : "Autonomous multi-agent audit running via sovereign AI..."
-              : t("scanning")}
-          </div>
-          <div className="linear-progress">
-            <div
-              className="linear-progress-fill"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-          <div className="scan-progress-target" dir="ltr">{url}</div>
+          {scanType === "autonomous" ? (
+            <>
+              <div className="scan-progress-value">{Math.round(progress)}%</div>
+              <div className="scan-progress-label">
+                {isAr
+                  ? "جاري تنفيذ التدقيق الذاتي متعدد الوكلاء عبر الذكاء الاصطناعي السيادي..."
+                  : isFr
+                  ? "Orchestration multi-agents autonome en cours via l'IA souveraine..."
+                  : "Autonomous multi-agent audit running via sovereign AI..."}
+              </div>
+              <div className="linear-progress">
+                <div
+                  className="linear-progress-fill"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+              <div className="scan-progress-target" dir="ltr">{url}</div>
 
-          {/* Autonomous Multi-Agent Live Execution Graph */}
-          {scanType === "autonomous" && (
-            <AgentWorkflowGraph
-              progress={progress}
-              locale={locale}
-              target={url}
-            />
+              {/* Autonomous Multi-Agent Live Execution Graph */}
+              <AgentWorkflowGraph
+                progress={progress}
+                locale={locale}
+                target={url}
+              />
+            </>
+          ) : (
+            <>
+              <div className="scan-progress-value">{Math.round(progress)}%</div>
+              <div className="linear-progress" style={{ marginBottom: "22px" }}>
+                <div
+                  className="linear-progress-fill"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+
+              {/* Dynamic Phase-by-Phase Stepper for Quick, Standard & Deep Passive Scans */}
+              <PassiveScanWorkflowStepper
+                scanType={scanType as "quick" | "standard" | "deep"}
+                progress={progress}
+                locale={locale}
+                target={url}
+              />
+            </>
           )}
         </div>
       )}

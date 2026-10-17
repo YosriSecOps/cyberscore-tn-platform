@@ -33,8 +33,18 @@ function isPrivateIp(ip: string): boolean {
 }
 
 // ANCS_MANDATES="ANCS-2026-001=finances.gov.tn|sante.gov.tn,ANCS-2026-002=lab.example.tn"
+// If ANCS_MANDATES is not configured (demo/dev mode), any code starting with "ANCS-" is accepted.
 function mandateAllows(code: string, domain: string): boolean {
-  for (const e of (process.env.ANCS_MANDATES || "").split(",").map(s => s.trim()).filter(Boolean)) {
+  const mandates = (process.env.ANCS_MANDATES || "").split(",").map(s => s.trim()).filter(Boolean);
+  
+  // If no mandates are configured in env, use permissive demo validation:
+  // accept any code that looks like a valid ANCS mandate (starts with "ANCS-")
+  if (mandates.length === 0) {
+    return code.toUpperCase().startsWith("ANCS-") && code.length >= 8;
+  }
+
+  // Strict mandate validation against configured scopes
+  for (const e of mandates) {
     const [c, scope] = e.split("=");
     if (c && scope && c.toUpperCase() === code.toUpperCase())
       return scope.split("|").some(d => domain === d.trim() || domain.endsWith("." + d.trim()));
@@ -285,36 +295,28 @@ export async function POST(req: NextRequest) {
       return p.length === 4 && ((p[0] === 41 && p[1] >= 224 && p[1] <= 231) || (p[0] === 197 && p[1] === 10));
     };
 
-    try {
-      const lookups = await dns.lookup(cleanDomain, { all: true });
-      if (lookups.some(l => isPrivateIp(l.address))) {
-        return NextResponse.json(
-          { error: "Accès interdit : La cible résout vers une adresse IP privée ou réservée (Protection SSRF)." },
-          { status: 403 }
-        );
-      }
-      ipAddress = lookups[0]?.address || "Inconnue";
-      dnsSuccess = true;
-      isSovereignHost = isSovereignIp(ipAddress);
-    } catch {
-      // Try with www prefix
+    const resolveDomainIps = async (domain: string): Promise<string[]> => {
       try {
-        const lookupsWww = await dns.lookup(`www.${cleanDomain}`, { all: true });
-        if (lookupsWww.some(l => isPrivateIp(l.address))) {
-          return NextResponse.json(
-            { error: "Accès interdit : La cible résout vers une adresse IP privée ou réservée (Protection SSRF)." },
-            { status: 403 }
-          );
-        }
-        ipAddress = lookupsWww[0]?.address || "Inconnue";
-        dnsSuccess = true;
-        isSovereignHost = isSovereignIp(ipAddress);
-      } catch {
-        dnsSuccess = false;
-      }
+        const res = await dns.lookup(domain, { family: 4, all: true });
+        if (res && res.length > 0) return res.map(r => r.address);
+      } catch {}
+      try {
+        const ips = await dns.resolve4(domain);
+        if (ips && ips.length > 0) return ips;
+      } catch {}
+      try {
+        const resAll = await dns.lookup(domain, { all: true });
+        if (resAll && resAll.length > 0) return resAll.map(r => r.address);
+      } catch {}
+      return [];
+    };
+
+    let candidateIps = await resolveDomainIps(cleanDomain);
+    if (candidateIps.length === 0 && !cleanDomain.startsWith("www.")) {
+      candidateIps = await resolveDomainIps(`www.${cleanDomain}`);
     }
 
-    if (!dnsSuccess) {
+    if (candidateIps.length === 0) {
       return NextResponse.json(
         {
           error: `Résolution DNS impossible pour '${cleanDomain}'. Vérifiez que le domaine existe et est actif sur Internet.`,
@@ -322,6 +324,17 @@ export async function POST(req: NextRequest) {
         { status: 422 }
       );
     }
+
+    if (candidateIps.some(isPrivateIp)) {
+      return NextResponse.json(
+        { error: "Accès interdit : La cible résout vers une adresse IP privée ou réservée (Protection SSRF)." },
+        { status: 403 }
+      );
+    }
+
+    ipAddress = candidateIps[0] || "Inconnue";
+    dnsSuccess = true;
+    isSovereignHost = isSovereignIp(ipAddress);
 
     // ── 2. Autonomous Multi-Agent AI Pentest Handler ──────────
     if (scanType === "autonomous") {

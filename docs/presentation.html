@@ -1451,7 +1451,7 @@ score_result = calculate_total_score(all_results)</div>
     <!-- SLIDE 12 : slide-12 -->
     <div class="slide" data-title="slide-12 - Profondeurs de Scan · SCAN_PHASES" data-notes="[Timing: 10:00 | Durée: 1 min]
 
-Pour adapter la charge d'évaluation aux besoins opérationnels, CyberScore TN implémente trois profondeurs d'audit prédéfinies. Le mode Quick exécute la seule Phase 1 : 4 scanners focalisés sur la surface web immédiate (SSL, Headers, Cookie, CSP) en environ 30 secondes. Le mode Standard, recommandé pour le monitoring national régulier, enchaîne la Phase 1 et la Phase 2 : 10 scanners totalisant la vérification DNS, la sécurité de messagerie SPF/DMARC, l'exposition d'informations sensibles, la détection technologique et les certificats en environ 2 minutes. Le mode Deep combine les trois phases : 15 scanners exécutés jusqu'aux tests OWASP, cartographie réseau et réputation d'adresses IP en environ 10 minutes. Soulignons que sur les 16 catégories du référentiel, 15 scanners sont pleinement implémentés, la seizième catégorie relative au patching CVE étant réservée pour une intégration locale." data-category="Moteurs d'Évaluation">
+Pour adapter la charge d'évaluation aux besoins opérationnels, CyberScore TN implémente trois profondeurs d'audit prédéfinies, matérialisées dans l'interface par un workflow stepper dynamique et pédagogique. Le mode Quick décompose l'analyse en 2 phases (Surface Web & SSL, puis calcul du score) pour une vérification flash en environ 3 secondes. Le mode Standard, recommandé pour le monitoring national régulier, articule 3 phases (Surface Web, Infrastructure DNS & Messagerie, puis Synthèse souveraine) pour 10 modules audités en environ 8 secondes. Enfin, le mode Deep mobilise 4 phases complètes jusqu'aux contrôles EASM avancés (OWASP, Nmap, sous-domaines, CTI) et corrèle l'ensemble des 16 facteurs en environ 35 à 45 secondes. À l'achèvement de chaque audit, une pause de grâce d'une seconde et demie permet à l'auditeur d'observer la validation intégrale des étapes avant la restitution du tableau de bord." data-category="Moteurs d'Évaluation">
       <div class="bg-watermark">12</div>
       <div class="slide-meta">
         <div class="slide-headings">
@@ -1463,9 +1463,9 @@ Pour adapter la charge d'évaluation aux besoins opérationnels, CyberScore TN i
       <div class="slide-content">
         <div class="grid-3">
           <div class="glass-card">
-            <div style="font-family: var(--font-mono); font-size: 15px; color: #38bdf8; font-weight: 700; margin-bottom: 8px;">MODE QUICK · ~30 SECONDES</div>
+            <div style="font-family: var(--font-mono); font-size: 15px; color: #38bdf8; font-weight: 700; margin-bottom: 8px;">MODE QUICK · ~3 SECONDES</div>
             <div class="card-label" style="font-size: 15px;">Audit de Surface Web</div>
-            <div style="margin-bottom: 14px; font-size: 14.5px; color: #38bdf8; font-weight: 600;">Phase 1 Unique · 4 Scanners</div>
+            <div style="margin-bottom: 14px; font-size: 14.5px; color: #38bdf8; font-weight: 600;">2 Phases UI · 4 Scanners</div>
             <ul class="editorial-list" style="gap: 12px; font-size: 14.5px;">
               <li><strong>SSLScanner :</strong> Validité TLS, suite de chiffrement.</li>
               <li><strong>HeadersScanner :</strong> HSTS, XFO, XCTO, Referrer.</li>
@@ -1476,9 +1476,9 @@ Pour adapter la charge d'évaluation aux besoins opérationnels, CyberScore TN i
           </div>
 
           <div class="glass-card cyan">
-            <div style="font-family: var(--font-mono); font-size: 15px; color: #10b981; font-weight: 700; margin-bottom: 8px;">MODE STANDARD · ~2 MINUTES</div>
+            <div style="font-family: var(--font-mono); font-size: 15px; color: #10b981; font-weight: 700; margin-bottom: 8px;">MODE STANDARD · ~8 SECONDES</div>
             <div class="card-label" style="font-size: 15px;">Audit Régulier d'État</div>
-            <div style="margin-bottom: 14px; font-size: 14.5px; color: #10b981; font-weight: 600;">Phases 1 + 2 · 10 Scanners</div>
+            <div style="margin-bottom: 14px; font-size: 14.5px; color: #10b981; font-weight: 600;">3 Phases UI · 10 Scanners</div>
             <ul class="editorial-list" style="gap: 10px; font-size: 14.5px;">
               <li><em>Tous les 4 scanners du mode Quick, plus :</em></li>
               <li><strong>DNSScanner :</strong> DNSSEC, CAA, redondance NS.</li>
@@ -1491,18 +1491,18 @@ Pour adapter la charge d'évaluation aux besoins opérationnels, CyberScore TN i
           </div>
 
           <div class="glass-card">
-            <div style="font-family: var(--font-mono); font-size: 15px; color: #a855f7; font-weight: 700; margin-bottom: 8px;">MODE DEEP · ~10 MINUTES</div>
+            <div style="font-family: var(--font-mono); font-size: 15px; color: #a855f7; font-weight: 700; margin-bottom: 8px;">MODE DEEP · ~35 SECONDES</div>
             <div class="card-label" style="font-size: 15px;">Audit Exhaustif Approfondi</div>
-            <div style="margin-bottom: 14px; font-size: 14.5px; color: #a855f7; font-weight: 600;">Phases 1 + 2 + 3 · 15 Scanners</div>
+            <div style="margin-bottom: 14px; font-size: 14.5px; color: #a855f7; font-weight: 600;">4 Phases UI · 16 Scanners</div>
             <ul class="editorial-list" style="gap: 10px; font-size: 14.5px;">
-              <li><em>Tous les 10 scanners Standard, plus Phase 3 :</em></li>
+              <li><em>Tous les 10 scanners Standard, plus Phase 3 & 4 :</em></li>
               <li><strong>OWASPScanner :</strong> Détection de vecteurs XSS/SQLi.</li>
               <li><strong>NetworkScanner :</strong> Cartographie des services ouverts.</li>
               <li><strong>SubdomainScanner :</strong> Énumération des sous-domaines.</li>
               <li><strong>ThreatIntelScanner :</strong> Réputation IP (AbuseIPDB).</li>
               <li><strong>HistoricalComplianceScanner :</strong> Suivi des scores.</li>
             </ul>
-            <div style="margin-top: 10px; font-size: 20px; color: #fbbf24; font-weight: 600;">* 15 implémentés + 1 réservé (patching CVEs)</div>
+            <div style="margin-top: 10px; font-size: 20px; color: #fbbf24; font-weight: 600;">* 16 facteurs corrélés • Pause de grâce 1,2s</div>
           </div>
         </div>
       </div>
